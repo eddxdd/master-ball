@@ -278,11 +278,14 @@ export type Pokemon = {
   imageUrl: string | null;
 };
 
+export const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
+
 export type Card = {
   id: number;
   tcgdexId: string;
   pokemonName: string;
   setName: string;
+  setDisplayName?: string;
   rarity: string;
   tier: number;
   imageUrl: string;
@@ -391,16 +394,71 @@ export const submitGuess = (gameId: number, payload: SubmitGuessPayload, token: 
     body: JSON.stringify(payload),
   });
 
+export type LevelInfo = {
+  level: number;
+  currentXp: number;
+  xpNeeded: number;
+  progressPercent: number;
+  totalXp: number;
+  leveledUp: boolean;
+  prevLevel: number;
+};
+
+export type CaptureCardResponse = {
+  id: number;
+  card: Card;
+  xpGained: number;
+  levelInfo: LevelInfo;
+};
+
 export const captureCard = (gameId: number, payload: CaptureCardPayload, token: string) =>
-  request<{ id: number; card: Card }>(`/games/${gameId}/capture`, {
+  request<CaptureCardResponse>(`/games/${gameId}/capture`, {
     method: "POST",
     headers: buildHeaders(token),
     body: JSON.stringify(payload),
   });
 
+export type TrainerProfile = {
+  id: number;
+  username: string;
+  email: string;
+  role: UserRole;
+  level: number;
+  currentXp: number;
+  xpNeeded: number;
+  progressPercent: number;
+  totalXp: number;
+};
+
+export const getTrainerProfile = (token: string) =>
+  request<TrainerProfile>("/users/me", {
+    method: "GET",
+    headers: buildHeaders(token),
+  });
+
 export const getGameHistory = (token: string) =>
   request<Game[]>("/games/history", {
     method: "GET",
+    headers: buildHeaders(token),
+  });
+
+// Admin API
+export type AdminStats = {
+  totals: {
+    users: number;
+    gamesCompleted: number;
+    captures: number;
+    pokedexEntries: number;
+    gamesLast7Days: number;
+  };
+  recentUsers: { id: number; username: string; role: string; level: number; experience: number; createdAt: string }[];
+  topTrainers: { id: number; username: string; level: number; experience: number }[];
+  rarityBreakdown: { rarity: string; count: number }[];
+};
+
+export const getAdminStats = (token: string) =>
+  request<AdminStats>('/admin/stats', {
+    method: 'GET',
     headers: buildHeaders(token),
   });
 
@@ -420,5 +478,109 @@ export const getPokedexStats = (token: string) =>
 export const getPokedexCard = (cardId: number, token: string) =>
   request<PokedexEntry>(`/pokedex/${cardId}`, {
     method: "GET",
+    headers: buildHeaders(token),
+  });
+
+// ---- Auction House API ----
+
+export type UserCardInstance = {
+  id: number;
+  obtained: string;
+};
+
+export type CollectionEntry = {
+  card: Card;
+  quantity: number;
+  instances: UserCardInstance[];
+};
+
+export type AuctionUser = {
+  id: number;
+  username: string;
+};
+
+export type AuctionOfferedCard = {
+  id: number;
+  cardId: number;
+  userId: number;
+  obtained: string;
+  card: Card & { pokemon: Pokemon };
+  user: AuctionUser;
+};
+
+export type Auction = {
+  id: number;
+  creatorId: number;
+  offeredUserCardId: number;
+  wantedCardId: number;
+  status: "active" | "completed" | "cancelled";
+  completedById: number | null;
+  completedUserCardId: number | null;
+  createdAt: string;
+  expiresAt: string;
+  updatedAt: string;
+  offeredUserCard: AuctionOfferedCard;
+  wantedCard: Card & { pokemon: Pokemon };
+  creator: AuctionUser;
+  completedBy: AuctionUser | null;
+  canFulfill?: boolean;
+};
+
+export type CreateAuctionPayload = {
+  offeredUserCardId: number;
+  wantedCardId: number;
+};
+
+export type AcceptAuctionPayload = {
+  userCardId: number;
+};
+
+export const getCollection = (token: string) =>
+  request<CollectionEntry[]>("/pokedex/collection", {
+    method: "GET",
+    headers: buildHeaders(token),
+  });
+
+export const getAuctions = (token: string) =>
+  request<Auction[]>("/auctions", {
+    method: "GET",
+    headers: buildHeaders(token),
+  });
+
+export const getMyAuctions = (token: string) =>
+  request<Auction[]>("/auctions/my", {
+    method: "GET",
+    headers: buildHeaders(token),
+  });
+
+export const createAuction = (payload: CreateAuctionPayload, token: string) =>
+  request<Auction>("/auctions", {
+    method: "POST",
+    headers: buildHeaders(token),
+    body: JSON.stringify(payload),
+  });
+
+export type AcceptAuctionResponse = {
+  message: string;
+  xpGained: number;
+  levelInfo: {
+    level: number;
+    currentXp: number;
+    xpNeeded: number;
+    progressPercent: number;
+    totalXp: number;
+  } | null;
+};
+
+export const acceptAuction = (auctionId: number, payload: AcceptAuctionPayload, token: string) =>
+  request<AcceptAuctionResponse>(`/auctions/${auctionId}/accept`, {
+    method: "POST",
+    headers: buildHeaders(token),
+    body: JSON.stringify(payload),
+  });
+
+export const cancelAuction = (auctionId: number, token: string) =>
+  request<{ message: string }>(`/auctions/${auctionId}`, {
+    method: "DELETE",
     headers: buildHeaders(token),
   });

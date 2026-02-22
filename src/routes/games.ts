@@ -9,7 +9,10 @@ import { prisma } from '../lib/prisma.js';
 import { selectRandomPokemon } from '../services/cardGenerator.js';
 import { generateFeedback, isGuessCorrect, calculateTier } from '../services/wordleLogic.js';
 import { generateCardOffers } from '../services/cardGenerator.js';
-import { updatePityTracker } from '../services/pitySystem.js';
+import { updatePityTracker, getPityTracker } from '../services/pitySystem.js';
+import { getSetDisplayName } from '../utils/cardDisplay.js';
+import { enrichCardsWithBiomes } from '../utils/cardEnrichment.js';
+import { xpForRarity, xpProgress, levelFromXp } from '../services/xpSystem.js';
 
 const router = Router();
 
@@ -146,6 +149,21 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
     if (game.userId !== userId) {
       return res.status(403).json({ error: 'Unauthorized' });
     }
+
+    const isAdmin = req.user!.role === 'ADMIN';
+
+    // Pity info for all users (for display on game page)
+    const pity = await getPityTracker(userId);
+    const pityInfo = {
+      consecutiveTier6: pity.consecutiveTier6,
+      consecutiveTier5: pity.consecutiveTier5,
+      consecutiveTier4: pity.consecutiveTier4,
+      consecutiveTier3: pity.consecutiveTier3,
+      consecutiveTier2: pity.consecutiveTier2,
+      gamesWithoutCeiling: pity.gamesWithoutCeiling,
+      hardPityCounter: pity.hardPityCounter,
+      totalGames: pity.totalGames,
+    };
     
     // Format response
     const response: any = {
@@ -157,7 +175,8 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
       completed: game.completed,
       won: game.won,
       tier: game.tier,
-        guesses: game.guesses
+      pity: pityInfo,
+      guesses: game.guesses
         .filter((g: any) => g.pokemon != null)
         .map((g: any) => ({
         guessNum: g.guessNum,
@@ -171,7 +190,12 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
       createdAt: game.createdAt
     };
     
-    // Only show answer if game is completed
+    // Admin: always show answer (for testing/support)
+    if (isAdmin) {
+      response.answer = game.pokemon;
+    }
+    
+    // Only show answer if game is completed (for non-admin, answer only when done)
     if (game.completed) {
       response.answer = game.pokemon;
       response.offeredCardIds = game.offeredCardIds;
@@ -198,7 +222,13 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
         });
         // Preserve order: first card = guaranteed (answer's card), then random cards
         const idToCard = new Map(cards.map((c: any) => [c.id, c]));
-        response.offeredCards = cardIds.map((id: number) => idToCard.get(id)).filter(Boolean);
+        const orderedCards = cardIds
+          .map((id: number) => idToCard.get(id))
+          .filter(Boolean)
+          .map((c: any) => ({ ...c, setDisplayName: getSetDisplayName(c.setId, c.imageUrl) }));
+        response.offeredCards = await enrichCardsWithBiomes(orderedCards);
+        response.guaranteedCardId = cardIds[0] ?? null;
+        response.pityCardId = game.appliedPityTier != null ? (cardIds[1] ?? null) : null;
       } else if (!capturedCard) {
         // If no offeredCardIds but game is completed and not captured yet,
         // regenerate cards now
@@ -218,8 +248,14 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
             }
           });
           
-          response.offeredCards = cardOffers.cards;
+          const regeneratedCards = cardOffers.cards.map((c: any) => ({
+            ...c,
+            setDisplayName: getSetDisplayName(c.setId, c.imageUrl),
+          }));
+          response.offeredCards = await enrichCardsWithBiomes(regeneratedCards);
           response.offeredCardIds = cardOffers.cards.map(c => c.id);
+          response.guaranteedCardId = cardOffers.guaranteedCard.id;
+          response.pityCardId = cardOffers.appliedPityTier != null ? (cardOffers.cards[1]?.id ?? null) : null;
         } catch (error) {
           console.error('Failed to regenerate cards:', error);
         }
@@ -303,6 +339,8 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
     // Update game if completed
     let updatedGame = game;
     let offeredCards = null;
+    let guaranteedCardId: number | null = null;
+    let pityCardId: number | null = null;
     
     if (correct || guessNum >= 6) {
       const tier = calculateTier(guessNum);
@@ -318,14 +356,22 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
             won: correct,
             guessesUsed: guessNum,
             tier,
-            offeredCardIds: cardOffers.cards.map(c => c.id) as any
+            offeredCardIds: cardOffers.cards.map(c => c.id) as any,
+            appliedPityTier: cardOffers.appliedPityTier ?? undefined
           },
           include: {
             pokemon: true
           }
         });
         
-        offeredCards = cardOffers.cards;
+        const freshCards = cardOffers.cards.map((c: any) => ({
+          ...c,
+          setDisplayName: getSetDisplayName(c.setId, c.imageUrl),
+        }));
+        offeredCards = await enrichCardsWithBiomes(freshCards);
+        guaranteedCardId = cardOffers.guaranteedCard.id;
+        // First random card (index 1) is designated as the pity card when pity applied
+        pityCardId = cardOffers.appliedPityTier != null ? (cardOffers.cards[1]?.id ?? null) : null;
       } catch (cardError) {
         console.error('Error generating card offers:', cardError);
         console.error('Card generation error details:', {
@@ -362,7 +408,9 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
       won: updatedGame.won,
       tier: updatedGame.tier,
       answer: updatedGame.completed ? updatedGame.pokemon : null,
-      offeredCards
+      offeredCards,
+      guaranteedCardId,
+      pityCardId
     });
   } catch (error) {
     next(error);
@@ -440,6 +488,12 @@ router.post('/:id/capture', authenticate, async (req: Request, res: Response, ne
       }
     });
     
+    // Check before upserting whether this is a brand-new card for the user
+    const existingPokedexEntry = await prisma.pokedexEntry.findUnique({
+      where: { userId_cardId: { userId, cardId } },
+    });
+    const isNewCard = !existingPokedexEntry;
+
     // Create or update Pokedex entry
     await prisma.pokedexEntry.upsert({
       where: {
@@ -455,10 +509,37 @@ router.post('/:id/capture', authenticate, async (req: Request, res: Response, ne
       }
     });
     
-    // Update pity tracker
-    await updatePityTracker(userId, game.tier!, card.isCeiling);
-    
-    res.json(userCard);
+    await updatePityTracker(userId, game.tier!, card.isCeiling, game.appliedPityTier ?? undefined);
+
+    // XP is only awarded the first time a unique card is collected
+    const xpGained = isNewCard ? xpForRarity(card.rarity) : 0;
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { experience: true, level: true } });
+    const prevXp = user?.experience ?? 0;
+    const prevLevel = user?.level ?? 1;
+    const newXp = prevXp + xpGained;
+    const newLevel = Math.min(100, levelFromXp(newXp));
+    const progress = xpProgress(newXp);
+
+    if (xpGained > 0) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { experience: newXp, level: newLevel },
+      });
+    }
+
+    res.json({
+      ...userCard,
+      xpGained,
+      levelInfo: {
+        level: progress.level,
+        currentXp: progress.currentXp,
+        xpNeeded: progress.xpNeeded,
+        progressPercent: progress.progressPercent,
+        totalXp: newXp,
+        leveledUp: newLevel > prevLevel,
+        prevLevel,
+      },
+    });
   } catch (error) {
     next(error);
   }

@@ -11,6 +11,8 @@ import gameRoutes from "./routes/games.js";
 import pokedexRoutes from "./routes/pokedex.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
+import adminRoutes from "./routes/admin.js";
+import auctionRoutes from "./routes/auctions.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -71,6 +73,8 @@ app.use('/pokedex', pokedexRoutes);
 app.use('/health', healthRoutes);
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
+app.use('/admin', adminRoutes);
+app.use('/auctions', auctionRoutes);
 
 // Error catcher (must be AFTER routes!)
 app.use(errorHandler);

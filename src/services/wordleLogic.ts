@@ -88,11 +88,27 @@ function compareExact<T>(guessValue: T, answerValue: T): FeedbackType {
 }
 
 /**
- * Check if a guess is completely correct (won the game)
- * Note: This checks Pokemon ID, not just attributes
+ * Check if a guess wins the game.
+ *
+ * Primary check: exact Pokemon ID match.
+ *
+ * Fallback: if all six feedback attributes are identical the player has fully
+ * identified the answer via the game's attribute system.  When two Pokemon share
+ * every visible attribute the game has no way to distinguish them, so either
+ * guess should count as a win.
  */
 export function isGuessCorrect(guessPokemon: Pokemon, answerPokemon: Pokemon): boolean {
-  return guessPokemon.id === answerPokemon.id;
+  if (guessPokemon.id === answerPokemon.id) return true;
+
+  // Attribute-based win: all columns the player sees are definitively matched
+  return (
+    guessPokemon.type1 === answerPokemon.type1 &&
+    guessPokemon.type2 === answerPokemon.type2 &&
+    guessPokemon.evolutionStage === answerPokemon.evolutionStage &&
+    guessPokemon.fullyEvolved === answerPokemon.fullyEvolved &&
+    guessPokemon.color === answerPokemon.color &&
+    guessPokemon.generation === answerPokemon.generation
+  );
 }
 
 /**

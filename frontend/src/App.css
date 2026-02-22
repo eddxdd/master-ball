@@ -428,6 +428,26 @@
   align-items: flex-end;
 }
 
+/* Mew card hero: card only, no border or overlay text */
+.home-mew-banner {
+  position: relative;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  display: block;
+}
+
+.home-mew-card {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+  object-position: center center;
+}
+
 .home-parallax-overlay {
   width: 100%;
   padding: 1.15rem 1.2rem;
@@ -2378,6 +2398,323 @@ code {
   color: #c5d2e0;
 }
 
+/* Top bar: Card Rewards button + biome indicator side-by-side */
+.wordle-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .wordle-top-bar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .wordle-top-bar .card-rewards-button-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .biome-indicator {
+    max-width: 280px;
+    width: 100%;
+  }
+}
+
+.card-rewards-button-wrap {
+  flex-shrink: 0;
+}
+
+/* Biome indicator */
+.biome-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.4rem 0.9rem 0.4rem 0.4rem;
+  overflow: hidden;
+  max-width: 260px;
+}
+
+.biome-indicator-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.biome-indicator-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.biome-indicator-night-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 20, 60, 0.45);
+  border-radius: 8px;
+}
+
+.biome-indicator-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.biome-indicator-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.biome-indicator-time {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.biome-indicator-time--day {
+  color: #fbbf24;
+}
+
+.biome-indicator-time--night {
+  color: #818cf8;
+}
+
+.card-rewards-button {
+  padding: 0.6rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e7edf3;
+  background: linear-gradient(135deg, rgba(157, 110, 228, 0.25), rgba(252, 45, 178, 0.15));
+  border: 2px solid rgba(157, 110, 228, 0.4);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.card-rewards-button:hover {
+  background: linear-gradient(135deg, rgba(157, 110, 228, 0.4), rgba(252, 45, 178, 0.25));
+  border-color: rgba(157, 110, 228, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(157, 110, 228, 0.3);
+}
+
+/* Card Rewards Modal */
+.card-rewards-modal {
+  background: linear-gradient(180deg, #1e1f2e 0%, #161722 100%);
+  border-radius: 16px;
+  max-width: 560px;
+  width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid rgba(157, 110, 228, 0.25);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.card-rewards-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(157, 110, 228, 0.2);
+}
+
+.card-rewards-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #9d6ee4, #fc2db2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-rewards-modal-body {
+  padding: 1.5rem;
+}
+
+.card-rewards-intro {
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  color: #c5d2e0;
+  line-height: 1.5;
+}
+
+.card-rewards-intro--small {
+  font-size: 0.83rem;
+  color: #8c9eb0;
+  margin: 0 0 0.85rem 0;
+}
+
+.pity-stuck-label {
+  font-size: 0.85rem;
+  color: #c5d2e0;
+}
+
+.card-rewards-tiers h3,
+.card-rewards-pity h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #9d6ee4;
+  font-weight: 600;
+}
+
+.card-rewards-pity {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(157, 110, 228, 0.2);
+}
+
+.card-rewards-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(157, 110, 228, 0.2);
+}
+
+.card-rewards-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.card-rewards-table th,
+.card-rewards-table td {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(157, 110, 228, 0.1);
+}
+
+.card-rewards-table th {
+  background: rgba(157, 110, 228, 0.12);
+  color: #e7edf3;
+  font-weight: 600;
+}
+
+.card-rewards-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.card-rewards-table tbody tr:hover td {
+  background: rgba(157, 110, 228, 0.06);
+}
+
+.tier-badge {
+  display: inline-block;
+  min-width: 1.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.tier-badge.tier-1 { background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 165, 0, 0.25)); color: #ffd700; }
+.tier-badge.tier-2 { background: rgba(255, 215, 0, 0.2); color: #e6c200; }
+.tier-badge.tier-3 { background: rgba(157, 110, 228, 0.3); color: #b89aeb; }
+.tier-badge.tier-4 { background: rgba(157, 110, 228, 0.2); color: #9d6ee4; }
+.tier-badge.tier-5 { background: rgba(140, 158, 176, 0.25); color: #8c9eb0; }
+.tier-badge.tier-6 { background: rgba(140, 158, 176, 0.15); color: #6b7c8d; }
+
+.rarity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rarity-tag {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  background: rgba(45, 49, 66, 0.8);
+  border: 1px solid rgba(157, 110, 228, 0.2);
+  border-radius: 6px;
+  color: #c5d2e0;
+}
+
+/* Newly-introduced rarity at this tier: rank 1-4 (Common–Double Rare) */
+.rarity-tag--new[data-rank="1"],
+.rarity-tag--new[data-rank="2"],
+.rarity-tag--new[data-rank="3"] {
+  background: linear-gradient(135deg, rgba(120, 180, 90, 0.35), rgba(60, 180, 120, 0.25));
+  border-color: rgba(100, 200, 120, 0.5);
+  color: #a8e6b8;
+  font-weight: 600;
+}
+
+.rarity-tag--new[data-rank="4"] {
+  background: linear-gradient(135deg, rgba(100, 160, 220, 0.35), rgba(80, 130, 200, 0.25));
+  border-color: rgba(100, 160, 220, 0.5);
+  color: #a8c8f0;
+  font-weight: 600;
+}
+
+/* Illustration Rare */
+.rarity-tag--new[data-rank="5"] {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(167, 139, 250, 0.25));
+  border-color: rgba(236, 72, 153, 0.45);
+  color: #f0a8d8;
+  font-weight: 600;
+}
+
+/* Super Rare */
+.rarity-tag--new[data-rank="6"] {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(99, 102, 241, 0.3));
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #b8c4ff;
+  font-weight: 600;
+}
+
+/* Special Illustration Rare, Ultra Rare */
+.rarity-tag--new[data-rank="7"],
+.rarity-tag--new[data-rank="11"] {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(236, 72, 153, 0.35));
+  border-color: rgba(167, 100, 255, 0.55);
+  color: #e0b8ff;
+  font-weight: 700;
+}
+
+/* Immersive, Shiny Rare, Shiny Super Rare — top-tier exclusives */
+.rarity-tag--new[data-rank="8"],
+.rarity-tag--new[data-rank="9"],
+.rarity-tag--new[data-rank="10"] {
+  background: linear-gradient(135deg, #ffd70033 0%, #ff69b433 40%, #00bfff33 80%, #7fff0033 100%);
+  border-color: rgba(255, 215, 0, 0.55);
+  color: #ffe680;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.card-rewards-stats {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #c5d2e0;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.card-rewards-stats strong {
+  color: #e7edf3;
+}
+
+.pity-note {
+  font-size: 0.78rem;
+  color: #7a8fa6;
+  font-weight: 400;
+}
+
 .wordle-grid-container {
   margin-bottom: 2rem;
 }
@@ -2466,6 +2803,78 @@ code {
   opacity: 0.5;
 }
 
+/* Answer Row */
+.answer-row-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.5rem 0.25rem;
+}
+
+.answer-row-divider::before,
+.answer-row-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+}
+
+.answer-row-label {
+  color: #ffd700;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.wordle-row.answer-row {
+  animation: answer-row-reveal 0.5s ease-out forwards;
+}
+
+@keyframes answer-row-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wordle-cell.answer-cell {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(255, 215, 0, 0.55);
+  box-shadow:
+    0 0 12px rgba(255, 215, 0, 0.25),
+    inset 0 0 8px rgba(255, 215, 0, 0.06);
+  font-size: 0.85rem;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.wordle-cell.answer-cell.pokemon-name {
+  flex-direction: row;
+  font-size: 0.95rem;
+}
+
+.answer-pokemon-name {
+  font-weight: 700;
+  color: #ffd700;
+  font-size: 0.95rem;
+}
+
+.answer-value {
+  font-weight: 700;
+  color: #a8f5aa;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  text-align: center;
+  line-height: 1.2;
+}
+
 /* Guess Input */
 .guess-input-section {
   background: rgba(45, 49, 66, 0.8);
@@ -2549,10 +2958,19 @@ code {
 
 .answer-reveal {
   margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.answer-reveal > p {
+  margin-bottom: 0.75rem;
 }
 
 .answer-pokemon {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1.5rem;
   background: rgba(157, 110, 228, 0.1);
   border: 2px solid #9d6ee4;
@@ -2565,6 +2983,7 @@ code {
   height: auto;
   object-fit: contain;
   border-radius: 8px;
+  display: block;
 }
 
 .tier-result {
@@ -2702,9 +3121,13 @@ code {
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   border: 3px solid transparent;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  /* perspective must be on the parent of the flipping element */
+  perspective: 1000px;
 }
 
 .offered-card:hover {
@@ -2728,17 +3151,155 @@ code {
   background: rgba(45, 49, 66, 0.6);
 }
 
-.guaranteed-badge {
+/* ── Direct face (guaranteed card – never flips) ────────────────────── */
+.offered-card-face-direct {
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.offered-card-face-direct .card-face-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Flip container (mystery cards) ─────────────────────────────────── */
+/* perspective lives on .offered-card (parent) so backface-visibility   */
+/* and 3D transforms work correctly                                      */
+.offered-card-flip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  /* No overflow:hidden here — it breaks preserve-3d in most browsers */
+}
+
+.offered-card-flip.revealed {
+  transform: rotateY(180deg);
+}
+
+.offered-card-face {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: linear-gradient(135deg, #9d6ee4, #fc2db2);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.offered-card-back-face {
+  transform: rotateY(0deg);
+}
+
+.offered-card-front-face {
+  transform: rotateY(180deg);
+}
+
+/* Full-bleed card image that fills the flip face */
+.card-face-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Card info below the flip ──────────────────────────────────────── */
+.offered-card-info {
+  padding: 0.75rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-top: 1px solid rgba(157, 110, 228, 0.18);
+}
+
+.offered-card-name {
+  font-size: 1.05rem;
   font-weight: 600;
-  z-index: 1;
+  margin: 0;
+  color: #e7edf3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.offered-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Unified tag pill — same shape for both set name and rarity */
+.card-tag {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: rgba(157, 110, 228, 0.18);
+  color: #c9a8f5;
+  border: 1px solid rgba(157, 110, 228, 0.35);
+}
+
+/* Rarity tag gets a slightly different accent */
+.card-tag.card-tag-rarity {
+  background: rgba(157, 110, 228, 0.28);
+  color: #d4bbff;
+  border-color: rgba(157, 110, 228, 0.5);
+}
+
+/* Biome tag — green tint so it's visually distinct */
+.card-tag.card-tag-biome {
+  background: rgba(52, 211, 153, 0.15);
+  color: #6ee7b7;
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.offered-card-biomes {
+  margin-top: 0.1rem;
+}
+
+/* ── Card overlay badges (Guaranteed / Pity) ────────────────────────── */
+.guaranteed-badge,
+.pity-badge {
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.guaranteed-badge {
+  background: linear-gradient(135deg, #9d6ee4, #fc2db2);
+  color: #fff;
+}
+
+.pity-badge {
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  color: #fff;
 }
 
 .card-image-container {
@@ -2772,6 +3333,22 @@ code {
   margin-bottom: 0.75rem;
 }
 
+.card-set-tag {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 215, 0, 0.95);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.1));
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 999px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.1);
+}
+
+
 .card-rarity-badge {
   display: inline-block;
   padding: 0.4rem 0.8rem;
@@ -2783,8 +3360,22 @@ code {
 }
 
 .modal-actions {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 1.5rem;
   border-top: 1px solid rgba(157, 110, 228, 0.2);
+}
+
+.modal-actions-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-actions-buttons .play-again-button,
+.modal-actions-buttons .exit-button {
+  flex: 1;
+  min-width: 140px;
 }
 
 .capture-button {
@@ -2932,6 +3523,9 @@ code {
   background: rgba(45, 49, 66, 0.8);
   border-radius: 12px;
   overflow: hidden;
+  /* 2px on top/sides for outline visibility; 0 on bottom so no gap above card-details */
+  padding: 2px 2px 0 2px;
+  outline: 2px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -2939,7 +3533,7 @@ code {
 .pokedex-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(157, 110, 228, 0.3);
-  border: 2px solid rgba(157, 110, 228, 0.4);
+  outline-color: rgba(157, 110, 228, 0.4);
 }
 
 /* Uncaptured Card Styles */
@@ -2979,18 +3573,45 @@ code {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
+/* Wrapper sizes to image so full card is visible (no crop). No fixed aspect-ratio. */
 .card-image-wrapper {
-  padding: 1rem;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background: none;
+  display: block;
+}
+
+.card-image-wrapper .card-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+.card-image-placeholder {
+  width: 100%;
+  aspect-ratio: 5 / 7;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
-  background: linear-gradient(135deg, rgba(45, 49, 66, 0.4), rgba(79, 82, 103, 0.4));
+}
+
+.card-image-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .card-details {
-  padding: 1rem;
+  padding: 0.25rem 1rem 1rem;
   border-top: 1px solid rgba(157, 110, 228, 0.2);
+}
+
+.card-details .card-set-tag {
+  display: block;
+  margin-top: 0.25rem;
 }
 
 .rarity-badge {
@@ -3057,8 +3678,24 @@ code {
 
 .card-viewer-rarity {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.card-viewer-biomes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.card-biome-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .card-viewer-rarity .rarity-badge {
@@ -3259,7 +3896,7 @@ code {
   .wordle-grid-container {
     overflow-x: auto;
     margin: 0 -1.5rem;
-    padding: 0 1.5rem;
+    padding: 0 1.5rem 2.5rem;
   }
 
   .wordle-grid-header,
@@ -3332,7 +3969,7 @@ code {
   .wordle-grid-container {
     overflow-x: auto;
     margin: 0 -1rem;
-    padding: 0 1rem;
+    padding: 0 1rem 2.5rem;
   }
 
   .wordle-grid-header {
@@ -3398,13 +4035,19 @@ code {
     font-size: 1.5rem;
   }
 
+  .answer-reveal {
+    width: 100%;
+  }
+
   .answer-pokemon {
     padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .answer-card-image {
     width: 180px;
-    max-width: 90%;
+    max-width: 100%;
   }
 
   .tier-result {
@@ -3428,6 +4071,11 @@ code {
   .offered-cards-grid,
   .pokedex-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pokedex-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .pokedex-filters {
@@ -3597,7 +4245,7 @@ code {
   }
 
   .pokedex-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.75rem;
   }
 
@@ -3612,4 +4260,1251 @@ code {
   .stat-label {
     font-size: 0.85rem;
   }
+}
+
+/* =====================================================================
+   ADMIN STATS PAGE
+   ===================================================================== */
+
+.admin-stats-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.admin-stats-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-stats-loading {
+  padding: 4rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1rem;
+}
+
+/* Stat cards row */
+.admin-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-stat-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.admin-stat-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.admin-stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #e7edf3;
+  line-height: 1.1;
+}
+
+.admin-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Two-column panel grid */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.admin-stats-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.admin-stats-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-stats-panel-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 1rem;
+}
+
+/* Tables */
+.admin-stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin-stats-table th {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.admin-stats-table td {
+  padding: 0.55rem 0.5rem;
+  color: rgba(255, 255, 255, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-stats-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-rank {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  width: 24px;
+}
+
+.admin-level-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+}
+
+.admin-role-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-role-badge--trainer {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+}
+
+.admin-role-badge--admin {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* Rarity bar chart */
+.admin-rarity-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.admin-rarity-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 60px;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.admin-rarity-name {
+  color: rgba(255, 255, 255, 0.65);
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-rarity-bar-wrap {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.admin-rarity-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  transition: width 0.6s ease;
+}
+
+.admin-rarity-count {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stats-panel--wide {
+    grid-column: 1;
+  }
+
+  .admin-rarity-row {
+    grid-template-columns: 120px 1fr 48px;
+  }
+}
+
+/* =====================================================================
+   TRAINER LEVEL SYSTEM
+   ===================================================================== */
+
+/* --- Nav level badge (sits on top-left corner of the avatar bubble) --- */
+.nav-level-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1a0a00;
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid var(--bg-primary, #08090e);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Ensure the nav-avatar-wrapper has position:relative so badge can anchor */
+.nav-avatar-wrapper {
+  position: relative;
+}
+
+/* --- Trainer Level card (on dashboard) --- */
+.trainer-level-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(217, 119, 6, 0.04));
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 0 0 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.trainer-level-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #f59e0b, #d97706, #f59e0b);
+}
+
+.trainer-level-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.trainer-level-badge {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+}
+
+.trainer-level-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #1a0a00;
+  line-height: 1;
+}
+
+.trainer-level-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: rgba(26, 10, 0, 0.75);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trainer-level-info {
+  flex: 1;
+}
+
+.trainer-level-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f59e0b;
+  margin: 0 0 0.2rem;
+}
+
+.trainer-level-xp-total {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+/* Progress bar */
+.trainer-level-progress-wrap {
+  margin-bottom: 1.25rem;
+}
+
+.trainer-level-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.trainer-level-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.trainer-level-xp-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.trainer-level-max {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.trainer-level-milestone-hint {
+  color: rgba(245, 158, 11, 0.7);
+}
+
+/* XP-per-rarity table */
+.trainer-level-xp-table {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1rem;
+}
+
+.trainer-level-xp-table-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 0.75rem;
+}
+
+.trainer-level-xp-rows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 1.5rem;
+}
+
+.trainer-level-xp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  padding: 0.15rem 0;
+}
+
+.trainer-level-xp-rarity {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.trainer-level-xp-val {
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+/* Level-up toast inside TrainerLevel card (dashboard) */
+.trainer-levelup-toast {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1a0a00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  animation: levelup-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Card capture modal trainer strip (always visible) --- */
+.capture-trainer-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  margin: 0 1rem 1.25rem;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 12px;
+}
+
+/* Avatar bubble */
+.capture-trainer-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.capture-trainer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capture-trainer-avatar svg {
+  width: 60%;
+  height: 60%;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Type-tinted avatar border colours (mirrors nav-avatar type styling) */
+.capture-trainer-avatar.type-fire   { border-color: #ef4444; }
+.capture-trainer-avatar.type-grass  { border-color: #22c55e; }
+.capture-trainer-avatar.type-water  { border-color: #3b82f6; }
+.capture-trainer-avatar.type-electric { border-color: #eab308; }
+.capture-trainer-avatar.type-ghost  { border-color: #a855f7; }
+.capture-trainer-avatar.type-fairy  { border-color: #ec4899; }
+.capture-trainer-avatar.type-psychic { border-color: #f43f5e; }
+.capture-trainer-avatar.type-poison { border-color: #a21caf; }
+.capture-trainer-avatar.type-dragon { border-color: #6366f1; }
+
+/* Info column */
+.capture-trainer-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.capture-trainer-top-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.capture-trainer-level {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.capture-xp-gained {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.capture-levelup-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #1a0a00;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  animation: levelup-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.capture-trainer-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.capture-trainer-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.capture-trainer-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+}
+
+.capture-trainer-xp-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+}
+
+@keyframes levelup-pop {
+  0%   { transform: scale(0.5); opacity: 0; }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* --- Locked image option level label --- */
+.image-option-lock {
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.image-option-lock-level {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* =============================================
+   AUCTION HOUSE
+   ============================================= */
+
+.auction-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(157, 110, 228, 0.2);
+  padding-bottom: 0;
+}
+
+.auction-tab {
+  background: transparent;
+  border: none;
+  color: #8c9eb0;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: color 0.2s ease, background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.auction-tab:hover {
+  color: #e7edf3;
+  background: rgba(157, 110, 228, 0.08);
+}
+
+.auction-tab.active {
+  color: #9d6ee4;
+  border-bottom: 3px solid #9d6ee4;
+  margin-bottom: -2px;
+}
+
+.auction-tab-badge {
+  background: rgba(157, 110, 228, 0.25);
+  color: #9d6ee4;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+}
+
+.auction-browse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.auction-browse-search {
+  max-width: 340px;
+  flex: 1 1 auto;
+}
+
+.auction-refresh-btn {
+  background: rgba(45, 49, 66, 0.8);
+  border: 2px solid rgba(157, 110, 228, 0.3);
+  border-radius: 8px;
+  color: #9d6ee4;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.auction-refresh-btn:hover {
+  background: rgba(157, 110, 228, 0.15);
+  border-color: #9d6ee4;
+}
+
+.auction-create-btn {
+  background: linear-gradient(135deg, #9d6ee4, #fc2db2);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.auction-create-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.auction-create-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.auction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.auction-listing-card {
+  background: rgba(45, 49, 66, 0.85);
+  border: 2px solid rgba(157, 110, 228, 0.2);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.auction-listing-card:hover {
+  border-color: rgba(157, 110, 228, 0.45);
+  box-shadow: 0 4px 20px rgba(157, 110, 228, 0.12);
+}
+
+.auction-listing-card.inactive {
+  opacity: 0.65;
+}
+
+.auction-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: -0.25rem;
+}
+
+.auction-status-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+.auction-status-badge[data-status="active"] {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.auction-status-badge[data-status="completed"] {
+  background: rgba(157, 110, 228, 0.15);
+  color: #9d6ee4;
+}
+
+.auction-status-badge[data-status="cancelled"] {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.auction-listing-trade {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.auction-listing-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+.auction-listing-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8c9eb0;
+}
+
+.auction-listing-img {
+  width: 100%;
+  max-width: 110px;
+  border-radius: 6px;
+  display: block;
+  object-fit: contain;
+}
+
+.auction-listing-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e7edf3;
+}
+
+.auction-listing-set {
+  font-size: 0.75rem;
+  color: #8c9eb0;
+}
+
+.auction-listing-arrow {
+  font-size: 1.4rem;
+  color: #9d6ee4;
+  align-self: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.auction-listing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(157, 110, 228, 0.15);
+}
+
+.auction-listing-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.auction-trainer {
+  font-size: 0.8rem;
+  color: #8c9eb0;
+}
+
+.auction-time {
+  font-size: 0.78rem;
+  color: #fc2db2;
+  font-weight: 600;
+}
+
+.auction-accept-btn {
+  background: linear-gradient(135deg, #9d6ee4, #fc2db2);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.auction-accept-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.auction-accept-btn.disabled,
+.auction-accept-btn:disabled {
+  background: rgba(45, 49, 66, 0.9);
+  color: #8c9eb0;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.auction-cancel-btn {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.auction-cancel-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: #ef4444;
+}
+
+.auction-cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.auction-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #e7edf3;
+}
+
+.auction-error-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #f87171;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+/* ---- Create auction modal ---- */
+
+.auction-modal-content {
+  background: #1a1d2a;
+  border: 2px solid rgba(157, 110, 228, 0.35);
+  border-radius: 16px;
+  width: 90vw;
+  max-width: 700px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.auction-modal-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+}
+
+.auction-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.auction-pick-card {
+  background: rgba(45, 49, 66, 0.8);
+  border: 2px solid rgba(157, 110, 228, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  text-align: center;
+}
+
+.auction-pick-card:hover {
+  border-color: rgba(157, 110, 228, 0.5);
+  transform: translateY(-2px);
+}
+
+.auction-pick-card.selected {
+  border-color: #9d6ee4;
+  box-shadow: 0 0 0 3px rgba(157, 110, 228, 0.25), 0 4px 16px rgba(157, 110, 228, 0.2);
+}
+
+.auction-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: rgba(157, 110, 228, 0.07);
+  border-top: 1px solid rgba(157, 110, 228, 0.15);
+}
+
+.auction-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #e7edf3;
+}
+
+.auction-summary-img {
+  width: 40px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.auction-summary-arrow {
+  font-size: 1.5rem;
+  color: #9d6ee4;
+}
+
+/* ---- Accept confirm modal ---- */
+
+.auction-confirm-modal {
+  background: #1a1d2a;
+  border: 2px solid rgba(157, 110, 228, 0.35);
+  border-radius: 16px;
+  width: 90vw;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.auction-confirm-trade {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.auction-confirm-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  flex: 1;
+}
+
+.auction-confirm-card-img {
+  width: 110px;
+  border-radius: 8px;
+}
+
+.auction-confirm-arrow {
+  font-size: 2rem;
+  color: #9d6ee4;
+}
+
+/* ---- XP gain toast ---- */
+
+.auction-xp-toast {
+  position: fixed;
+  top: 5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  background: linear-gradient(135deg, rgba(30, 35, 50, 0.97), rgba(40, 28, 60, 0.97));
+  border: 2px solid rgba(157, 110, 228, 0.5);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  box-shadow: 0 8px 30px rgba(157, 110, 228, 0.25), 0 0 0 1px rgba(157, 110, 228, 0.1);
+  animation: xp-toast-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  min-width: 200px;
+}
+
+@keyframes xp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(60px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.auction-xp-icon {
+  font-size: 1.75rem;
+  color: #f59e0b;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+  flex-shrink: 0;
+}
+
+.auction-xp-title {
+  font-size: 0.78rem;
+  color: #8c9eb0;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+}
+
+.auction-xp-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.auction-xp-level {
+  font-size: 0.8rem;
+  color: #9d6ee4;
+  font-weight: 600;
+  margin-top: 0.1rem;
+}
+
+/* =============================================
+   AUCTION HOUSE — MOBILE RESPONSIVE
+   ============================================= */
+
+@media (max-width: 768px) {
+  /* Tighten page padding (applies to both Pokedex and Auction House) */
+  .pokedex-page {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Single-column listing grid */
+  .auction-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Browse/My-auctions header: search grows, buttons stay right */
+  .auction-browse-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .auction-browse-header .search-input {
+    flex: 1 1 100%;
+    max-width: 100% !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Tabs take up full width evenly */
+  .auction-tabs {
+    gap: 0;
+  }
+
+  .auction-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0.7rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* XP toast: leave space on both sides, don't hug edge */
+  .auction-xp-toast {
+    right: 1rem;
+    left: 1rem;
+    min-width: unset;
+    width: auto;
+  }
+
+  /* Confirm card images slightly smaller */
+  .auction-confirm-card-img {
+    width: 95px;
+  }
+
+  /* Modal near full-width */
+  .auction-modal-content {
+    width: 96vw;
+    max-height: 92vh;
+  }
+
+  .auction-confirm-modal {
+    width: 96vw;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even tighter page padding */
+  .pokedex-page {
+    padding: 0.875rem 0.75rem;
+  }
+
+  /* Listing card inner padding */
+  .auction-listing-card {
+    padding: 1rem 0.875rem;
+    gap: 0.75rem;
+  }
+
+  /* Shrink card images so the trade layout fits narrow screens */
+  .auction-listing-img {
+    max-width: 85px;
+  }
+
+  .auction-listing-arrow {
+    font-size: 1.1rem;
+  }
+
+  .auction-listing-trade {
+    gap: 0.5rem;
+  }
+
+  .auction-listing-name {
+    font-size: 0.8rem;
+  }
+
+  .auction-listing-set {
+    font-size: 0.7rem;
+  }
+
+  /* Footer: stack meta above the action button */
+  .auction-listing-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.625rem;
+  }
+
+  .auction-listing-meta {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .auction-accept-btn,
+  .auction-cancel-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Status badge */
+  .auction-status-badge {
+    font-size: 0.7rem;
+  }
+
+  /* Tabs: smaller text */
+  .auction-tab {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+    gap: 0.3rem;
+  }
+
+  .auction-tab-badge {
+    font-size: 0.7rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  /* Create/Refresh header buttons full-width when wrapped */
+  .auction-create-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+  }
+
+  /* Modals: nearly full screen */
+  .auction-modal-content {
+    width: 98vw;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .auction-confirm-modal {
+    width: 98vw;
+    border-radius: 12px;
+  }
+
+  /* Modal body: tighter padding */
+  .auction-modal-body {
+    padding: 1rem;
+  }
+
+  /* Modal footer buttons: stack vertically */
+  .auction-modal-content .modal-footer,
+  .auction-confirm-modal .modal-footer {
+    flex-direction: column-reverse;
+    padding: 0.875rem 1rem;
+  }
+
+  .auction-modal-content .modal-btn-primary,
+  .auction-modal-content .modal-btn-cancel,
+  .auction-confirm-modal .modal-btn-primary,
+  .auction-confirm-modal .modal-btn-cancel {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* Confirm trade: smaller card images */
+  .auction-confirm-trade {
+    gap: 0.75rem;
+  }
+
+  .auction-confirm-card-img {
+    width: 75px;
+  }
+
+  .auction-confirm-arrow {
+    font-size: 1.5rem;
+  }
+
+  /* Summary bar: tighter */
+  .auction-summary-bar {
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .auction-summary-img {
+    width: 32px;
+  }
+
+  .auction-summary-arrow {
+    font-size: 1.2rem;
+  }
+
+  /* Pick grid: 2 columns in modal */
+  .auction-pick-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* XP toast: full bleed with small margin */
+  .auction-xp-toast {
+    top: auto;
+    bottom: 1rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    border-radius: 12px;
+  }
+}
+
+/* ---- Card quantity badge ---- */
+
+.card-quantity-badge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(157, 110, 228, 0.85);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  line-height: 1;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }

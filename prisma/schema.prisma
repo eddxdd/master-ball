@@ -35,6 +35,8 @@ model User {
   pityTracker       PityTracker?
   tradesAsSender    Trade[] @relation("TradeSender")
   tradesAsReceiver  Trade[] @relation("TradeReceiver")
+  auctionsCreated   Auction[] @relation("AuctionCreator")
+  auctionsCompleted Auction[] @relation("AuctionCompleter")
 }
 
 // Biome model - different environments where Pokemon spawn
@@ -117,6 +119,7 @@ model Card {
   pokemon         Pokemon  @relation(fields: [pokemonId], references: [id], onDelete: Cascade)
   userCards       UserCard[]
   pokedexEntries  PokedexEntry[]
+  auctionsWanting Auction[] @relation("WantedCard")
 
   @@index([pokemonId])
   @@index([tier])
@@ -135,6 +138,7 @@ model Game {
   completed      Boolean  @default(false)
   won            Boolean  @default(false)
   offeredCardIds Json?    // Array of 3 card IDs offered after completion
+  appliedPityTier Int?    // If pity was applied this game, the tier given (so we can reset that bucket on capture)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -180,6 +184,8 @@ model UserCard {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
   game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  offeredInAuction  Auction? @relation("OfferedCard")
+  usedToCompleteAuction Auction? @relation("CompletedCard")
 
   @@index([userId, cardId])
   @@index([cardId])
@@ -202,13 +208,17 @@ model PokedexEntry {
 }
 
 // PityTracker model - tracks pity system for gacha mechanics
+// Pity only for tier 4+: bucket4 = tier 5 or 6 (3 in a row -> give tier 4), bucket3 = tier 4 (-> tier 3), bucket2 = tier 3 (-> tier 2), bucket1 = tier 2 (-> tier 1). Tier 1 = no pity.
 model PityTracker {
   id                  Int       @id @default(autoincrement())
   userId              Int       @unique
-  consecutiveTier6    Int       @default(0)
-  consecutiveTier5    Int       @default(0)
-  gamesWithoutCeiling Int       @default(0)  // Soft pity tracker
-  hardPityCounter     Int       @default(0)  // Hard pity at 10
+  consecutiveTier6    Int       @default(0)  // consecutive tier 6 games
+  consecutiveTier5    Int       @default(0)  // consecutive tier 5 games
+  consecutiveTier4    Int       @default(0)  // consecutive tier 4 games
+  consecutiveTier3    Int       @default(0)  // consecutive tier 3 games
+  consecutiveTier2    Int       @default(0)  // consecutive tier 2 games
+  gamesWithoutCeiling Int       @default(0)
+  hardPityCounter     Int       @default(0)
   totalGames          Int       @default(0)
   lastCeilingPull     DateTime?
   createdAt           DateTime  @default(now())
@@ -216,6 +226,32 @@ model PityTracker {
 
   // Relations
   user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Auction model - public trade listings (offer a card, request a specific card in return)
+model Auction {
+  id                  Int       @id @default(autoincrement())
+  creatorId           Int
+  offeredUserCardId   Int       @unique
+  wantedCardId        Int
+  status              String    @default("active") // active, completed, cancelled
+  completedById       Int?
+  completedUserCardId Int?      @unique
+  createdAt           DateTime  @default(now())
+  expiresAt           DateTime
+  updatedAt           DateTime  @updatedAt
+
+  // Relations
+  creator             User      @relation("AuctionCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  offeredUserCard     UserCard  @relation("OfferedCard", fields: [offeredUserCardId], references: [id])
+  wantedCard          Card      @relation("WantedCard", fields: [wantedCardId], references: [id])
+  completedBy         User?     @relation("AuctionCompleter", fields: [completedById], references: [id])
+  completedUserCard   UserCard? @relation("CompletedCard", fields: [completedUserCardId], references: [id])
+
+  @@index([creatorId])
+  @@index([status])
+  @@index([wantedCardId])
+  @@index([expiresAt])
 }
 
 // Trade model - for future trading system (preserved)

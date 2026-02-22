@@ -3,9 +3,6 @@ import "./App.css";
 import Cropper from "react-easy-crop";
 import type { Area, Point } from "react-easy-crop";
 import {
-  createHotel,
-  getHotelById,
-  listHotels,
   loadAuthState,
   loginUser,
   registerUser,
@@ -19,13 +16,17 @@ import {
   deleteUser,
   updateUserRole,
   startGame,
+  getTrainerProfile,
+  getAdminStats,
   type Card,
 } from "./api";
-import type { AuthResponse, AuthState, HealthResponse, Hotel, User, CreateUserPayload, UpdateUserRolePayload } from "./api";
+import type { AuthResponse, AuthState, HealthResponse, User, CreateUserPayload, UpdateUserRolePayload, TrainerProfile, LevelInfo, AdminStats } from "./api";
 import { BiomeSelectionPage } from "./components/BiomeSelectionPage";
 import { WordleGamePage } from "./components/WordleGamePage";
 import { CardCaptureModal } from "./components/CardCaptureModal";
 import { PokedexPage } from "./components/PokedexPage";
+import { AuctionHousePage } from "./components/AuctionHousePage";
+import { TrainerLevel, avatarUnlockLevel, bannerUnlockLevel } from "./components/TrainerLevel";
 
 type ApiInspectorProps = {
   title: string;
@@ -136,11 +137,12 @@ function StatusPage() {
   return (
     <div className="status-page">
       <div className="status-page-content">
-        <section className="home-parallax-banner">
-          <div className="home-parallax-overlay">
-            <p className="home-parallax-kicker">Master Ball</p>
-            <h2>Catch 'Em All in Wordle Style</h2>
-          </div>
+        <section className="home-mew-banner">
+          <img
+            src="/images/cards/sets/promo/ancientmew.jpg"
+            alt="Ancient Mew"
+            className="home-mew-card"
+          />
         </section>
 
         <section className="status-intro">
@@ -148,7 +150,7 @@ function StatusPage() {
           <p className="status-intro-text">
             A Pokemon-themed Wordle game where you guess Pokemon based on their attributes—biome, 
             type, evolution stage, color, and generation. Choose your biome, make your guesses, 
-            and collect rare TCG cards as rewards. Can you complete the Pokedex with all 151 original Kanto Pokemon?
+            and collect rare TCG cards as rewards.
           </p>
           <ul className="status-intro-list">
             <li>🎮 Guess Pokemon in 6 tries based on 6 attributes</li>
@@ -818,200 +820,112 @@ function UsersPage({ auth }: { auth: AuthState }) {
   );
 }
 
-/**
- * HotelsPage - Admin-only page for managing hotels
- * Provides three operations: list all hotels, fetch by ID, and create new hotel
- * Uses ApiInspector to show raw API responses
- */
-function HotelsPage() {
-  const last = useLastResponse<Hotel | Hotel[]>();
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [hotelId, setHotelId] = useState<string>("");
-  const [createForm, setCreateForm] = useState({
-    name: "",
-    city: "",
-    country: "",
-    biome: "BEACH",
-  });
+function AdminStatsPage({ auth }: { auth: AuthState }) {
+  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const biomes = useMemo(
-    () => [
-      "BEACH",
-      "MOUNTAIN",
-      "FOREST",
-      "DESERT",
-      "OCEAN",
-      "GRASSLAND",
-      "CAVE",
-      "URBAN",
-    ],
-    []
-  );
+  useEffect(() => {
+    if (!auth.token) return;
+    setLoading(true);
+    getAdminStats(auth.token).then((res) => {
+      if (res.data) setStats(res.data);
+      else setError(res.error ?? 'Failed to load stats');
+      setLoading(false);
+    });
+  }, [auth.token]);
 
-  /**
-   * handleListHotels - Fetches all hotels from API and updates local hotels list
-   * Updates the last response state for the API inspector
-   */
-  const handleListHotels = async () => {
-    const res = await listHotels();
-    last.update(res);
-    if (res.data && Array.isArray(res.data)) {
-      setHotels(res.data);
-    }
-  };
+  const fmt = (n: number) => n.toLocaleString();
 
-  /**
-   * handleGetById - Fetches a specific hotel by numeric ID
-   * Validates that the ID is a valid number before making API call
-   * Updates the last response state for the API inspector
-   */
-  const handleGetById = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const idNum = Number(hotelId);
-    if (!Number.isFinite(idNum)) {
-      last.update({
-        status: 400,
-        error: "Please enter a valid numeric ID",
-        data: null,
-      } as any);
-      return;
-    }
-    const res = await getHotelById(idNum);
-    last.update(res);
-  };
+  if (loading) return <div className="page"><div className="admin-stats-loading">Loading stats...</div></div>;
+  if (error || !stats) return <div className="page"><div className="admin-stats-loading">{error ?? 'No data'}</div></div>;
 
-  /**
-   * handleCreateHotel - Creates a new hotel with form data
-   * On success, appends the new hotel to the local hotels list
-   * Updates the last response state for the API inspector
-   */
-  const handleCreateHotel = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await createHotel(createForm);
-    last.update(res);
-    if (res.data) {
-      setHotels((prev) => [...prev, res.data as Hotel]);
-    }
-  };
+  const statCards = [
+    { label: 'Users',          value: fmt(stats.totals.users),           icon: 'users'   },
+    { label: 'Games completed',value: fmt(stats.totals.gamesCompleted),  icon: 'games'   },
+    { label: 'Cards captured', value: fmt(stats.totals.captures),        icon: 'cards'   },
+    { label: 'Pokedex entries',value: fmt(stats.totals.pokedexEntries),  icon: 'pokedex' },
+    { label: 'Games (7 days)', value: fmt(stats.totals.gamesLast7Days),  icon: 'week'    },
+  ];
 
   return (
-    <div className="page">
-      <section className="panel">
-        <h2>Hotels</h2>
-        <p>
-          Work with the <code>/hotels</code> endpoints. You can list all
-          hotels, fetch one by ID, and create new hotels.
-        </p>
+    <div className="page admin-stats-page">
+      <h2 className="admin-stats-title">Admin Overview</h2>
 
-        <div className="hotels-sections">
-        <div className="two-column">
-          <div className="panel">
-            <h3>List Hotels</h3>
-            <button className="primary" onClick={handleListHotels}>
-              Fetch all hotels
-            </button>
-            <ul className="hotel-list">
-              {hotels.map((h) => (
-                <li key={h.id}>
-                  <strong>
-                    #{h.id} {h.name}
-                  </strong>{" "}
-                  – {h.city}, {h.country} ({h.biome})
-                </li>
+      <div className="admin-stat-cards">
+        {statCards.map(({ label, value }) => (
+          <div key={label} className="admin-stat-card">
+            <span className="admin-stat-value">{value}</span>
+            <span className="admin-stat-label">{label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="admin-stats-grid">
+        <section className="admin-stats-panel">
+          <h3 className="admin-stats-panel-title">Top Trainers</h3>
+          <table className="admin-stats-table">
+            <thead>
+              <tr><th>#</th><th>Trainer</th><th>Level</th><th>Total XP</th></tr>
+            </thead>
+            <tbody>
+              {stats.topTrainers.map((t, i) => (
+                <tr key={t.id}>
+                  <td className="admin-rank">{i + 1}</td>
+                  <td>{t.username}</td>
+                  <td><span className="admin-level-badge">Lv.{t.level}</span></td>
+                  <td>{fmt(t.experience)}</td>
+                </tr>
               ))}
-              {hotels.length === 0 && <li>No hotels loaded yet.</li>}
-            </ul>
-          </div>
+            </tbody>
+          </table>
+        </section>
 
-          <div className="panel">
-            <h3>Fetch Hotel By ID</h3>
-            <form onSubmit={handleGetById}>
-              <label className="field">
-                <span className="label">Hotel ID</span>
-                <input
-                  type="number"
-                  value={hotelId}
-                  onChange={(e) => setHotelId(e.target.value)}
-                  placeholder="e.g. 1"
-                />
-              </label>
-              <button className="secondary" type="submit">
-                Fetch
-              </button>
-            </form>
-          </div>
-        </div>
+        <section className="admin-stats-panel">
+          <h3 className="admin-stats-panel-title">Recent Signups</h3>
+          <table className="admin-stats-table">
+            <thead>
+              <tr><th>Trainer</th><th>Role</th><th>Level</th><th>Joined</th></tr>
+            </thead>
+            <tbody>
+              {stats.recentUsers.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.username}</td>
+                  <td>
+                    <span className={`admin-role-badge admin-role-badge--${u.role.toLowerCase()}`}>{u.role}</span>
+                  </td>
+                  <td><span className="admin-level-badge">Lv.{u.level}</span></td>
+                  <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
 
-        <form className="panel" onSubmit={handleCreateHotel}>
-          <h3>Create Hotel</h3>
-          <div className="two-column">
-            <label className="field">
-              <span className="label">Name</span>
-              <input
-                type="text"
-                value={createForm.name}
-                onChange={(e) =>
-                  setCreateForm((f) => ({ ...f, name: e.target.value }))
-                }
-                required
-              />
-            </label>
-            <label className="field">
-              <span className="label">City</span>
-              <input
-                type="text"
-                value={createForm.city}
-                onChange={(e) =>
-                  setCreateForm((f) => ({ ...f, city: e.target.value }))
-                }
-                required
-              />
-            </label>
-            <label className="field">
-              <span className="label">Country</span>
-              <input
-                type="text"
-                value={createForm.country}
-                onChange={(e) =>
-                  setCreateForm((f) => ({ ...f, country: e.target.value }))
-                }
-                required
-              />
-            </label>
-            <label className="field">
-              <span className="label">Biome</span>
-              <select
-                value={createForm.biome}
-                onChange={(e) =>
-                  setCreateForm((f) => ({ ...f, biome: e.target.value }))
-                }
-              >
-                {biomes.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <section className="admin-stats-panel admin-stats-panel--wide">
+          <h3 className="admin-stats-panel-title">Captures by Rarity</h3>
+          <div className="admin-rarity-bars">
+            {stats.rarityBreakdown.map(({ rarity, count }) => {
+              const max = stats.rarityBreakdown[0]?.count ?? 1;
+              const pct = Math.max(2, (count / max) * 100);
+              return (
+                <div key={rarity} className="admin-rarity-row">
+                  <span className="admin-rarity-name">{rarity}</span>
+                  <div className="admin-rarity-bar-wrap">
+                    <div className="admin-rarity-bar" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="admin-rarity-count">{fmt(count)}</span>
+                </div>
+              );
+            })}
           </div>
-          <button className="primary" type="submit">
-            Create Hotel
-          </button>
-        </form>
-        </div>
-      </section>
-
-      <ApiInspector
-        title="Hotels Last Response"
-        lastStatus={last.status}
-        lastError={last.error}
-        lastData={last.data}
-      />
+        </section>
+      </div>
     </div>
   );
 }
 
-type PageId = "home" | "play" | "game" | "pokedex" | "dashboard" | "health" | "auth" | "hotels" | "adminAuth" | "users";
+type PageId = "home" | "play" | "game" | "pokedex" | "dashboard" | "health" | "auth" | "adminStats" | "adminAuth" | "users" | "auctionHouse";
 
 /**
  * getCroppedImg - Helper function to create cropped image from canvas
@@ -1064,13 +978,17 @@ function UserDashboard({
   selectedAvatar, 
   setSelectedAvatar, 
   selectedBanner, 
-  setSelectedBanner 
+  setSelectedBanner,
+  trainerProfile,
+  lastCaptureLevelInfo,
 }: { 
   auth: AuthState;
   selectedAvatar: { num: number; type: string; croppedImage?: string; cropArea?: Area } | null;
   setSelectedAvatar: (avatar: { num: number; type: string; croppedImage?: string; cropArea?: Area } | null) => void;
   selectedBanner: { num: number; type: string; croppedImage?: string; cropArea?: Area } | null;
   setSelectedBanner: (banner: { num: number; type: string; croppedImage?: string; cropArea?: Area } | null) => void;
+  trainerProfile: TrainerProfile | null;
+  lastCaptureLevelInfo: LevelInfo | null;
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -1100,14 +1018,18 @@ function UserDashboard({
     { num: 9, type: 'dragon', name: 'Zinnia', title: 'Dragon Tamer' },
   ];
 
+  const currentLevel = trainerProfile?.level ?? 1;
+
   /**
    * handleImageSelect - Handles avatar/banner selection from modal grid
-   * Locked options (4-9) are ignored for regular users; admins can select all
+   * Options are unlocked based on the trainer's current level.
    * Opens cropping interface for both avatars and banners
    */
   const handleImageSelect = (index: number) => {
-    if (index > 3 && !isAdmin) {
-      // Locked option for non-admin users
+    const requiredLevel = showImageModal === 'banner'
+      ? bannerUnlockLevel(index)
+      : avatarUnlockLevel(index);
+    if (currentLevel < requiredLevel && !isAdmin) {
       return;
     }
     const selected = avatarOptions[index - 1];
@@ -1283,6 +1205,8 @@ function UserDashboard({
             </div>
           </div>
 
+          <TrainerLevel profile={trainerProfile} captureResult={lastCaptureLevelInfo} />
+
           <div className="dashboard-fields">
             <div className="dashboard-field-group">
               <label className="dashboard-label">Display Name</label>
@@ -1362,7 +1286,8 @@ function UserDashboard({
                   { num: 8, type: "poison", name: "Marnie", title: "Rebel Punk" },
                   { num: 9, type: "dragon", name: "Zinnia", title: "Dragon Tamer" },
                 ].map(({ num, type, name }) => {
-                  const isLocked = num > 3 && !isAdmin;
+                  const requiredLevel = showImageModal === 'banner' ? bannerUnlockLevel(num) : avatarUnlockLevel(num);
+                  const isLocked = currentLevel < requiredLevel && !isAdmin;
                   return (
                     <button
                       key={num}
@@ -1395,6 +1320,7 @@ function UserDashboard({
                             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                           </svg>
+                          <span className="image-option-lock-level">Lv.{requiredLevel}</span>
                         </div>
                       )}
                       {!isLocked && (
@@ -1571,10 +1497,15 @@ function App() {
   // Game state
   const [currentGameId, setCurrentGameId] = useState<number | null>(null);
   const [showCardCaptureModal, setShowCardCaptureModal] = useState(false);
+  const [cardCaptureModalAlreadyCaptured, setCardCaptureModalAlreadyCaptured] = useState(false);
+  const [cardCaptureModalCapturedCardId, setCardCaptureModalCapturedCardId] = useState<number | null>(null);
   const [offeredCards, setOfferedCards] = useState<Card[]>([]);
   const [guaranteedCardId, setGuaranteedCardId] = useState<number | null>(null);
+  const [pityCardId, setPityCardId] = useState<number | null>(null);
   const [shouldRefetchGame, setShouldRefetchGame] = useState(false);
-  
+  const [trainerProfile, setTrainerProfile] = useState<TrainerProfile | null>(null);
+  const [lastCaptureLevelInfo, setLastCaptureLevelInfo] = useState<LevelInfo | null>(null);
+
   const isAdmin = auth.user?.role === "ADMIN";
   const isLoggedIn = !!auth.token && !!auth.user;
 
@@ -1681,6 +1612,17 @@ function App() {
     regenerateCroppedImages();
   }, [auth.user?.id]);
 
+  // Fetch trainer profile (level/XP) whenever auth changes
+  useEffect(() => {
+    if (!auth.token) {
+      setTrainerProfile(null);
+      return;
+    }
+    getTrainerProfile(auth.token).then((res) => {
+      if (res.data) setTrainerProfile(res.data);
+    });
+  }, [auth.token]);
+
   useEffect(() => {
     if (!auth.token || !auth.user) return;
 
@@ -1688,7 +1630,7 @@ function App() {
     if (!expiresAt) {
       clearAuthState();
       setAuth({ token: null, user: null });
-      if (currentPage === "hotels" || currentPage === "dashboard") {
+      if (currentPage === "adminStats" || currentPage === "dashboard") {
         setCurrentPage("home");
       }
       return;
@@ -1698,7 +1640,7 @@ function App() {
     if (msUntilExpiry <= 0) {
       clearAuthState();
       setAuth({ token: null, user: null });
-      if (currentPage === "hotels" || currentPage === "dashboard") {
+      if (currentPage === "adminStats" || currentPage === "dashboard") {
         setCurrentPage("home");
       }
       return;
@@ -1707,7 +1649,7 @@ function App() {
     const logoutTimer = window.setTimeout(() => {
       clearAuthState();
       setAuth({ token: null, user: null });
-      if (currentPage === "hotels" || currentPage === "dashboard") {
+      if (currentPage === "adminStats" || currentPage === "dashboard") {
         setCurrentPage("home");
       }
     }, msUntilExpiry);
@@ -1735,10 +1677,9 @@ function App() {
     }
   };
   
-  const handleGameComplete = (won: boolean, tier: number, offeredCards: Card[]) => {
+  const handleGameComplete = (won: boolean, tier: number, offeredCards: Card[], guaranteedCardId: number | null, pityCardId: number | null) => {
     console.log('handleGameComplete called:', { won, tier, offeredCards, offeredCardsLength: offeredCards.length });
     
-    // Ensure we have 3 cards
     if (!offeredCards || offeredCards.length !== 3) {
       console.error('Invalid offeredCards:', offeredCards);
       alert('Error: Failed to generate card offers. Please try again.');
@@ -1747,7 +1688,16 @@ function App() {
     }
     
     setOfferedCards(offeredCards);
-    setGuaranteedCardId(offeredCards[0]?.id || null);
+    setGuaranteedCardId(guaranteedCardId ?? offeredCards[0]?.id ?? null);
+    setPityCardId(pityCardId);
+    setCardCaptureModalAlreadyCaptured(false);
+    setCardCaptureModalCapturedCardId(null);
+    setShowCardCaptureModal(true);
+  };
+
+  const openCardCaptureModalAsViewOnly = (capturedCardId: number | null = null) => {
+    setCardCaptureModalAlreadyCaptured(true);
+    setCardCaptureModalCapturedCardId(capturedCardId);
     setShowCardCaptureModal(true);
   };
   
@@ -1755,8 +1705,24 @@ function App() {
     // Close modal and trigger refetch in game page
     setShowCardCaptureModal(false);
     setShouldRefetchGame(true);
-    // Reset trigger after a moment
     setTimeout(() => setShouldRefetchGame(false), 100);
+  };
+
+  const handleCaptureComplete = (xpGained: number, levelInfo: LevelInfo) => {
+    setLastCaptureLevelInfo(levelInfo);
+    // Update the cached trainer profile so level display refreshes everywhere
+    if (trainerProfile) {
+      setTrainerProfile({
+        ...trainerProfile,
+        level: levelInfo.level,
+        currentXp: levelInfo.currentXp,
+        xpNeeded: levelInfo.xpNeeded,
+        progressPercent: levelInfo.progressPercent,
+        totalXp: levelInfo.totalXp,
+      });
+    }
+    // Clear the transient level-up animation after 4s
+    setTimeout(() => setLastCaptureLevelInfo(null), 4000);
   };
   
   const handlePlayAgain = () => {
@@ -1801,6 +1767,7 @@ function App() {
           <WordleGamePage 
             gameId={currentGameId}
             onGameComplete={handleGameComplete}
+            onOpenCardCaptureModal={openCardCaptureModalAsViewOnly}
             shouldRefetch={shouldRefetchGame}
             onBack={() => setCurrentPage("play")}
             auth={auth as { token: string; user: any }}
@@ -1833,7 +1800,7 @@ function App() {
             </div>
           );
         }
-        return <UserDashboard auth={auth} selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar} selectedBanner={selectedBanner} setSelectedBanner={setSelectedBanner} />;
+        return <UserDashboard auth={auth} selectedAvatar={selectedAvatar} setSelectedAvatar={setSelectedAvatar} selectedBanner={selectedBanner} setSelectedBanner={setSelectedBanner} trainerProfile={trainerProfile} lastCaptureLevelInfo={lastCaptureLevelInfo} />;
       case "adminAuth":
         if (!isAdmin) {
           return (
@@ -1858,21 +1825,30 @@ function App() {
           );
         }
         return <UsersPage auth={auth} />;
-      case "hotels":
+      case "adminStats":
         if (!isAdmin) {
           return (
             <div className="page">
               <section className="panel">
                 <h2>Access Denied</h2>
-                <p>
-                  The Hotels page is available only to users with the admin role.
-                  Please log in as an admin to access it.
-                </p>
+                <p>This page is only available to admin users.</p>
               </section>
             </div>
           );
         }
-        return <HotelsPage />;
+        return <AdminStatsPage auth={auth} />;
+      case "auctionHouse":
+        if (!isLoggedIn) {
+          return (
+            <div className="page">
+              <section className="panel">
+                <h2>Access Denied</h2>
+                <p>Please log in to access the Auction House.</p>
+              </section>
+            </div>
+          );
+        }
+        return <AuctionHousePage auth={auth as { token: string; user: { id: number; username: string } }} onBack={() => setCurrentPage("home")} />;
       default:
         return <StatusPage />;
     }
@@ -1915,6 +1891,11 @@ function App() {
             </button>
           ) : (
             <div className="nav-avatar-wrapper">
+              {trainerProfile && (
+                <div className="nav-level-badge" title={`Level ${trainerProfile.level} Trainer`}>
+                  {trainerProfile.level}
+                </div>
+              )}
               <div 
                   className={`nav-avatar ${selectedAvatar ? `type-${selectedAvatar.type}` : ''}`}
                   onClick={() => setShowAvatarMenu(!showAvatarMenu)}
@@ -1960,6 +1941,15 @@ function App() {
                     Pokedex
                   </button>
                   <button
+                    className={`nav-avatar-menu-item ${currentPage === "auctionHouse" ? "active" : ""}`}
+                    onClick={() => {
+                      setCurrentPage("auctionHouse");
+                      setShowAvatarMenu(false);
+                    }}
+                  >
+                    Auction House
+                  </button>
+                  <button
                     className={`nav-avatar-menu-item ${currentPage === "dashboard" ? "active" : ""}`}
                     onClick={() => {
                       setCurrentPage("dashboard");
@@ -1971,13 +1961,13 @@ function App() {
                   {isAdmin && (
                     <>
                       <button
-                        className={`nav-avatar-menu-item ${currentPage === "hotels" ? "active" : ""}`}
+                        className={`nav-avatar-menu-item ${currentPage === "adminStats" ? "active" : ""}`}
                         onClick={() => {
-                          setCurrentPage("hotels");
+                          setCurrentPage("adminStats");
                           setShowAvatarMenu(false);
                         }}
                       >
-                        Hotels
+                        Stats
                       </button>
                       <button
                         className={`nav-avatar-menu-item ${currentPage === "users" ? "active" : ""}`}
@@ -2023,9 +2013,15 @@ function App() {
           gameId={currentGameId}
           offeredCards={offeredCards}
           guaranteedCardId={guaranteedCardId}
+          pityCardId={pityCardId}
+          alreadyCaptured={cardCaptureModalAlreadyCaptured}
+          capturedCardId={cardCaptureModalCapturedCardId}
           onPlayAgain={handlePlayAgain}
           onExit={handleExitToHome}
           onClose={handleCardCaptured}
+          onCaptured={handleCaptureComplete}
+          selectedAvatar={selectedAvatar}
+          trainerProfile={trainerProfile}
           auth={auth as { token: string; user: any }}
         />
       )}

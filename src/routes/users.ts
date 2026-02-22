@@ -7,6 +7,7 @@ import prisma from "../db/prisma.js";
 
 // Auth middleware to protect admin-only routes
 import { authenticate, requireAdmin } from "../middleware/auth.js";
+import { xpProgress } from "../services/xpSystem.js";
 
 const router = Router();
 
@@ -40,6 +41,37 @@ type CreateUserBody = {
 type UpdateRoleBody = {
   role?: unknown;
 };
+
+/**
+ * GET /users/me
+ * Returns the authenticated user's profile including XP and level progress.
+ */
+router.get("/me", authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user!.id;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, username: true, email: true, role: true, level: true, experience: true },
+    });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const progress = xpProgress(user.experience);
+    return res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      level: progress.level,
+      currentXp: progress.currentXp,
+      xpNeeded: progress.xpNeeded,
+      progressPercent: progress.progressPercent,
+      totalXp: user.experience,
+    });
+  } catch (err) {
+    next(err);
+    return;
+  }
+});
 
 /**
  * GET /users

@@ -4,11 +4,19 @@
  */
 
 import { useState, useEffect } from 'react';
+import { CardRewardsModal } from './CardRewardsModal';
 
 interface Pokemon {
   id: number;
   name: string;
   imageUrl: string | null;
+  pokedexNumber?: number;
+  type1?: string;
+  type2?: string | null;
+  evolutionStage?: number;
+  fullyEvolved?: boolean;
+  color?: string;
+  generation?: number;
 }
 
 interface GuessFeedback {
@@ -26,15 +34,27 @@ interface Guess {
   feedback: GuessFeedback;
 }
 
-interface WordleGamePageProps {
-  gameId: number;
-  onGameComplete: (won: boolean, tier: number, offeredCards: any[]) => void;
-  shouldRefetch?: boolean;
-  onBack: () => void;
-  auth: { token: string };
+interface PityInfo {
+  consecutiveTier6: number;
+  consecutiveTier5: number;
+  consecutiveTier4: number;
+  consecutiveTier3: number;
+  consecutiveTier2: number;
+  gamesWithoutCeiling: number;
+  hardPityCounter: number;
+  totalGames: number;
 }
 
-export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, auth }: WordleGamePageProps) {
+interface WordleGamePageProps {
+  gameId: number;
+  onGameComplete: (won: boolean, tier: number, offeredCards: any[], guaranteedCardId: number | null, pityCardId: number | null) => void;
+  onOpenCardCaptureModal?: (capturedCardId: number | null) => void;
+  shouldRefetch?: boolean;
+  onBack: () => void;
+  auth: { token: string; user?: { role?: string } };
+}
+
+export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal, shouldRefetch, onBack, auth }: WordleGamePageProps) {
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,11 +65,19 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
   const [answer, setAnswer] = useState<Pokemon | null>(null);
   const [tier, setTier] = useState<number | null>(null);
   const [biomeId, setBiomeId] = useState<number | null>(null);
+  const [biomeName, setBiomeName] = useState<string | null>(null);
+  const [biomeImageUrl, setBiomeImageUrl] = useState<string | null>(null);
   const [timeOfDay, setTimeOfDay] = useState<string | null>(null);
   const [offeredCards, setOfferedCards] = useState<any[]>([]);
+  const [guaranteedCardId, setGuaranteedCardId] = useState<number | null>(null);
+  const [pityCardId, setPityCardId] = useState<number | null>(null);
   const [cardCaptured, setCardCaptured] = useState(false);
+  const [capturedCardId, setCapturedCardId] = useState<number | null>(null);
+  const [pity, setPity] = useState<PityInfo | null>(null);
+  const [showCardRewardsModal, setShowCardRewardsModal] = useState(false);
 
   const maxGuesses = 6;
+  const isAdmin = auth.user?.role === 'ADMIN';
   
   const capitalizeFirst = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -84,18 +112,19 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
       setWon(data.won);
       setTier(data.tier);
       setBiomeId(data.biome.id);
+      setBiomeName(data.biome.name ?? null);
+      setBiomeImageUrl(data.biome.imageUrl ?? null);
       setTimeOfDay(data.timeOfDay);
+      setPity(data.pity || null);
       
-      // Check if card was already captured for this game
       setCardCaptured(!!data.capturedCardId);
+      setCapturedCardId(data.capturedCardId ?? null);
       
-      if (data.completed) {
-        setAnswer(data.answer);
-        
-        // Set offered cards if available
-        if (data.offeredCards && data.offeredCards.length === 3) {
-          setOfferedCards(data.offeredCards);
-        }
+      // Answer: when completed (all users) or always when admin
+      setAnswer(data.answer || null);
+      
+      if (data.completed && data.offeredCards && data.offeredCards.length === 3) {
+        setOfferedCards(data.offeredCards);
       }
       
       // Fetch ALL Pokemon (not just biome-specific)
@@ -162,28 +191,30 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
           ? data.offeredCards
           : [];
         setOfferedCards(cards);
+        const gid: number | null = data.guaranteedCardId ?? (cards[0]?.id ?? null);
+        const pid: number | null = data.pityCardId ?? null;
+        setGuaranteedCardId(gid);
+        setPityCardId(pid);
         
         if (cards.length === 3) {
-          console.log('Calling onGameComplete with cards:', cards);
-          onGameComplete(data.won, data.tier, cards);
+          onGameComplete(data.won, data.tier, cards, gid, pid);
         } else {
-          console.log('Refetching game state to get offered cards...');
-          // Refetch game state in case offered cards are available from server
+          // Cards weren't in the initial response — refetch once
           const refetch = await fetch(`http://localhost:4000/games/${gameId}`, {
             headers: { 'Authorization': `Bearer ${auth.token}` }
           });
           if (refetch.ok) {
             const gameData = await refetch.json();
-            console.log('Refetched game data:', {
-              offeredCards: gameData.offeredCards,
-              offeredCardsLength: gameData.offeredCards?.length
-            });
             if (Array.isArray(gameData.offeredCards) && gameData.offeredCards.length === 3) {
-              setOfferedCards(gameData.offeredCards); // <-- THIS WAS MISSING BEFORE!
-              onGameComplete(data.won, data.tier, gameData.offeredCards);
-            } else {
-              console.error('Still no valid offered cards after refetch');
+              const gid2: number | null = gameData.guaranteedCardId ?? (gameData.offeredCards[0]?.id ?? null);
+              const pid2: number | null = gameData.pityCardId ?? null;
+              setOfferedCards(gameData.offeredCards);
+              setGuaranteedCardId(gid2);
+              setPityCardId(pid2);
+              onGameComplete(data.won, data.tier, gameData.offeredCards, gid2, pid2);
             }
+            // If still no cards, the "View Your Cards" button in the result section
+            // lets the player retry manually without blocking the UI.
           }
         }
       }
@@ -258,6 +289,54 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
     return rows;
   };
 
+  const renderAnswerRow = () => {
+    if (!answer) return null;
+
+    const type2Label = answer.type2 ? capitalizeFirst(answer.type2) : '—';
+    const evolvedLabel = answer.fullyEvolved != null ? (answer.fullyEvolved ? 'Yes' : 'No') : '?';
+
+    return (
+      <>
+        <div className="answer-row-divider">
+          <span className="answer-row-label">✦ Answer ✦</span>
+        </div>
+        <div className="wordle-row answer-row">
+          <div className="wordle-cell pokemon-name answer-cell">
+            {answer.imageUrl
+              ? <img src={answer.imageUrl} alt={capitalizeFirst(answer.name)} className="pokemon-icon" />
+              : answer.pokedexNumber
+                ? <img
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${answer.pokedexNumber}.png`}
+                    alt={capitalizeFirst(answer.name)}
+                    className="pokemon-icon"
+                  />
+                : null
+            }
+            <span className="answer-pokemon-name">{capitalizeFirst(answer.name)}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{answer.type1 ? capitalizeFirst(answer.type1) : '?'}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{type2Label}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{answer.evolutionStage ?? '?'}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{evolvedLabel}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{answer.color ? capitalizeFirst(answer.color) : '?'}</span>
+          </div>
+          <div className="wordle-cell answer-cell">
+            <span className="answer-value">{answer.generation ?? '?'}</span>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="wordle-game-page">
       <div className="wordle-header">
@@ -267,6 +346,47 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
           Guesses: {guesses.length} / {maxGuesses}
         </div>
       </div>
+
+      <div className="wordle-top-bar">
+        <div className="card-rewards-button-wrap">
+          <button
+            type="button"
+            className="card-rewards-button"
+            onClick={() => setShowCardRewardsModal(true)}
+          >
+            🎴 Card Rewards
+          </button>
+        </div>
+
+        {biomeName && (
+          <div className="biome-indicator">
+            {biomeImageUrl && (
+              <div className="biome-indicator-img-wrap">
+                <img
+                  src={biomeImageUrl}
+                  alt={biomeName}
+                  className="biome-indicator-img"
+                />
+                {/* Night overlay */}
+                {timeOfDay === 'night' && <div className="biome-indicator-night-overlay" />}
+              </div>
+            )}
+            <div className="biome-indicator-text">
+              <span className="biome-indicator-name">{biomeName}</span>
+              <span className={`biome-indicator-time biome-indicator-time--${timeOfDay ?? 'day'}`}>
+                {timeOfDay === 'night' ? '🌙 Night' : '☀️ Day'}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {showCardRewardsModal && (
+        <CardRewardsModal
+          pity={pity}
+          onClose={() => setShowCardRewardsModal(false)}
+        />
+      )}
 
       <div className="wordle-grid-container">
         <div className="wordle-grid-header">
@@ -281,6 +401,7 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
         
         <div className="wordle-grid">
           {renderGuessGrid()}
+          {(gameCompleted || (isAdmin && answer)) && renderAnswerRow()}
         </div>
       </div>
 
@@ -355,7 +476,7 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
                 className="view-cards-button"
                 onClick={async () => {
                   if (offeredCards.length === 3) {
-                    onGameComplete(won, tier || 6, offeredCards);
+                    onGameComplete(won, tier || 6, offeredCards, guaranteedCardId, pityCardId);
                     return;
                   }
                   const refetch = await fetch(`http://localhost:4000/games/${gameId}`, {
@@ -365,7 +486,11 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
                     const gameData = await refetch.json();
                     if (Array.isArray(gameData.offeredCards) && gameData.offeredCards.length === 3) {
                       setOfferedCards(gameData.offeredCards);
-                      onGameComplete(won, tier || 6, gameData.offeredCards);
+                      const gid = gameData.guaranteedCardId ?? (gameData.offeredCards[0]?.id ?? null);
+                      const pid = gameData.pityCardId ?? null;
+                      setGuaranteedCardId(gid);
+                      setPityCardId(pid);
+                      onGameComplete(won, tier || 6, gameData.offeredCards, gid, pid);
                     } else {
                       alert('Cards are still loading. Please try again in a moment.');
                     }
@@ -380,6 +505,15 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
             
             {cardCaptured && (
               <>
+                {onOpenCardCaptureModal && (
+                  <button
+                    type="button"
+                    className="view-cards-button"
+                    onClick={() => onOpenCardCaptureModal(capturedCardId)}
+                  >
+                    🎴 View Cards
+                  </button>
+                )}
                 <button 
                   className="play-again-button"
                   onClick={onBack}
@@ -390,7 +524,7 @@ export function WordleGamePage({ gameId, onGameComplete, shouldRefetch, onBack, 
                   className="exit-button"
                   onClick={() => window.location.href = '/'}
                 >
-                  🏠 Exit to Home
+                  🏠 Home
                 </button>
               </>
             )}

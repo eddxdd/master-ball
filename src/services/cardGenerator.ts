@@ -5,11 +5,65 @@
 
 import { Card } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
-import { getPityTracker, calculatePityModifiers } from './pitySystem.js';
+import { getPityTracker, calculatePityModifiers, calculatePityTier } from './pitySystem.js';
+
+/** Rarity rank from least rare (1) to rarest (11), matching the official TCG order. */
+const RARITY_RANK: Record<string, number> = {
+  'Common': 1,
+  'Uncommon': 2,
+  'Rare': 3,
+  'Double Rare': 4,
+  'Illustration Rare': 5,
+  'Super Rare': 6,
+  'Special Illustration Rare': 7,
+  'Immersive': 8,
+  'Shiny Rare': 9,
+  'Shiny Super Rare': 10,
+  'Ultra Rare': 11,
+};
+
+/** Rarities available per tier (rarest-first order, mirroring the Card Rewards table). */
+const TIER_RARITY_POOLS: Record<number, string[]> = {
+  1: ['Ultra Rare', 'Shiny Super Rare', 'Shiny Rare', 'Immersive', 'Special Illustration Rare', 'Illustration Rare'],
+  2: ['Ultra Rare', 'Special Illustration Rare', 'Super Rare', 'Illustration Rare', 'Double Rare'],
+  3: ['Super Rare', 'Illustration Rare', 'Double Rare', 'Rare'],
+  4: ['Illustration Rare', 'Double Rare', 'Rare', 'Uncommon'],
+  5: ['Double Rare', 'Rare', 'Uncommon', 'Common'],
+  6: ['Rare', 'Uncommon', 'Common'],
+};
+
+/**
+ * For each rarity, find the highest tier number (worst tier) it appears in —
+ * that is the tier where it is "newly introduced" going from worst → best.
+ */
+const RARITY_FIRST_TIER: Record<string, number> = (() => {
+  const map: Record<string, number> = {};
+  for (const [tierStr, rarities] of Object.entries(TIER_RARITY_POOLS)) {
+    const t = Number(tierStr);
+    for (const r of rarities) {
+      if (map[r] === undefined || t > map[r]) map[r] = t;
+    }
+  }
+  return map;
+})();
+
+/**
+ * Set of rarities that are new (first introduced) at each tier.
+ * e.g. NEW_RARITIES_FOR_TIER[4] = Set { 'Illustration Rare' }
+ */
+const NEW_RARITIES_FOR_TIER: Record<number, Set<string>> = (() => {
+  const map: Record<number, Set<string>> = {};
+  for (const [rarity, firstTier] of Object.entries(RARITY_FIRST_TIER)) {
+    if (!map[firstTier]) map[firstTier] = new Set();
+    map[firstTier].add(rarity);
+  }
+  return map;
+})();
 
 export interface CardOffer {
   cards: Card[];
   guaranteedCard: Card;
+  appliedPityTier: number | null;
   appliedPity: {
     ceilingBoost: number;
     tierBoost: boolean;
@@ -26,19 +80,19 @@ export async function generateCardOffers(
   tier: number,
   guaranteedPokemonId: number
 ): Promise<CardOffer> {
-  // Get pity state
   const pityState = await getPityTracker(userId);
   const pityModifiers = calculatePityModifiers(pityState);
-  
-  // Apply tier boost if activated
-  let effectiveTier = tier;
-  if (pityModifiers.tierBoost && tier > 1) {
-    effectiveTier = Math.max(1, tier - 1);
-    console.log(`Tier boost activated! ${tier} → ${effectiveTier}`);
+  const { effectiveTier, appliedPityTier } = calculatePityTier(tier, pityState);
+  if (appliedPityTier != null) {
+    console.log(`Pity applied: ${tier} → effective tier ${effectiveTier}`);
   }
-  
-  // Get guaranteed card (the guessed Pokemon) - MUST be from the guessed Pokemon
-  let guaranteedCard = await selectGuaranteedCard(guaranteedPokemonId, effectiveTier);
+  let effectiveTierFinal = effectiveTier;
+  if (pityModifiers.tierBoost && effectiveTierFinal > 1) {
+    effectiveTierFinal = Math.max(1, effectiveTierFinal - 1);
+    console.log(`Tier boost: ${effectiveTierFinal + 1} → ${effectiveTierFinal}`);
+  }
+
+  let guaranteedCard = await selectGuaranteedCard(guaranteedPokemonId, effectiveTierFinal);
   
   if (!guaranteedCard) {
     // This should not happen if database is properly seeded
@@ -47,28 +101,30 @@ export async function generateCardOffers(
   }
   
   // Generate 2 random cards
+  // randomCard1 is the designated pity card slot — use top-2-rarest selection when pity applies
   let randomCard1;
   let randomCard2;
   
   try {
-    randomCard1 = await selectRandomCard(
-      effectiveTier,
-      pityModifiers.ceilingWeightMultiplier,
-      pityModifiers.guaranteeCeiling,
-      [guaranteedCard.id]
-    );
+    randomCard1 = appliedPityTier != null
+      ? await selectPityCard(effectiveTierFinal, [guaranteedCard.id])
+      : await selectRandomCard(
+          effectiveTierFinal,
+          pityModifiers.ceilingWeightMultiplier,
+          pityModifiers.guaranteeCeiling,
+          [guaranteedCard.id]
+        );
   } catch (error) {
     console.error('Error selecting random card 1:', error);
-    // Fallback: use any card from any tier
     randomCard1 = await prisma.card.findFirst({
       where: { id: { not: guaranteedCard.id } }
     });
-    if (!randomCard1) randomCard1 = guaranteedCard; // Ultimate fallback
+    if (!randomCard1) randomCard1 = guaranteedCard;
   }
   
   try {
     randomCard2 = await selectRandomCard(
-      effectiveTier,
+      effectiveTierFinal,
       pityModifiers.ceilingWeightMultiplier,
       pityModifiers.guaranteeCeiling,
       [guaranteedCard.id, randomCard1.id]
@@ -85,6 +141,7 @@ export async function generateCardOffers(
   return {
     cards: [guaranteedCard, randomCard1, randomCard2],
     guaranteedCard,
+    appliedPityTier: appliedPityTier ?? null,
     appliedPity: {
       ceilingBoost: pityModifiers.ceilingWeightMultiplier,
       tierBoost: pityModifiers.tierBoost,
@@ -193,6 +250,37 @@ async function selectRandomCard(
   }));
   
   return selectWeightedRandom(weightedCards.map((w: any) => w.card), weightedCards.map((w: any) => w.weight));
+}
+
+/**
+ * Select a pity card: must be from the rarity (or rarities) that are newly introduced
+ * at this effective tier and not available in any worse tier.
+ * Falls back to the highest-ranked rarity available in the tier if no new-rarity cards exist.
+ */
+async function selectPityCard(tier: number, excludeIds: number[]): Promise<Card> {
+  const newRarities = NEW_RARITIES_FOR_TIER[tier];
+
+  if (newRarities && newRarities.size > 0) {
+    const newRarityCards = await prisma.card.findMany({
+      where: { tier, rarity: { in: [...newRarities] }, id: { notIn: excludeIds } }
+    });
+    if (newRarityCards.length > 0) {
+      console.log(`Pity card: selecting from new rarities ${[...newRarities].join(', ')} for tier ${tier}`);
+      return selectWeightedRandom(newRarityCards);
+    }
+  }
+
+  // Fallback: pick highest-ranked rarity available in the db for this tier
+  const allCards = await prisma.card.findMany({
+    where: { tier, id: { notIn: excludeIds } }
+  });
+  if (allCards.length === 0) throw new Error(`No pity cards available for tier ${tier}`);
+
+  const distinctRarities = [...new Set(allCards.map((c: Card) => c.rarity))];
+  distinctRarities.sort((a, b) => (RARITY_RANK[b] ?? 0) - (RARITY_RANK[a] ?? 0));
+  const bestRarity = distinctRarities[0];
+  const pool = allCards.filter((c: Card) => c.rarity === bestRarity);
+  return selectWeightedRandom(pool.length > 0 ? pool : allCards);
 }
 
 /**

@@ -6,6 +6,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { prisma } from '../lib/prisma.js';
+import { getSetDisplayName } from '../utils/cardDisplay.js';
+import { enrichCardsWithBiomes } from '../utils/cardEnrichment.js';
 
 const router = Router();
 
@@ -18,38 +20,78 @@ router.get('/', authenticate, async (req: Request, res: Response, next: NextFunc
     const userId = req.user!.id;
     const isAdmin = req.user!.role === 'ADMIN';
     
-    // Get all cards
+    // Get all cards, ordered so the best (lowest tier = rarest) card per unique
+    // image comes first — we'll deduplicate below.
     const allCards = await prisma.card.findMany({
-      include: {
-        pokemon: true
-      },
+      include: { pokemon: true },
       orderBy: [
         { pokemon: { pokedexNumber: 'asc' } },
-        { tier: 'asc' }
-      ]
+        { tier: 'asc' },
+      ],
     });
-    
-    // Get user's captured card IDs
+
+    // Get user's captured card IDs (a Set for O(1) lookup)
     const capturedEntries = await prisma.pokedexEntry.findMany({
       where: { userId },
-      select: {
-        cardId: true,
-        discovered: true
-      }
+      select: { cardId: true, discovered: true },
     });
-    
     const capturedMap = new Map(
       capturedEntries.map(entry => [entry.cardId, entry.discovered])
     );
-    
-    // Format response with capture status
-    const pokedex = allCards.map(card => ({
-      card,
-      captured: isAdmin || capturedMap.has(card.id), // Admins see all as captured
-      discovered: capturedMap.get(card.id) || null
+
+    // Get copy counts per cardId for this user
+    const userCardCounts = await prisma.userCard.groupBy({
+      by: ['cardId'],
+      where: { userId },
+      _count: { id: true },
+    });
+    const countByCardId = new Map(
+      userCardCounts.map(row => [row.cardId, row._count.id])
+    );
+
+    // Deduplicate: show one card per unique (pokemonId, imageUrl) pair.
+    // Because we ordered by tier asc, the representative card for each
+    // unique image is the rarest version (lowest tier).
+    // A card counts as "captured" if the user owns ANY card with that same image.
+    const seen = new Set<string>();
+    const pokedex: any[] = [];
+
+    for (const card of allCards) {
+      const key = `${card.pokemonId}::${card.imageUrl}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+
+      // Check if user has ANY card sharing this image (any tier variant)
+      const siblings = allCards.filter(
+        c => c.pokemonId === card.pokemonId && c.imageUrl === card.imageUrl
+      );
+      const isCaptured = isAdmin || siblings.some(c => capturedMap.has(c.id));
+      const discovered = siblings
+        .map(c => capturedMap.get(c.id))
+        .filter(Boolean)[0] ?? null;
+
+      // Sum copies across all sibling card IDs
+      const quantity = siblings.reduce((sum, c) => sum + (countByCardId.get(c.id) ?? 0), 0);
+
+      pokedex.push({
+        card: {
+          ...card,
+          setDisplayName: getSetDisplayName(card.setId, card.imageUrl),
+        },
+        captured: isCaptured,
+        discovered,
+        quantity,
+      });
+    }
+
+    // Enrich all cards with biome names in one batch query
+    const enrichedCards = await enrichCardsWithBiomes(pokedex.map((e) => e.card));
+    const enrichedPokedex = pokedex.map((entry, i) => ({
+      ...entry,
+      card: enrichedCards[i],
     }));
-    
-    res.json(pokedex);
+
+    res.json(enrichedPokedex);
   } catch (error) {
     next(error);
   }
@@ -152,6 +194,53 @@ router.get('/stats', authenticate, async (req: Request, res: Response, next: Nex
 });
 
 /**
+ * GET /pokedex/collection
+ * Get the user's owned UserCards (with card details), grouped by cardId.
+ * Useful for selecting a card to offer in an auction.
+ * Excludes cards already locked in an active auction.
+ * Must be registered before /:cardId to avoid routing conflicts.
+ */
+router.get('/collection', authenticate, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user!.id;
+
+    const userCards = await prisma.userCard.findMany({
+      where: {
+        userId,
+        offeredInAuction: null,
+      },
+      include: {
+        card: { include: { pokemon: true } },
+      },
+      orderBy: { obtained: 'desc' },
+    });
+
+    // Group by cardId to provide quantity info
+    const grouped: Record<number, { card: any; quantity: number; instances: { id: number; obtained: Date }[] }> = {};
+
+    for (const uc of userCards) {
+      const cardId = uc.cardId;
+      if (!grouped[cardId]) {
+        grouped[cardId] = {
+          card: {
+            ...uc.card,
+            setDisplayName: getSetDisplayName(uc.card.setId, uc.card.imageUrl),
+          },
+          quantity: 0,
+          instances: [],
+        };
+      }
+      grouped[cardId].quantity += 1;
+      grouped[cardId].instances.push({ id: uc.id, obtained: uc.obtained });
+    }
+
+    res.json(Object.values(grouped));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * GET /pokedex/:cardId
  * Get details about a specific card in the Pokedex
  */
@@ -161,7 +250,7 @@ router.get('/:cardId', authenticate, async (req: Request, res: Response, next: N
     const cardId = parseInt(req.params.cardId);
     
     if (isNaN(cardId)) {
-      return res.status(400).json({ error: 'Invalid card ID' });
+      res.status(400).json({ error: 'Invalid card ID' }); return;
     }
     
     const entry = await prisma.pokedexEntry.findUnique({
@@ -181,7 +270,7 @@ router.get('/:cardId', authenticate, async (req: Request, res: Response, next: N
     });
     
     if (!entry) {
-      return res.status(404).json({ error: 'Card not in your Pokedex' });
+      res.status(404).json({ error: 'Card not in your Pokedex' }); return;
     }
     
     // Get all instances of this card owned by user
@@ -204,6 +293,10 @@ router.get('/:cardId', authenticate, async (req: Request, res: Response, next: N
     
     res.json({
       ...entry,
+      card: {
+        ...entry.card,
+        setDisplayName: getSetDisplayName(entry.card.setId, entry.card.imageUrl),
+      },
       instances: userCards
     });
   } catch (error) {

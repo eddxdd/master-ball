@@ -5,6 +5,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
+
 interface Pokemon {
   id: number;
   name: string;
@@ -12,22 +14,26 @@ interface Pokemon {
   imageUrl: string | null;
 }
 
+
 interface Card {
   id: number;
   tcgdexId: string;
   pokemonName: string;
   setName: string;
+  setDisplayName?: string;
   rarity: string;
   tier: number;
   imageUrl: string;
   imageUrlLarge: string | null;
   pokemon: Pokemon;
+  biomeNames?: string[];
 }
 
 interface PokedexEntry {
   card: Card;
   captured: boolean;
   discovered: string | null;
+  quantity: number;
 }
 
 interface PokedexStats {
@@ -328,59 +334,35 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                   <span className="lock-icon">🔒</span>
                 </div>
               )}
-              <div className="card-image-wrapper">
-                {entry.card.imageUrlLarge || entry.card.imageUrl ? (
-                  <img
-                    src={entry.card.imageUrlLarge || entry.card.imageUrl}
-                    alt={capitalizeFirst(entry.card.pokemonName)}
-                    className="card-image"
-                    onError={(e) => {
-                      // Fallback to Pokemon sprite from PokeAPI using pokedexNumber
-                      const dexNum = entry.card.pokemon?.pokedexNumber || 0;
-                      const fallbackUrl = dexNum 
-                        ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dexNum}.png`
-                        : '';
-                      const currentTarget = e.currentTarget;
-                      
-                      if (fallbackUrl) {
-                        // Try PokeAPI sprite
-                        currentTarget.src = fallbackUrl;
-                        currentTarget.onerror = () => {
-                          // If that also fails, show placeholder
-                          currentTarget.style.display = 'none';
-                          const parent = currentTarget.parentElement;
-                          if (parent && !parent.querySelector('.card-image-placeholder')) {
-                            const fallback = document.createElement('div');
-                            fallback.className = 'card-image-placeholder';
-                            fallback.textContent = capitalizeFirst(entry.card.pokemonName).charAt(0);
-                            parent.appendChild(fallback);
-                          }
-                        };
-                      } else {
-                        // No dex number, show placeholder immediately
-                        currentTarget.style.display = 'none';
-                        const parent = currentTarget.parentElement;
-                        if (parent && !parent.querySelector('.card-image-placeholder')) {
-                          const fallback = document.createElement('div');
-                          fallback.className = 'card-image-placeholder';
-                          fallback.textContent = capitalizeFirst(entry.card.pokemonName).charAt(0);
-                          parent.appendChild(fallback);
-                        }
-                      }
-                    }}
-                  />
-                ) : (
-                  <div className="card-image-placeholder">
-                    {capitalizeFirst(entry.card.pokemonName).charAt(0)}
-                  </div>
+              <div className="card-image-wrapper" style={{ position: 'relative' }}>
+                <img
+                  src={entry.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                  alt={capitalizeFirst(entry.card.pokemonName)}
+                  className="card-image"
+                  onError={(e) => {
+                    e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
+                    e.currentTarget.onerror = null;
+                  }}
+                />
+                {entry.captured && entry.quantity > 1 && (
+                  <span className="card-quantity-badge">×{entry.quantity}</span>
                 )}
               </div>
               <div className="card-details">
                 <h4 className="card-pokemon-name">{capitalizeFirst(entry.card.pokemonName)}</h4>
-                <p className="card-set">{entry.card.setName}</p>
+                {(entry.card.setDisplayName ?? entry.card.setName) && (
+                  <span className="card-set-tag">{entry.card.setDisplayName ?? entry.card.setName}</span>
+                )}
                 <span className={`rarity-badge rarity-tier-${entry.card.tier}`}>
                   {entry.card.rarity}
                 </span>
+                {entry.card.biomeNames && entry.card.biomeNames.length > 0 && (
+                  <div className="card-biome-tags">
+                    {entry.card.biomeNames.map((b) => (
+                      <span key={b} className="card-tag card-tag-biome">{b}</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))
@@ -396,6 +378,13 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
               <span className={`rarity-badge rarity-tier-${selectedCard.tier}`}>
                 {selectedCard.rarity}
               </span>
+              {selectedCard.biomeNames && selectedCard.biomeNames.length > 0 && (
+                <div className="card-viewer-biomes">
+                  {selectedCard.biomeNames.map((b) => (
+                    <span key={b} className="card-tag card-tag-biome">{b}</span>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div
@@ -412,13 +401,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                 }}
                 draggable={false}
                 onError={(e) => {
-                  const dexNum = selectedCard.pokemon?.pokedexNumber || 0;
-                  const fallbackUrl = dexNum 
-                    ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dexNum}.png`
-                    : '';
-                  if (fallbackUrl) {
-                    e.currentTarget.src = fallbackUrl;
-                  }
+                  e.currentTarget.style.display = 'none';
                 }}
               />
             </div>
