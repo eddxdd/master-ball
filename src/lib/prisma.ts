@@ -5,7 +5,6 @@
 
 import { PrismaClient } from '@prisma/client';
 import { createRequire } from 'module';
-import { join } from 'path';
 
 // For Prisma 7, we need to use the adapter pattern
 const require = createRequire(import.meta.url);

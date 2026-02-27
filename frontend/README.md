@@ -1,43 +1,24 @@
-# Pokémon Hotel Frontend
+# Master Ball Frontend
 
-This is a small Vite + React frontend that lets you **visually exercise the Pokémon Hotel API** while you develop new backend features.
+This is the Vite + React frontend for **Master Ball** – a Pokémon-themed Wordle game with TCG card collection.
 
-## Pages mapped to backend routes
+## Pages and features
 
-- **Dashboard**: Quick overview and links to each feature area.
-- **Health**: Calls `GET /health` and shows the JSON response so you can confirm the server is running.
-- **Auth**:
-  - `POST /auth/register`
-  - `POST /auth/login`
-  - On success, the JWT token and trainer info are stored locally so future features can reuse them.
-- **Hotels**:
-  - `GET /hotels`
-  - `GET /hotels/:id`
-  - `POST /hotels`
-  - You can list hotels, fetch one by ID, and create new ones.
-
-Each page shows the **last API status code, error (if any), and raw JSON response** so you can see exactly what the backend returned.
-
-## Conventions for new backend features
-
-Whenever you add a new backend feature or route, also add a matching **frontend page or section** here so you can interact with it visually:
-
-1. **Create a new UI surface**:
-   - Either add a new page (e.g. `Bookings`, `Reviews`, `Encounters`) or extend an existing one.
-2. **Wire a form or controls to the API**:
-   - Call the new endpoint using the helper functions in `src/api.ts` (or add a new helper there).
-3. **Show the last response**:
-   - Reuse the same pattern as existing pages: show last status, error, and JSON payload so you can see the effect in real-time.
-
-This keeps the frontend in sync with the backend and gives you a living “dev console” you can use to explore your system as it grows.
+- **Home**: Overview and navigation.
+- **Play**: Biome selection and start a Wordle game.
+- **Game**: Wordle-style guessing with card rewards.
+- **Pokedex**: View collected cards and completion stats.
+- **Auction House**: List and trade cards with other trainers.
+- **Dashboard**: Trainer profile, avatar/banner, level and XP.
+- **Health**: `GET /health` – confirm the API is running.
+- **Auth**: Register and login. JWT and trainer info are stored for authenticated requests.
+- **Admin**: Stats, user management, and auth debug (admin role only).
 
 ## Local development
 
-1. Start the backend (from the project root):
-   - `npm run dev`
-2. Start this frontend (from `frontend/`):
-   - `npm run dev`
-3. Open the printed Vite URL in your browser (usually `http://localhost:5173`) to interact with the API.
+1. From the project root, start the API: `npm run dev`
+2. From `frontend/`: `npm run dev`
+3. Open the Vite URL (e.g. `http://localhost:5173`)
 
 # React + TypeScript + Vite
 
@@ -54,7 +35,7 @@ The React Compiler is not enabled on this template because of its impact on dev 
 
 ## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+If you are developing a production application, we recommend updating the configuration to use type-aware lint rules:
 
 ```js
 export default defineConfig([

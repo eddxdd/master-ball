@@ -663,14 +663,14 @@ function UsersPage({ auth }: { auth: AuthState }) {
           users, fetch one by ID, create new users, and delete users.
         </p>
 
-        <div className="hotels-sections">
+        <div className="admin-sections">
         <div className="two-column">
           <div className="panel">
             <h3>List Users</h3>
             <button className="primary" onClick={handleListUsers}>
               Fetch all users
             </button>
-            <ul className="hotel-list">
+            <ul className="user-list">
               {users.map((u) => (
                 <li key={u.id}>
                   <strong>
@@ -1478,7 +1478,7 @@ function UserDashboard({
 /**
  * App - Root component with navigation and authentication state
  * Manages:
- * - Page routing (home, dashboard, health, auth, hotels)
+ * - Page routing (home, dashboard, health, auth, admin)
  * - Auth state persistence and token expiry handling
  * - Conditional navigation based on login/admin status
  * - Auto-logout timer that clears auth when token expires
@@ -1739,7 +1739,7 @@ function App() {
 
   /**
    * renderPage - Routes to the appropriate page component based on currentPage state
-   * Implements access control: dashboard requires login, hotels requires admin role
+   * Implements access control: dashboard requires login, users page requires admin role
    * Shows access denied messages for unauthorized access attempts
    */
   const renderPage = () => {

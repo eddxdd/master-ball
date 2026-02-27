@@ -119,8 +119,8 @@ async function seedCardsEnhanced() {
               setName: 'Placeholder Set',
               rarity: 'Common',
               tier,
-              imageUrl: pokemon.imageUrl, // Use PokeAPI sprite
-              imageUrlLarge: pokemon.imageUrl,
+              imageUrl: pokemon.imageUrl ?? '',
+              imageUrlLarge: pokemon.imageUrl ?? '',
               weight: 10.0,
               isFloor: true,
               isCeiling: false

@@ -122,9 +122,6 @@ function getBiomesForPokemon(type1: string, type2: string | null): { biomes: str
   };
 }
 
-// Empty object - will be populated dynamically based on Pokemon types from PokeAPI
-const POKEMON_SPAWNS: Record<number, { biomes: string[]; timeOfDay: string }> = {};
-
 async function seedBiomes() {
   console.log('Seeding biomes...');
   

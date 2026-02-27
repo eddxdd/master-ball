@@ -33,9 +33,9 @@ router.get('/pokemon', async (_req: Request, res: Response, next: NextFunction) 
       }
     });
     
-    res.json(pokemon);
+    return res.json(pokemon);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -92,7 +92,7 @@ router.post('/', authenticate, async (req: Request, res: Response, next: NextFun
       }
     });
     
-    res.status(201).json({
+    return res.status(201).json({
       id: game.id,
       biome: game.biome,
       timeOfDay: game.timeOfDay,
@@ -103,7 +103,7 @@ router.post('/', authenticate, async (req: Request, res: Response, next: NextFun
       createdAt: game.createdAt
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -262,10 +262,10 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
       }
     }
     
-    res.json(response);
+    return res.json(response);
   } catch (error) {
     console.error('GET /games/:id error:', error);
-    next(error);
+    return next(error);
   }
 });
 
@@ -360,7 +360,8 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
             appliedPityTier: cardOffers.appliedPityTier ?? undefined
           },
           include: {
-            pokemon: true
+            pokemon: true,
+            guesses: true
           }
         });
         
@@ -392,13 +393,14 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
             tier
           },
           include: {
-            pokemon: true
+            pokemon: true,
+            guesses: true
           }
         });
       }
     }
     
-    res.json({
+    return res.json({
       guess: {
         guessNum,
         pokemon: guessPokemon,
@@ -413,7 +415,7 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
       pityCardId
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -527,7 +529,7 @@ router.post('/:id/capture', authenticate, async (req: Request, res: Response, ne
       });
     }
 
-    res.json({
+    return res.json({
       ...userCard,
       xpGained,
       levelInfo: {
@@ -541,7 +543,7 @@ router.post('/:id/capture', authenticate, async (req: Request, res: Response, ne
       },
     });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -573,9 +575,9 @@ router.get('/history', authenticate, async (req: Request, res: Response, next: N
       take: 50
     });
     
-    res.json(games);
+    return res.json(games);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 

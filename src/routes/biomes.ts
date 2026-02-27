@@ -24,9 +24,9 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
       }
     });
     
-    res.json(biomes);
+    return res.json(biomes);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -57,9 +57,9 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
       return res.status(404).json({ error: 'Biome not found' });
     }
     
-    res.json(biome);
+    return res.json(biome);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -95,9 +95,9 @@ router.get('/:id/pokemon', async (req: Request, res: Response, next: NextFunctio
     
     const pokemon = spawns.map((s: any) => s.pokemon);
     
-    res.json(pokemon);
+    return res.json(pokemon);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -121,9 +121,9 @@ router.post('/', authenticate, requireAdmin, async (req: Request, res: Response,
       }
     });
     
-    res.status(201).json(biome);
+    return res.status(201).json(biome);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -149,9 +149,9 @@ router.patch('/:id', authenticate, requireAdmin, async (req: Request, res: Respo
       }
     });
     
-    res.json(biome);
+    return res.json(biome);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
@@ -171,9 +171,9 @@ router.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Resp
       where: { id: biomeId }
     });
     
-    res.status(204).send();
+    return res.status(204).send();
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 

@@ -182,38 +182,6 @@ export const loginUser = (payload: LoginPayload) =>
 export const registerTrainer = registerUser;
 export const loginTrainer = loginUser;
 
-export type Hotel = {
-  id: number;
-  name: string;
-  city: string;
-  country: string;
-  biome: string;
-};
-
-export type CreateHotelPayload = {
-  name: string;
-  city: string;
-  country: string;
-  biome: string;
-};
-
-export const listHotels = () =>
-  request<Hotel[]>("/hotels", {
-    method: "GET",
-  });
-
-export const getHotelById = (id: number) =>
-  request<Hotel>(`/hotels/${id}`, {
-    method: "GET",
-  });
-
-export const createHotel = (payload: CreateHotelPayload) =>
-  request<Hotel>("/hotels", {
-    method: "POST",
-    headers: buildHeaders(),
-    body: JSON.stringify(payload),
-  });
-
 export type CreateUserPayload = {
   username: string;
   email: string;

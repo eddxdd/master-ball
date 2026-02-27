@@ -1008,14 +1008,14 @@ input::placeholder {
   color: #b3261e;
 }
 
-.hotels-sections {
+.admin-sections {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   margin-top: 1rem;
 }
 
-.hotels-sections .two-column {
+.admin-sections .two-column {
   gap: 1.5rem;
 }
 
@@ -1357,7 +1357,7 @@ input::placeholder {
   border-color: #9d6ee4;
 }
 
-.hotel-list {
+.user-list {
   margin-top: 0.75rem;
   list-style: none;
   padding: 0;
@@ -1367,7 +1367,7 @@ input::placeholder {
   gap: 0.25rem;
 }
 
-.hotel-list li {
+.user-list li {
   padding: 0.35rem 0.4rem;
   border-radius: 0.6rem;
   background: #11131a;
