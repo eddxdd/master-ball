@@ -1,4 +1,6 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import pino from "pino";
 import { pinoHttp } from "pino-http";
 import cors from "cors";
@@ -75,6 +77,14 @@ app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/auctions', auctionRoutes);
+
+// Serve frontend static files and SPA fallback (production only)
+if (process.env.NODE_ENV === 'production') {
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const frontendDist = path.join(__dirname, '..', 'frontend-dist');
+    app.use(express.static(frontendDist));
+    app.get('*', (_req, res) => res.sendFile(path.join(frontendDist, 'index.html')));
+}
 
 // Error catcher (must be AFTER routes!)
 app.use(errorHandler);

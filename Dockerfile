@@ -21,8 +21,13 @@ ENV DIRECT_DATABASE_URL=$DIRECT_DATABASE_URL
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Build TypeScript
+# Build TypeScript (backend)
 RUN npm run build
+
+# Build frontend (for production serving from API)
+ARG VITE_API_URL=https://masterball.eduardolemos.com
+ENV VITE_API_URL=$VITE_API_URL
+RUN cd frontend && npm ci && npm run build
 
 # Production stage
 FROM node:22-alpine AS production
@@ -43,6 +48,7 @@ RUN npm ci --only=production && \
 
 # Copy built application from builder
 COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/frontend/dist ./frontend-dist
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nodejs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nodejs:nodejs /app/prisma.config.ts ./prisma.config.ts
