@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import "./App.css";
 import Cropper from "react-easy-crop";
 import type { Area, Point } from "react-easy-crop";
@@ -20,7 +20,7 @@ import {
   getAdminStats,
   type Card,
 } from "./api";
-import type { AuthResponse, AuthState, HealthResponse, User, CreateUserPayload, UpdateUserRolePayload, TrainerProfile, LevelInfo, AdminStats } from "./api";
+import type { AuthResponse, AuthState, HealthResponse, User, CreateUserPayload, TrainerProfile, LevelInfo, AdminStats } from "./api";
 import { BiomeSelectionPage } from "./components/BiomeSelectionPage";
 import { WordleGamePage } from "./components/WordleGamePage";
 import { CardCaptureModal } from "./components/CardCaptureModal";
@@ -218,7 +218,7 @@ function HealthPage() {
 }
 
 function AuthPage({
-  auth,
+  auth: _auth,
   setAuth,
   onLoginSuccess,
 }: {
@@ -1708,7 +1708,7 @@ function App() {
     setTimeout(() => setShouldRefetchGame(false), 100);
   };
 
-  const handleCaptureComplete = (xpGained: number, levelInfo: LevelInfo) => {
+  const handleCaptureComplete = (_xpGained: number, levelInfo: LevelInfo) => {
     setLastCaptureLevelInfo(levelInfo);
     // Update the cached trainer profile so level display refreshes everywhere
     if (trainerProfile) {

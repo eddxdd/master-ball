@@ -64,7 +64,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
   const [won, setWon] = useState(false);
   const [answer, setAnswer] = useState<Pokemon | null>(null);
   const [tier, setTier] = useState<number | null>(null);
-  const [biomeId, setBiomeId] = useState<number | null>(null);
+  const [_biomeId, setBiomeId] = useState<number | null>(null);
   const [biomeName, setBiomeName] = useState<string | null>(null);
   const [biomeImageUrl, setBiomeImageUrl] = useState<string | null>(null);
   const [timeOfDay, setTimeOfDay] = useState<string | null>(null);
