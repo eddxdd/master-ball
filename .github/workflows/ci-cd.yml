@@ -76,8 +76,4 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key ${EC2_USER}@${EC2_HOST} "\
-            cd /home/ec2-user/apps/master-ball && \
-            aws ecr get-login-password --region us-east-2 | docker login -u AWS -p-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com && \
-            docker compose -f docker-compose.prod.yml pull && \
-            docker compose -f docker-compose.prod.yml up -d"
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key ${EC2_USER}@${EC2_HOST} "cd /home/ec2-user/apps/master-ball && aws ecr get-login-password --region us-east-2 > /tmp/ecr_token && docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com < /tmp/ecr_token && rm -f /tmp/ecr_token && docker compose -f docker-compose.prod.yml pull && docker compose -f docker-compose.prod.yml up -d"
