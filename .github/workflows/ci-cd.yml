@@ -15,6 +15,8 @@ jobs:
   test:
     name: Test and Lint
     runs-on: ubuntu-latest
+    env:
+      DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
     steps:
       - name: Checkout code
@@ -30,8 +32,6 @@ jobs:
         run: npm ci
 
       - name: Run Prisma generate
-        env:
-          DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
         run: npx prisma generate
 
       - name: Type check
