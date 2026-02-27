@@ -24,6 +24,9 @@ RUN npx prisma generate
 # Build TypeScript (backend)
 RUN npm run build
 
+# Keep only .prisma for production copy; remove rest of node_modules to free space before frontend install
+RUN (cd node_modules && find . -mindepth 1 -maxdepth 1 ! -name '.prisma' -exec rm -rf {} +)
+
 # Build frontend (for production serving from API)
 # No VITE_API_URL: production build uses same-origin (relative) URLs so this image works on any domain
 RUN cd frontend && npm ci && npm run build
