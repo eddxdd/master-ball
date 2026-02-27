@@ -30,6 +30,8 @@ jobs:
         run: npm ci
 
       - name: Run Prisma generate
+        env:
+          DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
         run: npx prisma generate
 
       - name: Type check
