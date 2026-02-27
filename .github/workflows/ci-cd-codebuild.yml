@@ -1,0 +1,66 @@
+# Alternative deploy pipeline: build Docker image on AWS CodeBuild (more disk space),
+# then deploy to EC2 the same way. Use this if the main pipeline still fails with "no space left".
+#
+# One-time setup:
+# 1. In AWS CodeBuild console, create a project (e.g. "master-ball-build"):
+#    - Source: GitHub, this repo, branch main
+#    - Environment: Managed image, Docker, Linux, BUILD_GENERAL1_MEDIUM (or LARGE for more disk)
+#    - Service role: allow ECR push, logs
+# 2. Add secret CODEBUILD_PROJECT_NAME = your project name (e.g. master-ball-build)
+# 3. Run this workflow from the Actions tab, or add push: branches: [main] below to use it on every push.
+
+name: CI/CD (CodeBuild)
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-2
+  ECR_REGISTRY: 338753559735.dkr.ecr.us-east-2.amazonaws.com
+  ECR_REPOSITORY: master-ball-api
+
+jobs:
+  test:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+    env:
+      DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run type-check
+      - run: npm run build
+
+  deploy:
+    name: Build (CodeBuild) and Deploy to EC2
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build and push image (CodeBuild)
+        uses: aws-actions/aws-codebuild-run-build@v1
+        with:
+          project-name: ${{ secrets.CODEBUILD_PROJECT_NAME }}
+          buildspec-override: buildspec.yml
+          compute-type-override: BUILD_GENERAL1_MEDIUM
+
+      - name: Deploy to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST || '18.225.81.206' }}
+          EC2_USER: ${{ secrets.EC2_USER || 'ec2-user' }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key ${EC2_USER}@${EC2_HOST} "cd /home/ec2-user/apps/master-ball && aws ecr get-login-password --region us-east-2 > /tmp/ecr_token && docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com < /tmp/ecr_token && rm -f /tmp/ecr_token && docker compose -f docker-compose.prod.yml pull && docker compose -f docker-compose.prod.yml up -d"

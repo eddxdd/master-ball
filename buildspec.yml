@@ -1,0 +1,35 @@
+# Optional: use with AWS CodeBuild when GitHub runner runs out of disk.
+# Create a CodeBuild project with Docker environment and larger compute (e.g. BUILD_GENERAL1_MEDIUM).
+# Point the project at this repo and set env: CODEBUILD_PROJECT_NAME in the workflow.
+
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}
+      - echo Building image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  build:
+    commands:
+      - docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      - docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+  post_build:
+    commands:
+      - echo Pushing image to ECR...
+      - docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+env:
+  variables:
+    ECR_REGISTRY: "338753559735.dkr.ecr.us-east-2.amazonaws.com"
+    ECR_REPOSITORY: "master-ball-api"
+    AWS_REGION: "us-east-2"
+
+artifacts:
+  files:
+    - "**/*"
+
+cache:
+  paths: []
