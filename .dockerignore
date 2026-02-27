@@ -15,3 +15,6 @@ coverage
 .nyc_output
 *.log
 
+# Exclude large card pack zips from image (not needed at runtime)
+frontend/public/images/cards/packs
+frontend/public/**/*.zip
