@@ -26,7 +26,21 @@ const logger = pino({
 });
 
 // Security middleware - Helmet helps secure Express apps by setting HTTP headers
-app.use(helmet());
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                "script-src": [
+                    "'self'",
+                    // Inline script hash (e.g. Vite build or injected); allow this specific hash to avoid CSP errors
+                    "'sha256-1txVT/jhTQ7dFWfpiowB7wHQzNsAa40eVR1Ma2PA+00-'",
+                    // Cloudflare Web Analytics beacon when site is behind Cloudflare
+                    "https://static.cloudflareinsights.com",
+                ],
+            },
+        },
+    })
+);
 
 // CORS configuration - allows frontend to make requests
 const corsOptions = {

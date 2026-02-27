@@ -25,8 +25,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Build frontend (for production serving from API)
-ARG VITE_API_URL=https://masterball.eduardolemos.com
-ENV VITE_API_URL=$VITE_API_URL
+# No VITE_API_URL: production build uses same-origin (relative) URLs so this image works on any domain
 RUN cd frontend && npm ci && npm run build
 
 # Production stage

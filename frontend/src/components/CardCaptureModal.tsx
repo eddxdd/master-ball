@@ -4,6 +4,7 @@
  */
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { API_URL } from '../api';
 
 const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
 
@@ -193,7 +194,7 @@ export function CardCaptureModal({
     // 3) Call API
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:4000/games/${gameId}/capture`, {
+      const response = await fetch(`${API_URL}/games/${gameId}/capture`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1484,10 +1484,7 @@ function UserDashboard({
  * - Auto-logout timer that clears auth when token expires
  */
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageId>(() => {
-    const saved = localStorage.getItem('currentPage');
-    return (saved as PageId) || "home";
-  });
+  const [currentPage, setCurrentPage] = useState<PageId>("home");
   const [auth, setAuth] = useState<AuthState>(() => loadAuthState());
   const [selectedAvatar, setSelectedAvatar] = useState<{ num: number; type: string; croppedImage?: string; cropArea?: Area } | null>(null);
   const [selectedBanner, setSelectedBanner] = useState<{ num: number; type: string; croppedImage?: string; cropArea?: Area } | null>(null);
@@ -1522,10 +1519,6 @@ function App() {
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [showAvatarMenu]);
-
-  useEffect(() => {
-    localStorage.setItem('currentPage', currentPage);
-  }, [currentPage]);
 
   // Persist avatar per user (so each account has its own avatar)
   useEffect(() => {

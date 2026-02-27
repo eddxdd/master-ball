@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { API_URL } from '../api';
 
 interface Biome {
   id: number;
@@ -29,7 +30,7 @@ export function BiomeSelectionPage({ onStartGame }: BiomeSelectionPageProps) {
   const fetchBiomes = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:4000/biomes');
+      const response = await fetch(`${API_URL}/biomes`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch biomes');

@@ -11,13 +11,13 @@ import {
   acceptAuction,
   cancelAuction,
   getCollection,
+  API_URL,
   type Auction,
   type CollectionEntry,
   type AcceptAuctionResponse,
 } from '../api';
 
 const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000';
 const MAX_ACTIVE_AUCTIONS = 3;
 
 function capitalizeFirst(str: string): string {

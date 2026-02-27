@@ -1,4 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
+// In production, use same origin (relative URLs) so the same build works wherever it's deployed.
+// In dev, use localhost:4000 unless VITE_API_URL is set (e.g. for a different backend).
+const API_URL =
+  import.meta.env.VITE_API_URL ??
+  (import.meta.env.DEV ? "http://localhost:4000" : "");
+export { API_URL };
 
 export type ApiResponse<T> = {
   status: number;

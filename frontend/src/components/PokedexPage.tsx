@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { API_URL } from '../api';
 
 const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
 
@@ -97,7 +98,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
 
   const fetchPokedex = async () => {
     try {
-      const response = await fetch('http://localhost:4000/pokedex', {
+      const response = await fetch(`${API_URL}/pokedex`, {
         headers: {
           'Authorization': `Bearer ${auth.token}`
         }
@@ -118,7 +119,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:4000/pokedex/stats', {
+      const response = await fetch(`${API_URL}/pokedex/stats`, {
         headers: {
           'Authorization': `Bearer ${auth.token}`
         }

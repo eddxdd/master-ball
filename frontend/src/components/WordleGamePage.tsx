@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { CardRewardsModal } from './CardRewardsModal';
+import { API_URL } from '../api';
 
 interface Pokemon {
   id: number;
@@ -96,7 +97,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
 
   const fetchGameState = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/games/${gameId}`, {
+      const response = await fetch(`${API_URL}/games/${gameId}`, {
         headers: {
           'Authorization': `Bearer ${auth.token}`
         }
@@ -136,7 +137,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
 
   const fetchAllPokemon = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/games/pokemon`);
+      const response = await fetch(`${API_URL}/games/pokemon`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch Pokemon list');
@@ -155,7 +156,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
     try {
       setLoading(true);
       
-      const response = await fetch(`http://localhost:4000/games/${gameId}/guess`, {
+      const response = await fetch(`${API_URL}/games/${gameId}/guess`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -200,7 +201,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
           onGameComplete(data.won, data.tier, cards, gid, pid);
         } else {
           // Cards weren't in the initial response — refetch once
-          const refetch = await fetch(`http://localhost:4000/games/${gameId}`, {
+          const refetch = await fetch(`${API_URL}/games/${gameId}`, {
             headers: { 'Authorization': `Bearer ${auth.token}` }
           });
           if (refetch.ok) {
@@ -479,7 +480,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
                     onGameComplete(won, tier || 6, offeredCards, guaranteedCardId, pityCardId);
                     return;
                   }
-                  const refetch = await fetch(`http://localhost:4000/games/${gameId}`, {
+                  const refetch = await fetch(`${API_URL}/games/${gameId}`, {
                     headers: { 'Authorization': `Bearer ${auth.token}` }
                   });
                   if (refetch.ok) {
