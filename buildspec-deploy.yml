@@ -1,0 +1,38 @@
+# Deploy stage: SSH to EC2 and run docker compose pull/up. Use with CodeBuild project master-ball-deploy.
+# Requires: EC2_HOST, EC2_USER, SSH_KEY_SECRET_NAME (or SSH_KEY_SECRET_ARN) in CodeBuild env.
+# Store the EC2 SSH private key in Secrets Manager and grant the deploy project role GetSecretValue.
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Deploying to EC2..."
+      - |
+        if [ -z "$EC2_HOST" ] || [ -z "$EC2_USER" ]; then
+          echo "Set EC2_HOST and EC2_USER in the CodeBuild project environment"
+          exit 1
+        fi
+      - |
+        if [ -n "$SSH_KEY_SECRET_ARN" ]; then
+          aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_ARN" --query SecretString --output text > /tmp/deploy_key
+        elif [ -n "$SSH_KEY_SECRET_NAME" ]; then
+          aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_NAME" --query SecretString --output text > /tmp/deploy_key
+        else
+          echo "Set SSH_KEY_SECRET_ARN or SSH_KEY_SECRET_NAME in the CodeBuild project environment"
+          exit 1
+        fi
+      - chmod 600 /tmp/deploy_key
+  build:
+    commands:
+      - |
+        ssh -o StrictHostKeyChecking=accept-new -i /tmp/deploy_key ${EC2_USER}@${EC2_HOST} "\
+          cd /home/ec2-user/apps/master-ball && \
+          aws ecr get-login-password --region us-east-2 | docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com && \
+          docker compose -f docker-compose.prod.yml pull && \
+          docker compose -f docker-compose.prod.yml up -d"
+  post_build:
+    commands:
+      - echo "Deploy completed"
+
+artifacts:
+  files: []

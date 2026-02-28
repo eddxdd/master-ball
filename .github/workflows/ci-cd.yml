@@ -1,23 +1,20 @@
-name: CI/CD Pipeline
+# Test and lint only. Deployment runs on AWS (CodePipeline + CodeBuild).
+# See docs/aws-pipeline-setup.md for the full pipeline (test → build → deploy).
+name: CI (tests only)
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 env:
-  AWS_REGION: us-east-2
-  ECR_REGISTRY: 338753559735.dkr.ecr.us-east-2.amazonaws.com
-  ECR_REPOSITORY: master-ball-api
+  DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
 jobs:
   test:
     name: Test and Lint
     runs-on: ubuntu-latest
-    env:
-      DIRECT_DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,8 +22,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -39,52 +36,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-  deploy:
-    name: Deploy to EC2
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Free disk space (runner has limited space for Docker build)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
-
-      - name: Build, tag, and push image to Amazon ECR
-        run: |
-          docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
-          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          docker tag ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
-          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
-
-      - name: Deploy to EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST || '18.225.81.206' }}
-          EC2_USER: ${{ secrets.EC2_USER || 'ec2-user' }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key ${EC2_USER}@${EC2_HOST} "cd /home/ec2-user/apps/master-ball && aws ecr get-login-password --region us-east-2 > /tmp/ecr_token && docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com < /tmp/ecr_token && rm -f /tmp/ecr_token && docker compose -f docker-compose.prod.yml pull && docker compose -f docker-compose.prod.yml up -d"

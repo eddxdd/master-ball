@@ -1,0 +1,22 @@
+# Test stage: type-check and build (no Docker). Use with CodeBuild project master-ball-test.
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  pre_build:
+    commands:
+      - npm ci
+      - npx prisma generate
+  build:
+    commands:
+      - npm run type-check
+      - npm run build
+
+env:
+  variables:
+    DIRECT_DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+
+artifacts:
+  files: []
