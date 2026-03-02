@@ -7,6 +7,12 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo Logging in to Docker Hub...
+      - |
+        if [ -n "${DOCKERHUB_SECRET_NAME:-}" ]; then
+          CREDS=$(aws secretsmanager get-secret-value --secret-id "$DOCKERHUB_SECRET_NAME" --query SecretString --output text)
+          echo "$CREDS" | jq -r '.password' | docker login -u $(echo "$CREDS" | jq -r '.username') --password-stdin
+        fi
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
       - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}
