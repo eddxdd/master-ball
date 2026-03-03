@@ -67,6 +67,23 @@ export function BiomeSelectionPage({ onStartGame }: BiomeSelectionPageProps) {
     );
   }
 
+  if (biomes.length === 0) {
+    return (
+      <div className="biome-selection-page">
+        <header className="biome-selection-header">
+          <h1>Select Your Biome</h1>
+          <p className="subtitle">Choose where your Pokemon adventure begins</p>
+        </header>
+        <div className="biome-selection-empty">
+          <p>No biomes available.</p>
+          <p className="biome-selection-empty-hint">
+            The database has not been seeded with biomes yet. Run the Wordle seed script on the server (e.g. <code>npx tsx src/scripts/seedWordle.ts</code>) to populate biomes and Pokemon spawns.
+          </p>
+          <button onClick={fetchBiomes} className="retry-button">Retry</button>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="biome-selection-page">
       <header className="biome-selection-header">

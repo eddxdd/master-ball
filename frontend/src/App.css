@@ -3789,6 +3789,27 @@ code {
   gap: 1rem;
 }
 
+.biome-selection-empty {
+  text-align: center;
+  padding: 2rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.biome-selection-empty p {
+  margin-bottom: 0.75rem;
+}
+.biome-selection-empty-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted, #888);
+  margin-bottom: 1.25rem;
+}
+.biome-selection-empty code {
+  font-size: 0.85em;
+  background: rgba(0,0,0,0.2);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
 .loading-spinner {
   width: 50px;
   height: 50px;
