@@ -14,12 +14,17 @@ phases:
         fi
       - |
         if [ -n "$SSH_KEY_SECRET_ARN" ]; then
-          aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_ARN" --query SecretString --output text > /tmp/deploy_key
+          RAW=$(aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_ARN" --query SecretString --output text)
         elif [ -n "$SSH_KEY_SECRET_NAME" ]; then
-          aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_NAME" --query SecretString --output text > /tmp/deploy_key
+          RAW=$(aws secretsmanager get-secret-value --secret-id "$SSH_KEY_SECRET_NAME" --query SecretString --output text)
         else
           echo "Set SSH_KEY_SECRET_ARN or SSH_KEY_SECRET_NAME in the CodeBuild project environment"
           exit 1
+        fi
+        if echo "$RAW" | jq -e '.privateKey' >/dev/null 2>&1; then
+          echo "$RAW" | jq -r '.privateKey' > /tmp/deploy_key
+        else
+          echo "$RAW" > /tmp/deploy_key
         fi
       - chmod 600 /tmp/deploy_key
   build:
