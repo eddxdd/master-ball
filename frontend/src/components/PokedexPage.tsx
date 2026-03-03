@@ -4,9 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { API_URL } from '../api';
-
-const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
+import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Pokemon {
   id: number;
@@ -337,7 +335,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
               )}
               <div className="card-image-wrapper" style={{ position: 'relative' }}>
                 <img
-                  src={entry.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                  src={getCardImageUrl(entry.card.imageUrl)}
                   alt={capitalizeFirst(entry.card.pokemonName)}
                   className="card-image"
                   onError={(e) => {
@@ -394,7 +392,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
               onMouseDown={handleMouseDown}
             >
               <img
-                src={selectedCard.imageUrlLarge || selectedCard.imageUrl}
+                src={getCardImageUrl(selectedCard.imageUrlLarge || selectedCard.imageUrl)}
                 alt={capitalizeFirst(selectedCard.pokemonName)}
                 className="card-viewer-image"
                 style={{
@@ -402,7 +400,8 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                 }}
                 draggable={false}
                 onError={(e) => {
-                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
+                  e.currentTarget.onerror = null;
                 }}
               />
             </div>

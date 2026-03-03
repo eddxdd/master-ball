@@ -253,6 +253,13 @@ export type Pokemon = {
 
 export const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
 
+/** Use only local images from our folder; otherwise return placeholder. Use for all card/asset img src. */
+export function getCardImageUrl(url: string | null | undefined): string {
+  if (!url || typeof url !== 'string') return CARD_PLACEHOLDER_IMAGE;
+  if (!url.startsWith('/')) return CARD_PLACEHOLDER_IMAGE;
+  return url;
+}
+
 export type Card = {
   id: number;
   tcgdexId: string;

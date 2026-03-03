@@ -12,12 +12,13 @@ import {
   cancelAuction,
   getCollection,
   API_URL,
+  getCardImageUrl,
+  CARD_PLACEHOLDER_IMAGE,
   type Auction,
   type CollectionEntry,
   type AcceptAuctionResponse,
 } from '../api';
 
-const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
 const MAX_ACTIVE_AUCTIONS = 3;
 
 function capitalizeFirst(str: string): string {
@@ -414,7 +415,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                         >
                           <div className="card-image-wrapper" style={{ position: 'relative' }}>
                             <img
-                              src={entry.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                              src={getCardImageUrl(entry.card.imageUrl)}
                               alt={capitalizeFirst(entry.card.pokemonName)}
                               className="card-image"
                               onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -458,7 +459,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                         >
                           <div className="card-image-wrapper">
                             <img
-                              src={card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                              src={getCardImageUrl(card.imageUrl)}
                               alt={capitalizeFirst(card.pokemonName)}
                               className="card-image"
                               onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -483,7 +484,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                   {selectedOffered ? (
                     <>
                       <img
-                        src={selectedOffered.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                        src={getCardImageUrl(selectedOffered.card.imageUrl)}
                         alt={selectedOffered.card.pokemonName}
                         className="auction-summary-img"
                         onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -499,7 +500,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                   {selectedWanted ? (
                     <>
                       <img
-                        src={selectedWanted.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                        src={getCardImageUrl(selectedWanted.imageUrl)}
                         alt={selectedWanted.pokemonName}
                         className="auction-summary-img"
                         onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -560,7 +561,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                 <div className="auction-confirm-side">
                   <p style={{ color: '#8c9eb0', marginBottom: '0.5rem', fontSize: '0.85rem' }}>You give</p>
                   <img
-                    src={acceptConfirm.auction.wantedCard.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                    src={getCardImageUrl(acceptConfirm.auction.wantedCard.imageUrl)}
                     alt={acceptConfirm.auction.wantedCard.pokemonName}
                     className="auction-confirm-card-img"
                     onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -574,7 +575,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                 <div className="auction-confirm-side">
                   <p style={{ color: '#8c9eb0', marginBottom: '0.5rem', fontSize: '0.85rem' }}>You receive</p>
                   <img
-                    src={acceptConfirm.auction.offeredUserCard.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+                    src={getCardImageUrl(acceptConfirm.auction.offeredUserCard.card.imageUrl)}
                     alt={acceptConfirm.auction.offeredUserCard.card.pokemonName}
                     className="auction-confirm-card-img"
                     onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -623,7 +624,7 @@ function AuctionCard({
         <div className="auction-listing-side">
           <div className="auction-listing-label">Offered</div>
           <img
-            src={auction.offeredUserCard.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+            src={getCardImageUrl(auction.offeredUserCard.card.imageUrl)}
             alt={auction.offeredUserCard.card.pokemonName}
             className="auction-listing-img"
             onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -640,7 +641,7 @@ function AuctionCard({
         <div className="auction-listing-side">
           <div className="auction-listing-label">Wanted</div>
           <img
-            src={auction.wantedCard.imageUrl || CARD_PLACEHOLDER_IMAGE}
+            src={getCardImageUrl(auction.wantedCard.imageUrl)}
             alt={auction.wantedCard.pokemonName}
             className="auction-listing-img"
             onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -696,7 +697,7 @@ function MyAuctionCard({
         <div className="auction-listing-side">
           <div className="auction-listing-label">You offer</div>
           <img
-            src={auction.offeredUserCard.card.imageUrl || CARD_PLACEHOLDER_IMAGE}
+            src={getCardImageUrl(auction.offeredUserCard.card.imageUrl)}
             alt={auction.offeredUserCard.card.pokemonName}
             className="auction-listing-img"
             onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
@@ -712,7 +713,7 @@ function MyAuctionCard({
         <div className="auction-listing-side">
           <div className="auction-listing-label">You want</div>
           <img
-            src={auction.wantedCard.imageUrl || CARD_PLACEHOLDER_IMAGE}
+            src={getCardImageUrl(auction.wantedCard.imageUrl)}
             alt={auction.wantedCard.pokemonName}
             className="auction-listing-img"
             onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}

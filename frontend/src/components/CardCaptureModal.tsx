@@ -4,9 +4,7 @@
  */
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { API_URL } from '../api';
-
-const CARD_PLACEHOLDER_IMAGE = '/images/cards/sets/Pokemon-Card-Back.png';
+import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Card {
   id: number;
@@ -271,7 +269,7 @@ export function CardCaptureModal({
                   /* Guaranteed card always shows its face — no flip needed */
                   <div className="offered-card-face-direct">
                     <img
-                      src={card.imageUrlLarge || card.imageUrl}
+                      src={getCardImageUrl(card.imageUrlLarge || card.imageUrl)}
                       alt={capitalizeFirst(card.pokemonName)}
                       className="card-face-img"
                       onError={(e) => {
@@ -292,7 +290,7 @@ export function CardCaptureModal({
                     </div>
                     <div className="offered-card-face offered-card-front-face">
                       <img
-                        src={card.imageUrlLarge || card.imageUrl}
+                        src={getCardImageUrl(card.imageUrlLarge || card.imageUrl)}
                         alt={capitalizeFirst(card.pokemonName)}
                         className="card-face-img"
                         onError={(e) => {

@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { CardRewardsModal } from './CardRewardsModal';
-import { API_URL } from '../api';
+import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Pokemon {
   id: number;
@@ -248,9 +248,15 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
           <div key={i} className="wordle-row">
             <div className="wordle-cell pokemon-name">
               {capitalizeFirst(guess.pokemon.name)}
-              {guess.pokemon.imageUrl && (
-                <img src={guess.pokemon.imageUrl} alt={capitalizeFirst(guess.pokemon.name)} className="pokemon-icon" />
-              )}
+              <img
+                src={getCardImageUrl(guess.pokemon.imageUrl)}
+                alt={capitalizeFirst(guess.pokemon.name)}
+                className="pokemon-icon"
+                onError={(e) => {
+                  e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
+                  e.currentTarget.onerror = null;
+                }}
+              />
             </div>
             <div className={`wordle-cell feedback-${guess.feedback.type1.replace('/', '-')}`}>
               {getFeedbackIcon(guess.feedback.type1)}
@@ -303,16 +309,15 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
         </div>
         <div className="wordle-row answer-row">
           <div className="wordle-cell pokemon-name answer-cell">
-            {answer.imageUrl
-              ? <img src={answer.imageUrl} alt={capitalizeFirst(answer.name)} className="pokemon-icon" />
-              : answer.pokedexNumber
-                ? <img
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${answer.pokedexNumber}.png`}
-                    alt={capitalizeFirst(answer.name)}
-                    className="pokemon-icon"
-                  />
-                : null
-            }
+            <img
+              src={getCardImageUrl(answer.imageUrl)}
+              alt={capitalizeFirst(answer.name)}
+              className="pokemon-icon"
+              onError={(e) => {
+                e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
+                e.currentTarget.onerror = null;
+              }}
+            />
             <span className="answer-pokemon-name">{capitalizeFirst(answer.name)}</span>
           </div>
           <div className="wordle-cell answer-cell">
@@ -450,19 +455,17 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
             <div className="answer-reveal">
               <p>The Pokemon was:</p>
               <div className="answer-pokemon">
-                <img 
-                  src={
+                <img
+                  src={getCardImageUrl(
                     offeredCards.length === 3
                       ? (offeredCards[0].imageUrlLarge || offeredCards[0].imageUrl)
-                      : (answer as any).imageUrl || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${(answer as any).pokedexNumber ?? (answer as any).id ?? 0}.png`
-                  }
+                      : (answer as any).imageUrl
+                  )}
                   alt={capitalizeFirst(answer.name)}
                   className="answer-card-image"
                   onError={(e) => {
-                    const target = e.currentTarget;
-                    if (!target.src.includes('official-artwork')) return;
-                    const a = answer as any;
-                    target.src = a?.imageUrl || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${a?.pokedexNumber ?? a?.id ?? 0}.png`;
+                    e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
+                    e.currentTarget.onerror = null;
                   }}
                 />
                 <h4>{capitalizeFirst(answer.name)}</h4>
