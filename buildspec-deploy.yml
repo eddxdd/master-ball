@@ -23,6 +23,10 @@ phases:
         fi
         if echo "$RAW" | jq -e '.privateKey' >/dev/null 2>&1; then
           echo "$RAW" | jq -r '.privateKey' > /tmp/deploy_key
+        elif echo "$RAW" | jq -e '.key' >/dev/null 2>&1; then
+          echo "$RAW" | jq -r '.key' > /tmp/deploy_key
+        elif echo "$RAW" | jq -e 'keys[0]' >/dev/null 2>&1; then
+          echo "$RAW" | jq -r '.[keys[0]]' > /tmp/deploy_key
         else
           echo "$RAW" > /tmp/deploy_key
         fi
