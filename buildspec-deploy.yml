@@ -36,6 +36,7 @@ phases:
       - |
         ssh -o StrictHostKeyChecking=accept-new -i /tmp/deploy_key ${EC2_USER}@${EC2_HOST} "\
           cd /home/ec2-user/apps/master-ball && \
+          docker system prune -a -f && \
           aws ecr get-login-password --region us-east-2 | docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com && \
           docker compose -f docker-compose.prod.yml pull && \
           docker compose -f docker-compose.prod.yml up -d"
