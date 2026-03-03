@@ -37,6 +37,14 @@ app.use(
                     // Cloudflare Web Analytics beacon when site is behind Cloudflare
                     "https://static.cloudflareinsights.com",
                 ],
+                "img-src": [
+                    "'self'",
+                    "data:",
+                    // TCGdex CDN for Pokémon card images
+                    "https://assets.tcgdex.net",
+                    // PokeAPI sprites fallback (e.g. Wordle answer/official artwork)
+                    "https://raw.githubusercontent.com",
+                ],
             },
         },
     })
