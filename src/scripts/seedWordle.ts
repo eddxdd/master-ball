@@ -241,9 +241,16 @@ async function seedCards() {
   
   for (const pokemonName of KANTO_151_NAMES) {
     try {
-      const pokemon = await prisma.pokemon.findUnique({
+      // Look up by name first; PokeAPI may use different spelling (e.g. "farfetch'd" vs "farfetchd")
+      let pokemon = await prisma.pokemon.findUnique({
         where: { name: pokemonName }
       });
+      if (!pokemon) {
+        const pokedexNumber = KANTO_151_NAMES.indexOf(pokemonName) + 1;
+        pokemon = await prisma.pokemon.findFirst({
+          where: { pokedexNumber }
+        });
+      }
       
       if (!pokemon) {
         console.log(`⚠ Pokemon "${pokemonName}" not found in database, skipping...`);
@@ -316,11 +323,12 @@ async function seedCards() {
         processedPokemon++;
       } else {
         // No TCGdex cards with valid images - create placeholder cards so this Pokémon appears in the Pokedex
-        console.log(`  ⚠ No cards with valid images for ${pokemonName}, creating placeholder cards`);
+        console.log(`  ⚠ No cards with valid images for ${pokemon.name}, creating placeholder cards`);
         for (let tier = 1; tier <= 6; tier++) {
+          const placeholderTcgdexId = `placeholder-${pokemon.id}-t${tier}`;
           await prisma.card.upsert({
             where: {
-              tcgdexId: `placeholder-${pokemonName}-t${tier}`
+              tcgdexId: placeholderTcgdexId
             },
             update: {
               pokemonName: pokemon.name,
@@ -328,7 +336,7 @@ async function seedCards() {
               imageUrlLarge: pokemon.imageUrl ?? ''
             },
             create: {
-              tcgdexId: `placeholder-${pokemonName}-t${tier}`,
+              tcgdexId: placeholderTcgdexId,
               pokemonId: pokemon.id,
               pokemonName: pokemon.name,
               setId: 'PLACEHOLDER',

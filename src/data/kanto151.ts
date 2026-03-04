@@ -32,3 +32,7 @@ export const KANTO_151_NAMES: readonly string[] = [
 ] as const;
 
 export const KANTO_151_COUNT = KANTO_151_NAMES.length;
+
+if (KANTO_151_COUNT !== 151) {
+  throw new Error(`Kanto list must have exactly 151 names, got ${KANTO_151_COUNT}`);
+}
