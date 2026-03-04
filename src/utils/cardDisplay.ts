@@ -22,8 +22,8 @@ function getSetsBaseDir(): string {
   const cwd = process.cwd();
   const distDir = path.join(cwd, 'frontend-dist', 'images', 'cards', 'sets');
   const publicDir = path.join(cwd, 'frontend', 'public', 'images', 'cards', 'sets');
-  if (fs.existsSync(path.join(cwd, 'frontend-dist'))) return path.join(cwd, 'frontend-dist', 'images', 'cards', 'sets');
-  return path.join(cwd, 'frontend', 'public', 'images', 'cards', 'sets');
+  if (fs.existsSync(path.join(cwd, 'frontend-dist'))) return distDir;
+  return publicDir;
 }
 
 export function getSetFolder(setId: string): string | null {

@@ -1524,7 +1524,7 @@ function App() {
   useEffect(() => {
     const userId = auth.user?.id;
     if (userId != null && selectedAvatar) {
-      const { croppedImage, ...metadata } = selectedAvatar;
+      const { croppedImage: _croppedImage, ...metadata } = selectedAvatar;
       localStorage.setItem(`selectedAvatar_${userId}`, JSON.stringify(metadata));
     }
   }, [selectedAvatar, auth.user?.id]);
@@ -1533,7 +1533,7 @@ function App() {
   useEffect(() => {
     const userId = auth.user?.id;
     if (userId != null && selectedBanner) {
-      const { croppedImage, ...metadata } = selectedBanner;
+      const { croppedImage: _croppedImage, ...metadata } = selectedBanner;
       localStorage.setItem(`selectedBanner_${userId}`, JSON.stringify(metadata));
     }
   }, [selectedBanner, auth.user?.id]);
