@@ -1,6 +1,8 @@
 # Deploy stage: SSH to EC2 and run docker compose pull/up. Use with CodeBuild project master-ball-deploy.
 # Requires: EC2_HOST, EC2_USER, SSH_KEY_SECRET_NAME (or SSH_KEY_SECRET_ARN) in CodeBuild env.
 # Store the EC2 SSH private key in Secrets Manager and grant the deploy project role GetSecretValue.
+#
+# git pull ensures docker-compose.prod.yml (and the startup command: migrate + seed + server) is up to date on the server.
 version: 0.2
 
 phases:
@@ -36,6 +38,7 @@ phases:
       - |
         ssh -o StrictHostKeyChecking=accept-new -i /tmp/deploy_key ${EC2_USER}@${EC2_HOST} "\
           cd /home/ec2-user/apps/master-ball && \
+          (git pull origin main || git pull || true) && \
           docker system prune -a -f && \
           aws ecr get-login-password --region us-east-2 | docker login -u AWS --password-stdin 338753559735.dkr.ecr.us-east-2.amazonaws.com && \
           docker compose -f docker-compose.prod.yml pull && \

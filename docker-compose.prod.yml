@@ -33,7 +33,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-# Migrate, seed Wordle biomes/pokemon (idempotent), then start API
+# Migrate, run full seed (biomes, Pokemon, spawns, cards from local + placeholders, dedupe), then start API.
+# Seed is idempotent (upserts) so safe to run every deploy; picks up new cards and keeps DB in sync.
     command: sh -c "npx prisma migrate deploy && node dist/scripts/seedWordle.js && node dist/server.js"
     restart: unless-stopped
 

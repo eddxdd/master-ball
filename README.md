@@ -53,8 +53,10 @@ npm run prisma:generate
 Optional seed:
 
 ```bash
-tsx src/scripts/seedWordle.ts
+npm run seed
 ```
+
+(This runs biomes, Pokemon from PokeAPI, spawns, cards from local folders + placeholders, and dedupes the Card table. Idempotent — safe to run repeatedly.)
 
 Optional card images (zips in `frontend/public/images/cards/`):
 
@@ -80,9 +82,19 @@ npm run dev
 | `npm run dev` | Backend + frontend |
 | `npm run build` | Build backend |
 | `npm run start` | Run production server |
+| `npm run seed` | Full seed (biomes, Pokemon, spawns, cards from local + placeholders, dedupe) |
+| `npm run seed:cards-local` | Cards only: sync from local folders + placeholders + dedupe |
 | `npm run prisma:migrate` | Run migrations |
 | `npm run prisma:studio` | DB UI |
 | `npm run cards:sync-local` | Sync card image URLs from local folders |
+
+## Deploy
+
+When you run the API with **production compose** (`docker-compose.prod.yml`), the container startup runs **on every deploy**:
+
+1. `npx prisma migrate deploy`
+2. **`node dist/scripts/seedWordle.js`** — full seed (biomes, Pokemon, spawns, cards from local folders + placeholders, Card table dedupe). Idempotent, so no SSH needed; new cards and checks are applied automatically.
+3. `node dist/server.js`
 
 ## License
 
