@@ -228,7 +228,7 @@ async function main() {
     const cardResult = await seedCardsFromLocal();
     console.log(`✓ Cards: ${cardResult.created} created/updated, ${cardResult.placeholders} placeholders, ${cardResult.skipped} skipped`);
     const dedupeResult = await dedupeCardsBySet();
-    console.log(`✓ Dedupe: ${dedupeResult.deleted} duplicate cards removed`);
+    console.log(`✓ Dedupe: ${dedupeResult.deleted} duplicate cards removed, ${dedupeResult.merged} references merged`);
     
     console.log('\n✓ Seed completed successfully!');
   } catch (error) {

@@ -49,21 +49,21 @@ router.get('/', authenticate, async (req: Request, res: Response, next: NextFunc
       userCardCounts.map(row => [row.cardId, row._count.id])
     );
 
-    // Deduplicate: show one card per unique (pokemonId, imageUrl) pair.
-    // Because we ordered by tier asc, the representative card for each
-    // unique image is the rarest version (lowest tier).
-    // A card counts as "captured" if the user owns ANY card with that same image.
+    // Deduplicate: show one card per unique (pokemonId, setId) so we never show
+    // the same Pokémon+set twice (e.g. same Bulbasaur card in tier 4 and 5).
+    // Order is already by pokedexNumber then tier asc, so first occurrence is the rarest tier.
     const seen = new Set<string>();
     const pokedex: any[] = [];
 
     for (const card of allCards) {
-      const key = `${card.pokemonId}::${card.imageUrl}`;
+      const setKey = card.setId ?? '';
+      const key = `${card.pokemonId}::${setKey}`;
       if (seen.has(key)) continue;
       seen.add(key);
 
-      // Check if user has ANY card sharing this image (any tier variant)
+      // All cards that are the same Pokémon + set (tier variants)
       const siblings = allCards.filter(
-        c => c.pokemonId === card.pokemonId && c.imageUrl === card.imageUrl
+        c => c.pokemonId === card.pokemonId && (c.setId ?? '') === setKey
       );
       const isCaptured = isAdmin || siblings.some(c => capturedMap.has(c.id));
       const discovered = siblings

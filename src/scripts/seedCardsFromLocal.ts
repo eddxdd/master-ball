@@ -188,10 +188,11 @@ export async function seedCardsFromLocal(): Promise<{ created: number; placehold
 
 /**
  * Remove duplicate cards: same (pokemonId, setId) — keep one row (lowest id).
- * Only deletes cards that are NOT referenced by UserCard or PokedexEntry.
+ * Reassigns UserCard and Auction references to the kept card. For PokedexEntry, updates
+ * one row to the kept card and deletes any other entries that would duplicate (userId, cardId).
  */
-export async function dedupeCardsBySet(): Promise<{ deleted: number }> {
-  const duplicates = await prisma.$queryRaw<{ pokemonid: number; setid: string; minid: number; cnt: number }[]>`
+export async function dedupeCardsBySet(): Promise<{ deleted: number; merged: number }> {
+  const duplicates = await prisma.$queryRaw<{ pokemonid: number; setid: string | null; minid: number; cnt: number }[]>`
     SELECT "pokemonId" AS pokemonid, "setId" AS setid, MIN(id) AS minid, COUNT(*) AS cnt
     FROM "Card"
     GROUP BY "pokemonId", "setId"
@@ -199,29 +200,60 @@ export async function dedupeCardsBySet(): Promise<{ deleted: number }> {
   `;
 
   let deleted = 0;
+  let merged = 0;
   for (const row of duplicates) {
     const idsToDelete = await prisma.card.findMany({
       where: {
         pokemonId: row.pokemonid,
-        setId: row.setid,
         id: { not: row.minid },
+        ...(row.setid === null ? { setId: null } : { setId: row.setid }),
       },
       select: { id: true },
     });
     const ids = idsToDelete.map((c) => c.id);
     if (ids.length === 0) continue;
 
-    const inUse = await prisma.userCard.count({ where: { cardId: { in: ids } } })
-      + await prisma.pokedexEntry.count({ where: { cardId: { in: ids } } })
-      + await prisma.auction.count({ where: { wantedCardId: { in: ids } } });
-    if (inUse > 0) {
-      console.log(`  Skip dedupe (pokemonId=${row.pokemonid}, setId=${row.setid}): ${inUse} references`);
-      continue;
+    const keptId = row.minid;
+
+    // Reassign UserCard and Auction to the kept card
+    const ucUpdated = await prisma.userCard.updateMany({
+      where: { cardId: { in: ids } },
+      data: { cardId: keptId },
+    });
+    const auUpdated = await prisma.auction.updateMany({
+      where: { wantedCardId: { in: ids } },
+      data: { wantedCardId: keptId },
+    });
+
+    // PokedexEntry has unique (userId, cardId). Reassigning all to keptId would create duplicates.
+    // So: update one entry per (userId, keptId) from a duplicate id, then delete the rest.
+    const entriesToMove = await prisma.pokedexEntry.findMany({
+      where: { cardId: { in: ids } },
+      select: { id: true, userId: true },
+    });
+    const seenUser = new Set<number>();
+    for (const e of entriesToMove) {
+      if (seenUser.has(e.userId)) {
+        await prisma.pokedexEntry.delete({ where: { id: e.id } });
+      } else {
+        seenUser.add(e.userId);
+        await prisma.pokedexEntry.update({
+          where: { id: e.id },
+          data: { cardId: keptId },
+        });
+      }
     }
+
+    const totalMerged = ucUpdated.count + auUpdated.count + entriesToMove.length;
+    if (totalMerged > 0) {
+      merged += totalMerged;
+      console.log(`  Merged refs (pokemonId=${row.pokemonid}, setId=${row.setid ?? 'null'}) -> card ${keptId}`);
+    }
+
     await prisma.card.deleteMany({ where: { id: { in: ids } } });
     deleted += ids.length;
   }
-  return { deleted };
+  return { deleted, merged };
 }
 
 async function main() {
@@ -234,6 +266,7 @@ async function main() {
   console.log('\nDeduplicating (one card per pokemon per set)...');
   const dedupe = await dedupeCardsBySet();
   console.log(`  Deleted:        ${dedupe.deleted}`);
+  console.log(`  Refs merged:    ${dedupe.merged}`);
 
   console.log('\n✓ Seed from local completed.');
   await prisma.$disconnect();
