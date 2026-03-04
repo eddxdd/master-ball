@@ -4,7 +4,7 @@
  */
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
+import { API_URL, getCardImageUrl, handleCardImageError, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Card {
   id: number;
@@ -272,10 +272,7 @@ export function CardCaptureModal({
                       src={getCardImageUrl(card.imageUrlLarge || card.imageUrl)}
                       alt={capitalizeFirst(card.pokemonName)}
                       className="card-face-img"
-                      onError={(e) => {
-                        e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                        e.currentTarget.onerror = null;
-                      }}
+                      onError={(e) => handleCardImageError(e, 'card-capture-modal')}
                     />
                   </div>
                 ) : (
@@ -293,10 +290,7 @@ export function CardCaptureModal({
                         src={getCardImageUrl(card.imageUrlLarge || card.imageUrl)}
                         alt={capitalizeFirst(card.pokemonName)}
                         className="card-face-img"
-                        onError={(e) => {
-                          e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                          e.currentTarget.onerror = null;
-                        }}
+                        onError={(e) => handleCardImageError(e, 'card-capture-modal')}
                       />
                     </div>
                   </div>

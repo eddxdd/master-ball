@@ -32,8 +32,9 @@ app.use(
             directives: {
                 "script-src": [
                     "'self'",
-                    // Inline script hash (e.g. Vite build or injected); allow this specific hash to avoid CSP errors
+                    // Inline script hashes (e.g. Vite build or injected); allow these to avoid CSP errors
                     "'sha256-1txVT/jhTQ7dFWfpiowB7wHQzNsAa40eVR1Ma2PA+00-'",
+                    "'sha256-TDKBaPnKrnLCOWR3rq050M1Ed/Ohf889DC5LFX3GCWw='",
                     // Cloudflare Web Analytics beacon when site is behind Cloudflare
                     "https://static.cloudflareinsights.com",
                 ],

@@ -13,6 +13,7 @@ import {
   getCollection,
   API_URL,
   getCardImageUrl,
+  handleCardImageError,
   CARD_PLACEHOLDER_IMAGE,
   type Auction,
   type CollectionEntry,
@@ -418,7 +419,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                               src={getCardImageUrl(entry.card.imageUrl)}
                               alt={capitalizeFirst(entry.card.pokemonName)}
                               className="card-image"
-                              onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                              onError={(e) => handleCardImageError(e, 'auction-house')}
                             />
                             {entry.quantity > 1 && (
                               <span className="card-quantity-badge">×{entry.quantity}</span>
@@ -462,7 +463,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                               src={getCardImageUrl(card.imageUrl)}
                               alt={capitalizeFirst(card.pokemonName)}
                               className="card-image"
-                              onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                              onError={(e) => handleCardImageError(e, 'auction-house')}
                             />
                           </div>
                           <div className="card-details">
@@ -487,7 +488,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                         src={getCardImageUrl(selectedOffered.card.imageUrl)}
                         alt={selectedOffered.card.pokemonName}
                         className="auction-summary-img"
-                        onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                        onError={(e) => handleCardImageError(e, 'auction-house')}
                       />
                       <span>{capitalizeFirst(selectedOffered.card.pokemonName)}</span>
                     </>
@@ -503,7 +504,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                         src={getCardImageUrl(selectedWanted.imageUrl)}
                         alt={selectedWanted.pokemonName}
                         className="auction-summary-img"
-                        onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                        onError={(e) => handleCardImageError(e, 'auction-house')}
                       />
                       <span>{capitalizeFirst(selectedWanted.pokemonName)}</span>
                     </>
@@ -564,7 +565,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                     src={getCardImageUrl(acceptConfirm.auction.wantedCard.imageUrl)}
                     alt={acceptConfirm.auction.wantedCard.pokemonName}
                     className="auction-confirm-card-img"
-                    onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                    onError={(e) => handleCardImageError(e, 'auction-house')}
                   />
                   <p>{capitalizeFirst(acceptConfirm.auction.wantedCard.pokemonName)}</p>
                   <span className={`rarity-badge rarity-tier-${acceptConfirm.auction.wantedCard.tier}`}>
@@ -578,7 +579,7 @@ export function AuctionHousePage({ auth, onBack }: AuctionHousePageProps) {
                     src={getCardImageUrl(acceptConfirm.auction.offeredUserCard.card.imageUrl)}
                     alt={acceptConfirm.auction.offeredUserCard.card.pokemonName}
                     className="auction-confirm-card-img"
-                    onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+                    onError={(e) => handleCardImageError(e, 'auction-house')}
                   />
                   <p>{capitalizeFirst(acceptConfirm.auction.offeredUserCard.card.pokemonName)}</p>
                   <span className={`rarity-badge rarity-tier-${acceptConfirm.auction.offeredUserCard.card.tier}`}>
@@ -627,7 +628,7 @@ function AuctionCard({
             src={getCardImageUrl(auction.offeredUserCard.card.imageUrl)}
             alt={auction.offeredUserCard.card.pokemonName}
             className="auction-listing-img"
-            onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+            onError={(e) => handleCardImageError(e, 'auction-house')}
           />
           <div className="auction-listing-name">{capitalizeFirst(auction.offeredUserCard.card.pokemonName)}</div>
           <span className={`rarity-badge rarity-tier-${auction.offeredUserCard.card.tier}`}>
@@ -644,7 +645,7 @@ function AuctionCard({
             src={getCardImageUrl(auction.wantedCard.imageUrl)}
             alt={auction.wantedCard.pokemonName}
             className="auction-listing-img"
-            onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+            onError={(e) => handleCardImageError(e, 'auction-house')}
           />
           <div className="auction-listing-name">{capitalizeFirst(auction.wantedCard.pokemonName)}</div>
           <span className={`rarity-badge rarity-tier-${auction.wantedCard.tier}`}>
@@ -700,7 +701,7 @@ function MyAuctionCard({
             src={getCardImageUrl(auction.offeredUserCard.card.imageUrl)}
             alt={auction.offeredUserCard.card.pokemonName}
             className="auction-listing-img"
-            onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+            onError={(e) => handleCardImageError(e, 'auction-house')}
           />
           <div className="auction-listing-name">{capitalizeFirst(auction.offeredUserCard.card.pokemonName)}</div>
           <span className={`rarity-badge rarity-tier-${auction.offeredUserCard.card.tier}`}>
@@ -716,7 +717,7 @@ function MyAuctionCard({
             src={getCardImageUrl(auction.wantedCard.imageUrl)}
             alt={auction.wantedCard.pokemonName}
             className="auction-listing-img"
-            onError={(e) => { e.currentTarget.src = CARD_PLACEHOLDER_IMAGE; e.currentTarget.onerror = null; }}
+            onError={(e) => handleCardImageError(e, 'auction-house')}
           />
           <div className="auction-listing-name">{capitalizeFirst(auction.wantedCard.pokemonName)}</div>
           <span className={`rarity-badge rarity-tier-${auction.wantedCard.tier}`}>

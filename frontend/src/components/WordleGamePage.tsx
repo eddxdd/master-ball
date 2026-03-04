@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { CardRewardsModal } from './CardRewardsModal';
-import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
+import { API_URL, getCardImageUrl, handleCardImageError, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Pokemon {
   id: number;
@@ -252,10 +252,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
                 src={getCardImageUrl(guess.pokemon.imageUrl)}
                 alt={capitalizeFirst(guess.pokemon.name)}
                 className="pokemon-icon"
-                onError={(e) => {
-                  e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                  e.currentTarget.onerror = null;
-                }}
+                onError={(e) => handleCardImageError(e, 'wordle-guess')}
               />
             </div>
             <div className={`wordle-cell feedback-${guess.feedback.type1.replace('/', '-')}`}>
@@ -313,10 +310,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
               src={getCardImageUrl(answer.imageUrl)}
               alt={capitalizeFirst(answer.name)}
               className="pokemon-icon"
-              onError={(e) => {
-                e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                e.currentTarget.onerror = null;
-              }}
+              onError={(e) => handleCardImageError(e, 'wordle-answer-row')}
             />
             <span className="answer-pokemon-name">{capitalizeFirst(answer.name)}</span>
           </div>
@@ -463,10 +457,7 @@ export function WordleGamePage({ gameId, onGameComplete, onOpenCardCaptureModal,
                   )}
                   alt={capitalizeFirst(answer.name)}
                   className="answer-card-image"
-                  onError={(e) => {
-                    e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                    e.currentTarget.onerror = null;
-                  }}
+                  onError={(e) => handleCardImageError(e, 'wordle-answer-reveal')}
                 />
                 <h4>{capitalizeFirst(answer.name)}</h4>
               </div>

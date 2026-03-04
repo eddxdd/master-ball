@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { API_URL, getCardImageUrl, CARD_PLACEHOLDER_IMAGE } from '../api';
+import { API_URL, getCardImageUrl, handleCardImageError, CARD_PLACEHOLDER_IMAGE } from '../api';
 
 interface Pokemon {
   id: number;
@@ -338,10 +338,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                   src={getCardImageUrl(entry.card.imageUrl)}
                   alt={capitalizeFirst(entry.card.pokemonName)}
                   className="card-image"
-                  onError={(e) => {
-                    e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                    e.currentTarget.onerror = null;
-                  }}
+                  onError={(e) => handleCardImageError(e, 'pokedex-grid')}
                 />
                 {entry.captured && entry.quantity > 1 && (
                   <span className="card-quantity-badge">×{entry.quantity}</span>
@@ -399,10 +396,7 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                   transform: `translate(${panX}px, ${panY}px) scale(${zoomLevel})`
                 }}
                 draggable={false}
-                onError={(e) => {
-                  e.currentTarget.src = CARD_PLACEHOLDER_IMAGE;
-                  e.currentTarget.onerror = null;
-                }}
+                onError={(e) => handleCardImageError(e, 'pokedex-viewer')}
               />
             </div>
           </div>

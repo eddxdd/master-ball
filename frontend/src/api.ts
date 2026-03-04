@@ -260,6 +260,23 @@ export function getCardImageUrl(url: string | null | undefined): string {
   return url;
 }
 
+/**
+ * Call this from img onError when a card image fails to load.
+ * Logs diagnostic info to the console and sets the img src to the placeholder.
+ */
+export function handleCardImageError(
+  e: { currentTarget: HTMLImageElement },
+  context?: string
+): void {
+  const img = e.currentTarget;
+  console.error('[Card image failed to load]', {
+    requestedSrc: img.src,
+    context: context ?? 'card',
+  });
+  img.src = CARD_PLACEHOLDER_IMAGE;
+  img.onerror = null;
+}
+
 export type Card = {
   id: number;
   tcgdexId: string;
