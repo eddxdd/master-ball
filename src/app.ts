@@ -54,12 +54,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Rate limiting - protect against brute force attacks
+const rateLimitWindowMs = 15 * 60 * 1000; // 15 minutes
+const rateLimitMax = process.env.RATE_LIMIT_MAX
+  ? parseInt(process.env.RATE_LIMIT_MAX, 10)
+  : (process.env.NODE_ENV === 'production' ? 300 : 1000);
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Limit each IP to 100 requests per windowMs in production
-    message: 'Too many requests from this IP, please try again later.',
-    standardHeaders: true,
-    legacyHeaders: false,
+  windowMs: rateLimitWindowMs,
+  max: rateLimitMax,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
 

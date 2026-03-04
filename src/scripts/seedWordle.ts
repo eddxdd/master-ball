@@ -246,61 +246,89 @@ async function seedCards(pokemonNames: string[]) {
       // Filter out cards without valid image URLs
       const validCards = cards.filter(card => card.imageUrl && card.imageUrl !== '');
       
-      if (validCards.length === 0) {
-        console.log(`⚠ No cards with valid images found for ${pokemonName}`);
-        continue;
-      }
-      
-      // Only use the first card to keep the database smaller
-      const cardData = validCards[0];
-      
-      console.log(`  Fetched card for ${pokemonName}: ${cardData.setName}`);
-      
-      const normalizedRarity = normalizeRarity(cardData.rarity);
-      const tiers = getAllTiersForCard(normalizedRarity);
-      
-      // Create card for each possible tier
-      for (const tier of tiers) {
-        const weight = getWeightForRarity(normalizedRarity);
-        const isFloor = isFloorCard(normalizedRarity, tier);
-        const isCeiling = isCeilingCard(normalizedRarity, tier);
+      if (validCards.length > 0) {
+        // Only use the first card to keep the database smaller
+        const cardData = validCards[0];
         
-        await prisma.card.upsert({
-          where: {
-            tcgdexId: `${cardData.tcgdexId}-t${tier}`
-          },
-          update: {
-            pokemonName: cardData.pokemonName,
-            setId: cardData.setId,
-            setName: cardData.setName,
-            rarity: normalizedRarity,
-            tier,
-            imageUrl: cardData.imageUrl,
-            imageUrlLarge: cardData.imageUrlLarge,
-            weight,
-            isFloor,
-            isCeiling
-          },
-          create: {
-            tcgdexId: `${cardData.tcgdexId}-t${tier}`,
-            pokemonId: pokemon.id,
-            pokemonName: cardData.pokemonName,
-            setId: cardData.setId,
-            setName: cardData.setName,
-            rarity: normalizedRarity,
-            tier,
-            imageUrl: cardData.imageUrl,
-            imageUrlLarge: cardData.imageUrlLarge,
-            weight,
-            isFloor,
-            isCeiling
-          }
-        });
+        console.log(`  Fetched card for ${pokemonName}: ${cardData.setName}`);
         
-        totalCards++;
+        const normalizedRarity = normalizeRarity(cardData.rarity);
+        const tiers = getAllTiersForCard(normalizedRarity);
+        
+        // Create card for each possible tier
+        for (const tier of tiers) {
+          const weight = getWeightForRarity(normalizedRarity);
+          const isFloor = isFloorCard(normalizedRarity, tier);
+          const isCeiling = isCeilingCard(normalizedRarity, tier);
+          
+          await prisma.card.upsert({
+            where: {
+              tcgdexId: `${cardData.tcgdexId}-t${tier}`
+            },
+            update: {
+              pokemonName: cardData.pokemonName,
+              setId: cardData.setId,
+              setName: cardData.setName,
+              rarity: normalizedRarity,
+              tier,
+              imageUrl: cardData.imageUrl,
+              imageUrlLarge: cardData.imageUrlLarge,
+              weight,
+              isFloor,
+              isCeiling
+            },
+            create: {
+              tcgdexId: `${cardData.tcgdexId}-t${tier}`,
+              pokemonId: pokemon.id,
+              pokemonName: cardData.pokemonName,
+              setId: cardData.setId,
+              setName: cardData.setName,
+              rarity: normalizedRarity,
+              tier,
+              imageUrl: cardData.imageUrl,
+              imageUrlLarge: cardData.imageUrlLarge,
+              weight,
+              isFloor,
+              isCeiling
+            }
+          });
+          
+          totalCards++;
+        }
+        
+        processedPokemon++;
+      } else {
+        // No TCGdex cards with valid images - create placeholder cards so this Pokémon appears in the Pokedex
+        console.log(`  ⚠ No cards with valid images for ${pokemonName}, creating placeholder cards`);
+        for (let tier = 1; tier <= 6; tier++) {
+          await prisma.card.upsert({
+            where: {
+              tcgdexId: `placeholder-${pokemonName}-t${tier}`
+            },
+            update: {
+              pokemonName: pokemon.name,
+              imageUrl: pokemon.imageUrl ?? '',
+              imageUrlLarge: pokemon.imageUrl ?? ''
+            },
+            create: {
+              tcgdexId: `placeholder-${pokemonName}-t${tier}`,
+              pokemonId: pokemon.id,
+              pokemonName: pokemon.name,
+              setId: 'PLACEHOLDER',
+              setName: 'Placeholder Set',
+              rarity: 'Common',
+              tier,
+              imageUrl: pokemon.imageUrl ?? '',
+              imageUrlLarge: pokemon.imageUrl ?? '',
+              weight: 10.0,
+              isFloor: true,
+              isCeiling: false
+            }
+          });
+          totalCards++;
+        }
+        processedPokemon++;
       }
-      
-      processedPokemon++;
       
       // Delay to respect API rate limits
       await new Promise(resolve => setTimeout(resolve, 300));
