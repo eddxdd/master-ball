@@ -31,6 +31,8 @@ function sanitizeForFilename(name: string): string {
  * Resolve card image URLs to local paths under /images/cards/sets/.
  * If the card already has a local path, use it. Otherwise derive from setId + pokemonName
  * so the frontend can load from the folder (e.g. /images/cards/sets/base/Bulbasaur.jpg).
+ * When setId is not in our map, we try the "base" folder so cards from other sets
+ * can still show if you have that Pokémon in base.
  */
 export function getLocalCardImageUrl(card: {
   imageUrl: string | null;
@@ -46,12 +48,9 @@ export function getLocalCardImageUrl(card: {
       imageUrlLarge: urlLarge.startsWith('/') ? urlLarge : url,
     };
   }
-  const folder = SET_ID_TO_FOLDER[card.setId];
-  if (folder) {
-    const base = `/images/cards/sets/${folder}/${sanitizeForFilename(card.pokemonName)}.jpg`;
-    return { imageUrl: base, imageUrlLarge: base };
-  }
-  return { imageUrl: PLACEHOLDER_URL, imageUrlLarge: PLACEHOLDER_URL };
+  const folder = SET_ID_TO_FOLDER[card.setId] ?? 'base';
+  const base = `/images/cards/sets/${folder}/${sanitizeForFilename(card.pokemonName)}.jpg`;
+  return { imageUrl: base, imageUrlLarge: base };
 }
 
 /**
