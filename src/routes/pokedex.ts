@@ -6,7 +6,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { prisma } from '../lib/prisma.js';
-import { getSetDisplayName } from '../utils/cardDisplay.js';
+import { getSetDisplayName, getLocalCardImageUrl } from '../utils/cardDisplay.js';
 import { enrichCardsWithBiomes } from '../utils/cardEnrichment.js';
 
 const router = Router();
@@ -73,10 +73,13 @@ router.get('/', authenticate, async (req: Request, res: Response, next: NextFunc
       // Sum copies across all sibling card IDs
       const quantity = siblings.reduce((sum, c) => sum + (countByCardId.get(c.id) ?? 0), 0);
 
+      const resolved = getLocalCardImageUrl(card);
       pokedex.push({
         card: {
           ...card,
-          setDisplayName: getSetDisplayName(card.setId, card.imageUrl),
+          imageUrl: resolved.imageUrl,
+          imageUrlLarge: resolved.imageUrlLarge,
+          setDisplayName: getSetDisplayName(card.setId, resolved.imageUrl),
         },
         captured: isCaptured,
         discovered,
@@ -179,14 +182,18 @@ router.get('/stats', authenticate, async (req: Request, res: Response, next: Nex
       }
       return rarest;
     }, null as typeof entries[0] | null);
-    
+
+    const rarestCardResolved = rarestCard?.card
+      ? (() => { const r = getLocalCardImageUrl(rarestCard.card); return { ...rarestCard.card, imageUrl: r.imageUrl, imageUrlLarge: r.imageUrlLarge }; })()
+      : null;
+
     res.json({
       totalCards,
       collectedCards,
       completionPercentage: Math.round((collectedCards / totalCards) * 100),
       cardsByRarity: rarityCounts,
       cardsByBiome: biomeData,
-      rarestCard: rarestCard?.card || null
+      rarestCard: rarestCardResolved
     });
   } catch (error) {
     next(error);
@@ -220,11 +227,14 @@ router.get('/collection', authenticate, async (req: Request, res: Response, next
 
     for (const uc of userCards) {
       const cardId = uc.cardId;
+      const resolved = getLocalCardImageUrl(uc.card);
       if (!grouped[cardId]) {
         grouped[cardId] = {
           card: {
             ...uc.card,
-            setDisplayName: getSetDisplayName(uc.card.setId, uc.card.imageUrl),
+            imageUrl: resolved.imageUrl,
+            imageUrlLarge: resolved.imageUrlLarge,
+            setDisplayName: getSetDisplayName(uc.card.setId, resolved.imageUrl),
           },
           quantity: 0,
           instances: [],
@@ -291,11 +301,14 @@ router.get('/:cardId', authenticate, async (req: Request, res: Response, next: N
       }
     });
     
+    const resolved = getLocalCardImageUrl(entry.card);
     res.json({
       ...entry,
       card: {
         ...entry.card,
-        setDisplayName: getSetDisplayName(entry.card.setId, entry.card.imageUrl),
+        imageUrl: resolved.imageUrl,
+        imageUrlLarge: resolved.imageUrlLarge,
+        setDisplayName: getSetDisplayName(entry.card.setId, resolved.imageUrl),
       },
       instances: userCards
     });
@@ -319,8 +332,12 @@ router.get('/cards/all', authenticate, async (_req: Request, res: Response, next
         { pokemonName: 'asc' }
       ]
     });
-    
-    res.json(cards);
+
+    const withLocalUrls = cards.map((c) => {
+      const resolved = getLocalCardImageUrl(c);
+      return { ...c, imageUrl: resolved.imageUrl, imageUrlLarge: resolved.imageUrlLarge };
+    });
+    res.json(withLocalUrls);
   } catch (error) {
     next(error);
   }

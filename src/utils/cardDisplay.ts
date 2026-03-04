@@ -8,8 +8,50 @@ const SET_ID_TO_FOLDER: Record<string, string> = {
   base5: 'team-rocket',
 };
 
+const PLACEHOLDER_URL = '/images/cards/sets/Pokemon-Card-Back.png';
+
 export function getSetFolder(setId: string): string | null {
   return SET_ID_TO_FOLDER[setId] ?? null;
+}
+
+/** Sanitize Pokemon/card name for use in filenames (matches syncLocalCardImages logic). */
+function sanitizeForFilename(name: string): string {
+  return name
+    .replace(/\u2642/g, '-m')
+    .replace(/\u2640/g, '-f')
+    .replace(/['']/g, '')
+    .replace(/\./g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[<>:"/\\|?*]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
+ * Resolve card image URLs to local paths under /images/cards/sets/.
+ * If the card already has a local path, use it. Otherwise derive from setId + pokemonName
+ * so the frontend can load from the folder (e.g. /images/cards/sets/base/Bulbasaur.jpg).
+ */
+export function getLocalCardImageUrl(card: {
+  imageUrl: string | null;
+  imageUrlLarge?: string | null;
+  setId: string;
+  pokemonName: string;
+}): { imageUrl: string; imageUrlLarge: string } {
+  const url = card.imageUrl?.trim() || '';
+  const urlLarge = (card.imageUrlLarge?.trim() || url) || '';
+  if (url.startsWith('/')) {
+    return {
+      imageUrl: url,
+      imageUrlLarge: urlLarge.startsWith('/') ? urlLarge : url,
+    };
+  }
+  const folder = SET_ID_TO_FOLDER[card.setId];
+  if (folder) {
+    const base = `/images/cards/sets/${folder}/${sanitizeForFilename(card.pokemonName)}.jpg`;
+    return { imageUrl: base, imageUrlLarge: base };
+  }
+  return { imageUrl: PLACEHOLDER_URL, imageUrlLarge: PLACEHOLDER_URL };
 }
 
 /**

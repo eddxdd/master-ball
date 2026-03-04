@@ -10,7 +10,7 @@ import { selectRandomPokemon } from '../services/cardGenerator.js';
 import { generateFeedback, isGuessCorrect, calculateTier } from '../services/wordleLogic.js';
 import { generateCardOffers } from '../services/cardGenerator.js';
 import { updatePityTracker, getPityTracker } from '../services/pitySystem.js';
-import { getSetDisplayName } from '../utils/cardDisplay.js';
+import { getSetDisplayName, getLocalCardImageUrl } from '../utils/cardDisplay.js';
 import { enrichCardsWithBiomes } from '../utils/cardEnrichment.js';
 import { xpForRarity, xpProgress, levelFromXp } from '../services/xpSystem.js';
 
@@ -225,7 +225,10 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
         const orderedCards = cardIds
           .map((id: number) => idToCard.get(id))
           .filter(Boolean)
-          .map((c: any) => ({ ...c, setDisplayName: getSetDisplayName(c.setId, c.imageUrl) }));
+          .map((c: any) => {
+            const resolved = getLocalCardImageUrl(c);
+            return { ...c, imageUrl: resolved.imageUrl, imageUrlLarge: resolved.imageUrlLarge, setDisplayName: getSetDisplayName(c.setId, resolved.imageUrl) };
+          });
         response.offeredCards = await enrichCardsWithBiomes(orderedCards);
         response.guaranteedCardId = cardIds[0] ?? null;
         response.pityCardId = game.appliedPityTier != null ? (cardIds[1] ?? null) : null;
@@ -248,10 +251,10 @@ router.get('/:id', authenticate, async (req: Request, res: Response, next: NextF
             }
           });
           
-          const regeneratedCards = cardOffers.cards.map((c: any) => ({
-            ...c,
-            setDisplayName: getSetDisplayName(c.setId, c.imageUrl),
-          }));
+          const regeneratedCards = cardOffers.cards.map((c: any) => {
+            const resolved = getLocalCardImageUrl(c);
+            return { ...c, imageUrl: resolved.imageUrl, imageUrlLarge: resolved.imageUrlLarge, setDisplayName: getSetDisplayName(c.setId, resolved.imageUrl) };
+          });
           response.offeredCards = await enrichCardsWithBiomes(regeneratedCards);
           response.offeredCardIds = cardOffers.cards.map(c => c.id);
           response.guaranteedCardId = cardOffers.guaranteedCard.id;
@@ -365,10 +368,10 @@ router.post('/:id/guess', authenticate, async (req: Request, res: Response, next
           }
         });
         
-        const freshCards = cardOffers.cards.map((c: any) => ({
-          ...c,
-          setDisplayName: getSetDisplayName(c.setId, c.imageUrl),
-        }));
+        const freshCards = cardOffers.cards.map((c: any) => {
+          const resolved = getLocalCardImageUrl(c);
+          return { ...c, imageUrl: resolved.imageUrl, imageUrlLarge: resolved.imageUrlLarge, setDisplayName: getSetDisplayName(c.setId, resolved.imageUrl) };
+        });
         offeredCards = await enrichCardsWithBiomes(freshCards);
         guaranteedCardId = cardOffers.guaranteedCard.id;
         // First random card (index 1) is designated as the pity card when pity applied
@@ -531,6 +534,10 @@ router.post('/:id/capture', authenticate, async (req: Request, res: Response, ne
 
     return res.json({
       ...userCard,
+      card: (() => {
+        const resolved = getLocalCardImageUrl(userCard.card);
+        return { ...userCard.card, imageUrl: resolved.imageUrl, imageUrlLarge: resolved.imageUrlLarge };
+      })(),
       xpGained,
       levelInfo: {
         level: progress.level,

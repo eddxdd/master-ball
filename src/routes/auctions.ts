@@ -7,6 +7,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { prisma } from '../lib/prisma.js';
 import { xpForRarity, levelFromXp, xpProgress } from '../services/xpSystem.js';
+import { getLocalCardImageUrl } from '../utils/cardDisplay.js';
 
 const router = Router();
 
@@ -62,10 +63,19 @@ router.get('/', authenticate, async (req: Request, res: Response, next: NextFunc
 
     const ownedCardIdSet = new Set(ownedCards.map((c) => c.cardId));
 
-    const result = auctions.map((auction) => ({
-      ...auction,
-      canFulfill: ownedCardIdSet.has(auction.wantedCardId),
-    }));
+    const result = auctions.map((auction) => {
+      const offeredResolved = getLocalCardImageUrl(auction.offeredUserCard.card);
+      const wantedResolved = getLocalCardImageUrl(auction.wantedCard);
+      return {
+        ...auction,
+        offeredUserCard: {
+          ...auction.offeredUserCard,
+          card: { ...auction.offeredUserCard.card, imageUrl: offeredResolved.imageUrl, imageUrlLarge: offeredResolved.imageUrlLarge },
+        },
+        wantedCard: { ...auction.wantedCard, imageUrl: wantedResolved.imageUrl, imageUrlLarge: wantedResolved.imageUrlLarge },
+        canFulfill: ownedCardIdSet.has(auction.wantedCardId),
+      };
+    });
 
     res.json(result);
   } catch (error) {
@@ -87,7 +97,20 @@ router.get('/my', authenticate, async (req: Request, res: Response, next: NextFu
       orderBy: { createdAt: 'desc' },
     });
 
-    res.json(auctions);
+    const withResolvedImages = auctions.map((auction) => {
+      const offeredResolved = getLocalCardImageUrl(auction.offeredUserCard.card);
+      const wantedResolved = getLocalCardImageUrl(auction.wantedCard);
+      return {
+        ...auction,
+        offeredUserCard: {
+          ...auction.offeredUserCard,
+          card: { ...auction.offeredUserCard.card, imageUrl: offeredResolved.imageUrl, imageUrlLarge: offeredResolved.imageUrlLarge },
+        },
+        wantedCard: { ...auction.wantedCard, imageUrl: wantedResolved.imageUrl, imageUrlLarge: wantedResolved.imageUrlLarge },
+      };
+    });
+
+    res.json(withResolvedImages);
   } catch (error) {
     next(error);
   }
@@ -162,7 +185,16 @@ router.post('/', authenticate, async (req: Request, res: Response, next: NextFun
       include: auctionInclude,
     });
 
-    res.status(201).json(auction);
+    const offeredResolved = getLocalCardImageUrl(auction.offeredUserCard.card);
+    const wantedResolved = getLocalCardImageUrl(auction.wantedCard);
+    res.status(201).json({
+      ...auction,
+      offeredUserCard: {
+        ...auction.offeredUserCard,
+        card: { ...auction.offeredUserCard.card, imageUrl: offeredResolved.imageUrl, imageUrlLarge: offeredResolved.imageUrlLarge },
+      },
+      wantedCard: { ...auction.wantedCard, imageUrl: wantedResolved.imageUrl, imageUrlLarge: wantedResolved.imageUrlLarge },
+    });
   } catch (error) {
     next(error);
   }
