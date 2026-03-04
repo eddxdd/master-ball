@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { API_URL, getCardImageUrl, handleCardImageError, CARD_PLACEHOLDER_IMAGE } from '../api';
+import { API_URL, getCardImageUrl, handleCardImageError } from '../api';
 
 interface Pokemon {
   id: number;

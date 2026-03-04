@@ -14,7 +14,6 @@ import {
   API_URL,
   getCardImageUrl,
   handleCardImageError,
-  CARD_PLACEHOLDER_IMAGE,
   type Auction,
   type CollectionEntry,
   type AcceptAuctionResponse,
