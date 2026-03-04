@@ -14,6 +14,15 @@ import {
   isFloorCard,
   isCeilingCard
 } from '../services/cardTiers.js';
+import { KANTO_151_NAMES } from '../data/kanto151.js';
+
+// TCGdex name variants (Bulbapedia/PokeAPI name -> TCGdex search names)
+const TCGDEX_NAME_VARIATIONS: Record<string, string[]> = {
+  'nidoran-f': ['nidoran♀', 'nidoran-f', 'nidoran female'],
+  'nidoran-m': ['nidoran♂', 'nidoran-m', 'nidoran male'],
+  'mr-mime': ['mr. mime', 'mr-mime', 'mr mime'],
+  'farfetchd': ["farfetch'd", 'farfetchd', 'farfetch'],
+};
 
 // Biome definitions
 const BIOMES = [
@@ -224,27 +233,35 @@ async function seedPokemonSpawns(pokemonNames: string[]) {
   console.log(`✓ Seeded ${spawnCount} Pokemon spawn locations`);
 }
 
-async function seedCards(pokemonNames: string[]) {
-  console.log('Fetching Pokemon cards from TCGdex...');
+async function seedCards() {
+  console.log('Ensuring cards for all 151 Kanto Pokémon (canonical order)...');
   
   let totalCards = 0;
   let processedPokemon = 0;
   
-  for (const pokemonName of pokemonNames) {
+  for (const pokemonName of KANTO_151_NAMES) {
     try {
       const pokemon = await prisma.pokemon.findUnique({
         where: { name: pokemonName }
       });
       
       if (!pokemon) {
-        console.log(`⚠ Pokemon ${pokemonName} not found in database, skipping...`);
+        console.log(`⚠ Pokemon "${pokemonName}" not found in database, skipping...`);
         continue;
       }
       
-      const cards = await fetchProcessedCardsByPokemon(pokemonName);
-      
-      // Filter out cards without valid image URLs
-      const validCards = cards.filter(card => card.imageUrl && card.imageUrl !== '');
+      // Try TCGdex with name variants (e.g. mr-mime -> mr. mime)
+      const namesToTry = TCGDEX_NAME_VARIATIONS[pokemonName] ?? [pokemonName];
+      let validCards: Awaited<ReturnType<typeof fetchProcessedCardsByPokemon>> = [];
+      for (const nameVariant of namesToTry) {
+        try {
+          const cards = await fetchProcessedCardsByPokemon(nameVariant);
+          validCards = cards.filter(card => card.imageUrl && card.imageUrl !== '');
+          if (validCards.length > 0) break;
+        } catch {
+          continue;
+        }
+      }
       
       if (validCards.length > 0) {
         // Only use the first card to keep the database smaller
@@ -348,7 +365,7 @@ async function main() {
     await seedBiomes();
     const pokemonNames = await seedPokemon();
     await seedPokemonSpawns(pokemonNames);
-    await seedCards(pokemonNames);
+    await seedCards();
     
     console.log('\n✓ Seed completed successfully!');
   } catch (error) {
