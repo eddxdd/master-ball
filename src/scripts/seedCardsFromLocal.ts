@@ -202,15 +202,24 @@ export async function dedupeCardsBySet(): Promise<{ deleted: number; merged: num
   let deleted = 0;
   let merged = 0;
   for (const row of duplicates) {
-    const idsToDelete = await prisma.card.findMany({
-      where: {
-        pokemonId: row.pokemonid,
-        id: { not: row.minid },
-        ...(row.setid === null ? { setId: null } : { setId: row.setid }),
-      },
-      select: { id: true },
-    });
-    const ids = idsToDelete.map((c) => c.id);
+    let ids: number[];
+    if (row.setid === null) {
+      const rows = await prisma.$queryRaw<{ id: number }[]>`
+        SELECT id FROM "Card"
+        WHERE "pokemonId" = ${row.pokemonid} AND "setId" IS NULL AND id <> ${row.minid}
+      `;
+      ids = rows.map((r) => r.id);
+    } else {
+      const idsToDelete = await prisma.card.findMany({
+        where: {
+          pokemonId: row.pokemonid,
+          setId: row.setid,
+          id: { not: row.minid },
+        },
+        select: { id: true },
+      });
+      ids = idsToDelete.map((c) => c.id);
+    }
     if (ids.length === 0) continue;
 
     const keptId = row.minid;
