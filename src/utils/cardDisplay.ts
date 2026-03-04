@@ -68,7 +68,7 @@ function resolveFromFilesystem(setsBaseDir: string, setId: string, pokemonName: 
     const promoPath = path.join(setsBaseDir, 'promo', 'ancientmew.jpg');
     if (fs.existsSync(promoPath)) return '/images/cards/sets/promo/ancientmew.jpg';
   }
-  const folder = SET_ID_TO_FOLDER[setId] ?? 'base';
+  const folder = SET_ID_TO_FOLDER[setId] ?? setId;
   const inSet = findInFolderSync(setsBaseDir, folder, pokemonName);
   if (inSet) return inSet;
   for (const f of FOLDER_ORDER) {
@@ -130,7 +130,7 @@ export function getSetDisplayName(setId: string, imageUrl?: string | null): stri
     const match = imageUrl.match(/\/images\/cards\/sets\/([^/]+)\//);
     if (match) return folderToDisplayName(match[1]);
   }
-  const folder = SET_ID_TO_FOLDER[setId];
+  const folder = SET_ID_TO_FOLDER[setId] ?? setId;
   if (folder) return folderToDisplayName(folder);
-  return '';          // unknown set — return empty so the tag is hidden
+  return '';
 }

@@ -6,23 +6,7 @@
 import 'dotenv/config';
 import { prisma } from '../lib/prisma.js';
 import { fetchPokemonBatch } from '../services/pokeapi.js';
-import { fetchProcessedCardsByPokemon } from '../services/tcgdex.js';
-import {
-  normalizeRarity,
-  getAllTiersForCard,
-  getWeightForRarity,
-  isFloorCard,
-  isCeilingCard
-} from '../services/cardTiers.js';
-import { KANTO_151_NAMES } from '../data/kanto151.js';
-
-// TCGdex name variants (Bulbapedia/PokeAPI name -> TCGdex search names)
-const TCGDEX_NAME_VARIATIONS: Record<string, string[]> = {
-  'nidoran-f': ['nidoran♀', 'nidoran-f', 'nidoran female'],
-  'nidoran-m': ['nidoran♂', 'nidoran-m', 'nidoran male'],
-  'mr-mime': ['mr. mime', 'mr-mime', 'mr mime'],
-  'farfetchd': ["farfetch'd", 'farfetchd', 'farfetch'],
-};
+import { seedCardsFromLocal, dedupeCardsBySet } from './seedCardsFromLocal.js';
 
 // Biome definitions
 const BIOMES = [
@@ -233,139 +217,6 @@ async function seedPokemonSpawns(pokemonNames: string[]) {
   console.log(`✓ Seeded ${spawnCount} Pokemon spawn locations`);
 }
 
-async function seedCards() {
-  console.log('Ensuring cards for all 151 Kanto Pokémon (canonical order)...');
-  
-  let totalCards = 0;
-  let processedPokemon = 0;
-  
-  for (const pokemonName of KANTO_151_NAMES) {
-    try {
-      // Look up by name first; PokeAPI may use different spelling (e.g. "farfetch'd" vs "farfetchd")
-      let pokemon = await prisma.pokemon.findUnique({
-        where: { name: pokemonName }
-      });
-      if (!pokemon) {
-        const pokedexNumber = KANTO_151_NAMES.indexOf(pokemonName) + 1;
-        pokemon = await prisma.pokemon.findFirst({
-          where: { pokedexNumber }
-        });
-      }
-      
-      if (!pokemon) {
-        console.log(`⚠ Pokemon "${pokemonName}" not found in database, skipping...`);
-        continue;
-      }
-      
-      // Try TCGdex with name variants (e.g. mr-mime -> mr. mime)
-      const namesToTry = TCGDEX_NAME_VARIATIONS[pokemonName] ?? [pokemonName];
-      let validCards: Awaited<ReturnType<typeof fetchProcessedCardsByPokemon>> = [];
-      for (const nameVariant of namesToTry) {
-        try {
-          const cards = await fetchProcessedCardsByPokemon(nameVariant);
-          validCards = cards.filter(card => card.imageUrl && card.imageUrl !== '');
-          if (validCards.length > 0) break;
-        } catch {
-          continue;
-        }
-      }
-      
-      if (validCards.length > 0) {
-        // Only use the first card to keep the database smaller
-        const cardData = validCards[0];
-        
-        console.log(`  Fetched card for ${pokemonName}: ${cardData.setName}`);
-        
-        const normalizedRarity = normalizeRarity(cardData.rarity);
-        const tiers = getAllTiersForCard(normalizedRarity);
-        
-        // Create card for each possible tier
-        for (const tier of tiers) {
-          const weight = getWeightForRarity(normalizedRarity);
-          const isFloor = isFloorCard(normalizedRarity, tier);
-          const isCeiling = isCeilingCard(normalizedRarity, tier);
-          
-          await prisma.card.upsert({
-            where: {
-              tcgdexId: `${cardData.tcgdexId}-t${tier}`
-            },
-            update: {
-              pokemonName: cardData.pokemonName,
-              setId: cardData.setId,
-              setName: cardData.setName,
-              rarity: normalizedRarity,
-              tier,
-              imageUrl: cardData.imageUrl,
-              imageUrlLarge: cardData.imageUrlLarge,
-              weight,
-              isFloor,
-              isCeiling
-            },
-            create: {
-              tcgdexId: `${cardData.tcgdexId}-t${tier}`,
-              pokemonId: pokemon.id,
-              pokemonName: cardData.pokemonName,
-              setId: cardData.setId,
-              setName: cardData.setName,
-              rarity: normalizedRarity,
-              tier,
-              imageUrl: cardData.imageUrl,
-              imageUrlLarge: cardData.imageUrlLarge,
-              weight,
-              isFloor,
-              isCeiling
-            }
-          });
-          
-          totalCards++;
-        }
-        
-        processedPokemon++;
-      } else {
-        // No TCGdex cards with valid images - create placeholder cards so this Pokémon appears in the Pokedex
-        console.log(`  ⚠ No cards with valid images for ${pokemon.name}, creating placeholder cards`);
-        for (let tier = 1; tier <= 6; tier++) {
-          const placeholderTcgdexId = `placeholder-${pokemon.id}-t${tier}`;
-          await prisma.card.upsert({
-            where: {
-              tcgdexId: placeholderTcgdexId
-            },
-            update: {
-              pokemonName: pokemon.name,
-              imageUrl: pokemon.imageUrl ?? '',
-              imageUrlLarge: pokemon.imageUrl ?? ''
-            },
-            create: {
-              tcgdexId: placeholderTcgdexId,
-              pokemonId: pokemon.id,
-              pokemonName: pokemon.name,
-              setId: 'PLACEHOLDER',
-              setName: 'Placeholder Set',
-              rarity: 'Common',
-              tier,
-              imageUrl: pokemon.imageUrl ?? '',
-              imageUrlLarge: pokemon.imageUrl ?? '',
-              weight: 10.0,
-              isFloor: true,
-              isCeiling: false
-            }
-          });
-          totalCards++;
-        }
-        processedPokemon++;
-      }
-      
-      // Delay to respect API rate limits
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-    } catch (error) {
-      console.error(`Error processing ${pokemonName}:`, error);
-    }
-  }
-  
-  console.log(`✓ Seeded ${totalCards} cards from ${processedPokemon} Pokemon`);
-}
-
 async function main() {
   console.log('Starting Pokemon Wordle TCG seed...\n');
   
@@ -373,7 +224,11 @@ async function main() {
     await seedBiomes();
     const pokemonNames = await seedPokemon();
     await seedPokemonSpawns(pokemonNames);
-    await seedCards();
+    // Local-first: one card per (pokemon, set) from local folders; placeholders for rest; then dedupe
+    const cardResult = await seedCardsFromLocal();
+    console.log(`✓ Cards: ${cardResult.created} created/updated, ${cardResult.placeholders} placeholders, ${cardResult.skipped} skipped`);
+    const dedupeResult = await dedupeCardsBySet();
+    console.log(`✓ Dedupe: ${dedupeResult.deleted} duplicate cards removed`);
     
     console.log('\n✓ Seed completed successfully!');
   } catch (error) {
