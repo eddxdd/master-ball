@@ -228,10 +228,15 @@ function AuthPage({
 }) {
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [rememberMe, setRememberMe] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showRegisterConfirmPassword, setShowRegisterConfirmPassword] = useState(false);
+  const [registerError, setRegisterError] = useState<string | null>(null);
   const [registerForm, setRegisterForm] = useState({
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [loginForm, setLoginForm] = useState({
     usernameOrEmail: "",
@@ -247,7 +252,16 @@ function AuthPage({
    */
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await registerUser(registerForm);
+    setRegisterError(null);
+    if (registerForm.password !== registerForm.confirmPassword) {
+      setRegisterError("Passwords do not match");
+      return;
+    }
+    const res = await registerUser({
+      username: registerForm.username,
+      email: registerForm.email,
+      password: registerForm.password,
+    });
     last.update(res);
     if (res.data && !res.error) {
       const newState: AuthState = {
@@ -325,15 +339,30 @@ function AuthPage({
                     />
                   </label>
                   <label className="field">
-                    <input
-                      type="password"
-                      value={loginForm.password}
-                      placeholder="Password"
-                      onChange={(e) =>
-                        setLoginForm((f) => ({ ...f, password: e.target.value }))
-                      }
-                      required
-                    />
+                    <div className="auth-password-wrap">
+                      <input
+                        type={showLoginPassword ? "text" : "password"}
+                        value={loginForm.password}
+                        placeholder="Password"
+                        onChange={(e) =>
+                          setLoginForm((f) => ({ ...f, password: e.target.value }))
+                        }
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="auth-password-toggle"
+                        aria-label={showLoginPassword ? "Hide password" : "Show password"}
+                        onClick={() => setShowLoginPassword((v) => !v)}
+                        tabIndex={-1}
+                      >
+                        {showLoginPassword ? (
+                          <span aria-hidden="true">Hide</span>
+                        ) : (
+                          <span aria-hidden="true">Show</span>
+                        )}
+                      </button>
+                    </div>
                   </label>
                   <button className="primary auth-action-btn" type="submit">
                     Login
@@ -375,7 +404,10 @@ function AuthPage({
                     <button
                       type="button"
                       className="auth-switch-inline"
-                      onClick={() => setAuthMode("register")}
+                      onClick={() => {
+                        setAuthMode("register");
+                        setRegisterError(null);
+                      }}
                     >
                       Sign up
                     </button>
@@ -406,16 +438,56 @@ function AuthPage({
                     />
                   </label>
                   <label className="field">
-                    <input
-                      type="password"
-                      value={registerForm.password}
-                      placeholder="Password"
-                      onChange={(e) =>
-                        setRegisterForm((f) => ({ ...f, password: e.target.value }))
-                      }
-                      required
-                    />
+                    <div className="auth-password-wrap">
+                      <input
+                        type={showRegisterPassword ? "text" : "password"}
+                        value={registerForm.password}
+                        placeholder="Password"
+                        onChange={(e) => {
+                          setRegisterForm((f) => ({ ...f, password: e.target.value }));
+                          setRegisterError(null);
+                        }}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="auth-password-toggle"
+                        aria-label={showRegisterPassword ? "Hide password" : "Show password"}
+                        onClick={() => setShowRegisterPassword((v) => !v)}
+                        tabIndex={-1}
+                      >
+                        {showRegisterPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </label>
+                  <label className="field">
+                    <div className="auth-password-wrap">
+                      <input
+                        type={showRegisterConfirmPassword ? "text" : "password"}
+                        value={registerForm.confirmPassword}
+                        placeholder="Confirm password"
+                        onChange={(e) => {
+                          setRegisterForm((f) => ({ ...f, confirmPassword: e.target.value }));
+                          setRegisterError(null);
+                        }}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="auth-password-toggle"
+                        aria-label={showRegisterConfirmPassword ? "Hide password" : "Show password"}
+                        onClick={() => setShowRegisterConfirmPassword((v) => !v)}
+                        tabIndex={-1}
+                      >
+                        {showRegisterConfirmPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
+                  </label>
+                  {registerError && (
+                    <p className="auth-field-error" role="alert">
+                      {registerError}
+                    </p>
+                  )}
                   <button className="primary auth-action-btn" type="submit">
                     Register
                   </button>
@@ -456,7 +528,10 @@ function AuthPage({
                     <button
                       type="button"
                       className="auth-switch-inline"
-                      onClick={() => setAuthMode("login")}
+                      onClick={() => {
+                        setAuthMode("login");
+                        setRegisterError(null);
+                      }}
                     >
                       Sign in
                     </button>

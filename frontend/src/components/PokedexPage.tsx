@@ -18,6 +18,7 @@ interface Card {
   id: number;
   tcgdexId: string;
   pokemonName: string;
+  setId?: string;
   setName: string;
   setDisplayName?: string;
   rarity: string;
@@ -333,12 +334,20 @@ export function PokedexPage({ onBack, auth }: PokedexPageProps) {
                   <span className="lock-icon">🔒</span>
                 </div>
               )}
-              <div className="card-image-wrapper" style={{ position: 'relative' }}>
+              <div
+                className="card-image-wrapper"
+                style={{ position: 'relative' }}
+                data-set-id={entry.card.setId ?? ''}
+                data-set-name={entry.card.setDisplayName ?? entry.card.setName ?? ''}
+                title={entry.card.setDisplayName ?? entry.card.setName ? `Set: ${entry.card.setDisplayName ?? entry.card.setName}` : undefined}
+              >
                 <img
                   src={getCardImageUrl(entry.card.imageUrl)}
                   alt={capitalizeFirst(entry.card.pokemonName)}
                   className="card-image"
                   onError={(e) => handleCardImageError(e, 'pokedex-grid')}
+                  data-set-id={entry.card.setId ?? ''}
+                  data-set-name={entry.card.setDisplayName ?? entry.card.setName ?? ''}
                 />
                 {entry.captured && entry.quantity > 1 && (
                   <span className="card-quantity-badge">×{entry.quantity}</span>

@@ -1152,6 +1152,41 @@ input::placeholder {
   background: linear-gradient(90deg, rgba(14, 19, 40, 0.98), rgba(49, 35, 89, 0.58));
 }
 
+.auth-password-wrap {
+  position: relative;
+  display: block;
+}
+
+.auth-password-wrap input {
+  padding-right: 4rem;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  color: var(--auth-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--auth-pill-radius);
+  transition: color 140ms ease, background 140ms ease;
+}
+
+.auth-password-toggle:hover {
+  color: var(--auth-accent);
+  background: rgba(var(--auth-accent-rgb), 0.12);
+}
+
+.auth-field-error {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.85rem;
+  color: #e86c6c;
+}
+
 .auth-action-btn {
   width: 100%;
 }

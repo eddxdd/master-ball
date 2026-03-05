@@ -20,9 +20,13 @@ router.get('/', authenticate, async (req: Request, res: Response, next: NextFunc
     const userId = req.user!.id;
     const isAdmin = req.user!.role === 'ADMIN';
     
+    // Only show cards from the active sets. Add new set IDs here when a new set is released.
+    const ACTIVE_SET_IDS = ['base', 'jungle', 'fossil', 'team-rocket', 'promo'];
+
     // Get all cards, ordered so the best (lowest tier = rarest) card per unique
     // image comes first — we'll deduplicate below.
     const allCards = await prisma.card.findMany({
+      where: { setId: { in: ACTIVE_SET_IDS } },
       include: { pokemon: true },
       orderBy: [
         { pokemon: { pokedexNumber: 'asc' } },
