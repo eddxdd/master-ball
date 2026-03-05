@@ -7,6 +7,9 @@ import { Card } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { getPityTracker, calculatePityModifiers, calculatePityTier } from './pitySystem.js';
 
+/** Only offer cards from these sets. Add new set IDs here when a set is released. */
+const ACTIVE_SET_IDS = ['base', 'jungle', 'fossil', 'team-rocket', 'promo'];
+
 /** Rarity rank from least rare (1) to rarest (11), matching the official TCG order. */
 const RARITY_RANK: Record<string, number> = {
   'Common': 1,
@@ -120,7 +123,8 @@ export async function generateCardOffers(
   } catch (error) {
     console.error('Error selecting random card 1:', error);
     randomCard1 = await prisma.card.findFirst({
-      where: { pokemonId: { notIn: excludePokemonIds } }
+      where: { pokemonId: { notIn: excludePokemonIds }, setId: { in: ACTIVE_SET_IDS } },
+      orderBy: { id: 'asc' },
     });
     if (!randomCard1) randomCard1 = guaranteedCard;
   }
@@ -139,7 +143,8 @@ export async function generateCardOffers(
   } catch (error) {
     console.error('Error selecting random card 2:', error);
     randomCard2 = await prisma.card.findFirst({
-      where: { pokemonId: { notIn: excludePokemonIds } }
+      where: { pokemonId: { notIn: excludePokemonIds }, setId: { in: ACTIVE_SET_IDS } },
+      orderBy: { id: 'asc' },
     });
     if (!randomCard2) randomCard2 = guaranteedCard;
   }
@@ -162,12 +167,11 @@ export async function generateCardOffers(
 async function selectGuaranteedCard(pokemonId: number, tier: number): Promise<Card | null> {
   console.log(`selectGuaranteedCard called with pokemonId=${pokemonId}, tier=${tier}`);
   
+  const activeFilter = { setId: { in: ACTIVE_SET_IDS } };
+
   // Get all cards for this Pokemon in this tier
   const cards = await prisma.card.findMany({
-    where: {
-      pokemonId,
-      tier
-    }
+    where: { pokemonId, tier, ...activeFilter }
   });
   
   console.log(`Found ${cards.length} cards for Pokemon ${pokemonId} in tier ${tier}`);
@@ -179,9 +183,8 @@ async function selectGuaranteedCard(pokemonId: number, tier: number): Promise<Ca
     const fallbackCards1 = await prisma.card.findMany({
       where: {
         pokemonId,
-        tier: {
-          in: [Math.max(1, tier - 1), Math.min(6, tier + 1)]
-        }
+        tier: { in: [Math.max(1, tier - 1), Math.min(6, tier + 1)] },
+        ...activeFilter,
       }
     });
     
@@ -191,11 +194,9 @@ async function selectGuaranteedCard(pokemonId: number, tier: number): Promise<Ca
       return selectWeightedRandom(fallbackCards1);
     }
     
-    // Fallback 2: try ANY tier for this Pokemon
+    // Fallback 2: try ANY tier for this Pokemon (from active sets only)
     const fallbackCards2 = await prisma.card.findMany({
-      where: {
-        pokemonId
-      }
+      where: { pokemonId, ...activeFilter }
     });
     
     console.log(`Fallback 2: Found ${fallbackCards2.length} cards in any tier for Pokemon ${pokemonId}`);
@@ -225,32 +226,40 @@ async function selectRandomCard(
   const excludeClause = {
     id: { notIn: excludeIds },
     pokemonId: { notIn: excludePokemonIds },
+    setId: { in: ACTIVE_SET_IDS },
   };
+
   // If hard pity, guarantee ceiling card
   if (guaranteeCeiling) {
     const ceilingCards = await prisma.card.findMany({
-      where: {
-        tier,
-        isCeiling: true,
-        ...excludeClause,
-      }
+      where: { tier, isCeiling: true, ...excludeClause }
     });
-    
     if (ceilingCards.length > 0) {
       return ceilingCards[Math.floor(Math.random() * ceilingCards.length)];
     }
   }
   
   // Get all cards in this tier (excluding already-chosen card ids and pokemon ids)
-  const cards = await prisma.card.findMany({
-    where: {
-      tier,
-      ...excludeClause,
-    }
+  let cards = await prisma.card.findMany({
+    where: { tier, ...excludeClause }
   });
-  
+
+  // Fallback: not all tiers are populated (all local cards use tier 4).
+  // Try adjacent tiers, then any active card.
   if (cards.length === 0) {
-    throw new Error(`No cards available for tier ${tier} (distinct Pokémon)`);
+    cards = await prisma.card.findMany({
+      where: {
+        tier: { in: [Math.max(1, tier - 1), Math.min(6, tier + 1)] },
+        ...excludeClause,
+      }
+    });
+  }
+  if (cards.length === 0) {
+    cards = await prisma.card.findMany({ where: excludeClause });
+  }
+
+  if (cards.length === 0) {
+    throw new Error(`No active cards available (distinct Pokémon)`);
   }
   
   // Apply pity weight boost to ceiling cards
@@ -277,6 +286,7 @@ async function selectPityCard(
   const excludeClause = {
     id: { notIn: excludeIds },
     pokemonId: { notIn: excludePokemonIds },
+    setId: { in: ACTIVE_SET_IDS },
   };
   const newRarities = NEW_RARITIES_FOR_TIER[tier];
 
@@ -291,10 +301,16 @@ async function selectPityCard(
   }
 
   // Fallback: pick highest-ranked rarity available in the db for this tier
-  const allCards = await prisma.card.findMany({
+  let allCards = await prisma.card.findMany({
     where: { tier, ...excludeClause }
   });
-  if (allCards.length === 0) throw new Error(`No pity cards available for tier ${tier}`);
+
+  // If this tier is empty (all local cards use tier 4), fall back to any active card
+  if (allCards.length === 0) {
+    allCards = await prisma.card.findMany({ where: excludeClause });
+  }
+
+  if (allCards.length === 0) throw new Error(`No pity cards available`);
 
   const distinctRarities = [...new Set(allCards.map((c: Card) => c.rarity))];
   distinctRarities.sort((a, b) => (RARITY_RANK[b] ?? 0) - (RARITY_RANK[a] ?? 0));
