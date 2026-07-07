@@ -4,6 +4,8 @@ Phased so that each phase ships something demoable and maps to a specific set of
 
 > **Scope note:** phases below reflect the narrowed product scope in [`product-research.md`](./product-research.md) — the two flagship v1 features are the **Conversational Team Doctor** (Phase 2) and the **Mental-Game Coach** (Phase 3), not "clone every feature of every existing tool." The AI video/battle-postmortem feature (analyzing a user-uploaded recording of a Pokémon Champions match, since that game has no replay export) is explicitly a **Premium/stretch feature** in Phase 7, not core scope — it's the most differentiated idea from the research but also the most expensive to build well.
 >
+> **"Dex" vs. "TrAIner" note:** Phase 1 (the Pokédex, Team Builder, and Calculator) is the "Dex" half of the product and is scoped as a first-class deliverable in its own right, not a placeholder to rush past — Phases 2–3 (the "TrAIner" half) are what get layered on top of it, and they're only a real differentiator if the Dex underneath them is genuinely excellent. See [`README.md`](./README.md#core-product-pillars) for the full pillar breakdown.
+>
 > **Platform note:** the whole build targets a single website, shipped as an installable PWA — there is no committed native/Google Play app anywhere in Phases 0–6. Native packaging (Capacitor) is explicitly optional and lives only in Phase 7, alongside a separate, unrelated on-device/edge-AI stretch item. See [`tech-stack.md`](./tech-stack.md#mobile--distribution) for the full reasoning.
 
 ## Phase 0 — Foundations
@@ -19,17 +21,19 @@ Phased so that each phase ships something demoable and maps to a specific set of
 
 **Skills demonstrated:** modern full-stack scaffolding, Docker, CI basics, cloud deploy from day one.
 
-## Phase 1 — Core product, no AI yet
-**Goal:** team import + deterministic analysis works, fully tested, before any LLM is involved.
+## Phase 1 — The Dex: Pokédex, Team Builder, and Calculator, no AI yet
+**Goal:** the "Dex" half of the product — Pokédex, team import, and deterministic analysis — works, fully tested, before any LLM is involved. This is the foundation everything else (including the AI layer) is built on, not a placeholder to get past quickly.
 
+- Pokédex data model: species/move/ability/type-chart/nature reference tables, seeded once and shared by every feature below (the calculator, the team builder, and later the agent's tools all read from this same data, never duplicate it)
+- `get_pokemon_profile` tool + standalone Pokédex UI — a genuine, browsable "look up any Pokémon" page (base stats, full movepool, abilities, type matchups/weaknesses, natures reference), independent of team-building — this is the confirmed gap even ChampTeams has (see [`product-research.md`](./product-research.md)): dex-grade data that only ever shows up inside a team-builder flow, never as its own first-class reference
+- **Mega Evolution awareness folded into the Pokédex profile** — pre-computed, displayed Mega stat/ability changes, since Pokémon Champions itself doesn't show this anywhere before you actually mega evolve in a real match; the sharpest, most concretely-validated capability inside the Pokédex, not a separate feature bolted onto the team builder
 - Team import (Showdown export format parser)
 - `calculate_damage` tool — ported/verified damage formulas, exhaustively unit-tested against known-correct values, with `pytest-benchmark` asserting sub-100ms response from day one (see [`tech-stack.md`](./tech-stack.md#performance--cost-discipline-explicit-architecture-principle-not-just-a-nice-to-have)) — this tool is a core product pillar competing against established calculator apps, not a placeholder
 - `analyze_team` tool — type coverage, speed tiers, weakness matrix
-- **Mega-aware Pokédex** — the cheap, high-goodwill quick win from the research: pre-compute and display Mega Evolution stat/ability changes, since Pokémon Champions itself doesn't show this anywhere before you actually mega evolve in a real match
-- Frontend: team builder/import UI, analysis results view — held to the same "feels instant" bar as the best native calculator apps, not just "functionally correct"
+- Frontend: Pokédex browser, team builder/import UI, analysis results view — held to the same "feels instant" bar as the best native calculator apps, not just "functionally correct"
 - Auth (basic email/password or OAuth)
 
-**Skills demonstrated:** you can ship a correct, well-tested, *fast*, non-AI feature that stands on its own against established competitors — this matters both as a product foundation and because it proves the LLM layer is used where it adds value, not as a crutch to cover for a weak core product.
+**Skills demonstrated:** you can ship a correct, well-tested, *fast*, non-AI feature set that stands on its own against established competitors — this matters both as a product foundation and because it proves the LLM layer is used where it adds value, not as a crutch to cover for a weak core product.
 
 ## Phase 2 — Conversational Team Doctor (RAG + first agent)
 **Goal:** the flagship "ask anything, reasoned and grounded" experience works — this is the actual differentiator, not a generic RAG demo.
@@ -82,7 +86,7 @@ Phased so that each phase ships something demoable and maps to a specific set of
 
 - Neo4j knowledge graph: Pokémon ↔ types ↔ moves ↔ abilities ↔ items ↔ common archetypes
 - Graph-traversal queries feeding the agent for "what counters X core" style questions, combined with vector RAG (GraphRAG pattern)
-- AI-assisted Team Builder: given a target meta or a specific matchup, propose team candidates (heuristics + stats + LLM reasoning over graph + RAG context) — this is the pillar 1 category from [`README.md`](./README.md#core-product-pillars) reaching feature parity-and-beyond with the established competitors, not a new side feature
+- AI-assisted Team Builder: given a target meta or a specific matchup, propose team candidates (heuristics + stats + LLM reasoning over graph + RAG context) — this is the Team Builder & Damage Calculator pillar from [`README.md`](./README.md#core-product-pillars) reaching feature parity-and-beyond with the established competitors, not a new side feature
 
 **Skills demonstrated:** GraphRAG (genuinely current, differentiated technique), a case study of *when* to combine graph + vector retrieval instead of picking one.
 

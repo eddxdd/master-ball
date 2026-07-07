@@ -2,7 +2,7 @@
 
 > **Naming status: working title, not final.** "DexTrAIner" is a placeholder we're building under for now — see [Naming & branding](#naming--branding) below for how the codebase should reference it so a rename later is a five-minute job, not a refactor.
 
-DexTrAIner is an AI coach for competitive Pokémon players — Pokémon Champions/VGC and Pokémon Showdown OU/singles alike. It's built on a genuinely excellent, fast, accurate Team Builder and Damage Calculator (a proven, in-demand category — see [`product-research.md`](./product-research.md)), with two things layered on top that nothing else in the space does well: reasoning in plain English about a team/matchup instead of just showing numbers, and helping with the mental-game side of laddering that every existing tool ignores. Being successful here was never about being the only tool in the category — it's about doing the job better than what exists, on every axis, including raw performance.
+DexTrAIner is two things in one name, both held to a "best in class" bar: the **Dex** — a genuinely excellent, fast, accurate Pokédex, Team Builder, and Damage Calculator (a proven, in-demand category — see [`product-research.md`](./product-research.md)) — and the **TrAIner** — an AI layer on top that reasons in plain English about a team/matchup instead of just showing numbers, and helps with the mental-game side of laddering that every existing tool ignores. Neither half is the "real" product with the other bolted on: the Dex has to be excellent on its own merits, and the AI has to be a genuine value-add on top of it, not a thin wrapper around a calculator. Being successful here was never about being the only tool in the category — it's about doing the job better than what exists, on every axis, including raw performance.
 
 > **Product scope note:** the original one-liner above (and the six "pillars" this doc used to list) came from an initial ChatGPT-generated concept and an early, under-researched pass. It's since been replaced by [`product-research.md`](./product-research.md) — real research into what competitive Pokémon players are actually frustrated by (Reddit, Smogon forums, official Pokémon forums, existing app reviews), what's already been built by others, and where the real, validated, multi-person gap is. Read that doc for the reasoning behind the "Core product pillars" section below.
 
@@ -21,6 +21,8 @@ Two goals, in order:
 
 ## Doc index
 
+**Planning & decisions** — what we chose and why, written before/independent of the code:
+
 | Doc | What's in it |
 |---|---|
 | [`product-research.md`](./product-research.md) | What competitive Pokémon players actually struggle with (Reddit/forums/official Pokémon forums research), the existing competitive-tool landscape, and why DexTrAIner's v1 focus is what it is |
@@ -28,6 +30,18 @@ Two goals, in order:
 | [`architecture.md`](./architecture.md) | System design: components, data flow, agent graph, RAG pipeline |
 | [`ai-agents-and-rag.md`](./ai-agents-and-rag.md) | Deep dive on the AI layer: tools, MCP servers, retrieval pipeline, eval/observability strategy |
 | [`roadmap.md`](./roadmap.md) | Phased build plan, each phase mapped to the skills it's meant to demonstrate |
+
+**Operational & structural** — how to run the project and how the code that actually exists is organized, kept up to date alongside the code itself (see "Keeping docs current" below):
+
+| Doc | What's in it |
+|---|---|
+| [`setup.md`](./setup.md) | How to run the whole stack locally (Docker Compose), environment variables, common commands, troubleshooting |
+| [`backend/README.md`](./backend/README.md) | `Backend/`'s folder structure, conventions (Settings, DB session, migrations), and Docker image notes |
+| [`frontend/README.md`](./frontend/README.md) | `Frontend/`'s folder structure, conventions (branding, state management, shadcn/ui), and Docker image notes |
+
+## Keeping docs current
+
+`Docs/` grows alongside the code, not just up front: whenever a phase adds a new part of the codebase, the relevant doc above gets created or updated in the same pass, and this index gets updated too — nothing should exist in this folder that isn't linked from here.
 
 ## Naming & branding
 
@@ -50,11 +64,15 @@ Concretely, once code exists:
 Grounded in [`product-research.md`](./product-research.md) — each of these maps to a specific, multi-source-validated pain point or validated-demand category, not a guess. All of them, including the ones with existing competitors, are held to a "best in class" bar — see the Performance principle below.
 
 ### Core pillars (v1)
-1. **Team Builder & Damage Calculator** — a real deterministic calc engine (never an LLM guessing numbers) and a full team-building experience, competing directly with established tools (ChampTeams, ChampionsMeta, native Play Store calc apps) on accuracy, speed, and polish, not just feature-parity. This category has proven demand (ChampTeams: 1,500+ organic users) — the goal is to do it better, not avoid it because someone else got there first.
-2. **Team Analyzer** — type-coverage/speed-tier/role-compression analysis, used both directly and as a tool the Conversational Team Doctor calls.
-3. **Mega-aware Pokédex** — a quick, cheap, high-goodwill fix for a specific, official, dev-acknowledged complaint: Pokémon Champions doesn't show Mega Evolution stat/ability changes anywhere before you actually mega evolve in a real match.
+
+**The "Dex" — the comprehensive competitive reference and tools, excellent on their own merits:**
+1. **Pokédex** — a genuine standalone reference, not a side effect of team-building: base stats, full movepool, abilities, type matchups/weaknesses, a natures reference, and tournament usage %, browsable on its own the way Bulbapedia or Smogon's dex pages are (confirmed gap — even ChampTeams, the closest competitor, only surfaces this data inside its team-builder flow, never as a standalone page; see [`product-research.md`](./product-research.md)). **Mega Evolution stat/ability awareness is the sharpest capability inside it** — a specific, official, dev-acknowledged complaint (Pokémon Champions doesn't show Mega stat/ability changes anywhere before you actually mega evolve in a real match) — but it's one capability of a full Pokédex, not the whole feature.
+2. **Team Builder & Damage Calculator** — a real deterministic calc engine (never an LLM guessing numbers) and a full team-building experience, competing directly with established tools (ChampTeams, ChampionsMeta, native Play Store calc apps) on accuracy, speed, and polish, not just feature-parity. This category has proven demand (ChampTeams: 1,500+ organic users) — the goal is to do it better, not avoid it because someone else got there first.
+3. **Team Analyzer** — type-coverage/speed-tier/role-compression analysis, built on the same Pokédex data, used both directly and as a tool the Conversational Team Doctor calls.
 4. **Meta/usage lookup** — leans on existing public tournament/usage data where possible rather than re-deriving everything from scratch; cached and refreshed on a schedule, not fetched live on every request, so it's fast for the user and sustainable to run (see [`tech-stack.md`](./tech-stack.md) for the performance/cost discipline this implies).
-5. **Conversational Team Doctor** — natural-language Q&A that *reasons* about a team/matchup ("lead with X because it outspeeds their likely Trick Room setter and resists their revealed Mega's STAB"), grounded and cited, layered on top of pillars 1–4. Differentiator: existing tools are calculators with at most a bolted-on AI suggestion button; nothing does real conversational reasoning.
+
+**The "TrAIner" — the AI layer that amplifies the Dex, not a separate product bolted alongside it:**
+5. **Conversational Team Doctor** — natural-language Q&A that *reasons* about a team/matchup ("lead with X because it outspeeds their likely Trick Room setter and resists their revealed Mega's STAB"), grounded and cited, layered on top of the Dex pillars above. Differentiator: existing tools are calculators with at most a bolted-on AI suggestion button; nothing does real conversational reasoning over Pokédex-grade data.
 6. **Mental-Game Coach** — session tracking with a proactive "you've lost 2 in a row, want a break instead of queuing again?" push notification (implementing the community's own "two-loss rule"), and a post-loss breakdown that explains specifically *why* a game was lost — replacing the "that felt random and unfair" feeling that the community itself identifies as tilt's root cause. Zero existing competitors touch this angle at all.
 
 ### Deferred to Premium / later (not in the v1 roadmap)

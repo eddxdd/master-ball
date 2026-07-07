@@ -13,7 +13,7 @@ entry → router → {tool_calls in parallel} → synthesizer → END
 ```
 
 **Nodes:**
-- `router` — cheap/fast model call (OpenAI's smallest/fastest tier) classifies the turn: `team_analysis | damage_calc | replay_review | meta_question | tournament_prep | post_loss_review | general_rag | needs_clarification`.
+- `router` — cheap/fast model call (OpenAI's smallest/fastest tier) classifies the turn: `pokedex_question | team_analysis | damage_calc | replay_review | meta_question | tournament_prep | post_loss_review | general_rag | needs_clarification`.
 - `tool_calls` — one or more of the tools below, invoked based on the router's decision. Run independent tool calls concurrently (`asyncio.gather`), not sequentially.
 - `clarify_node` — only reached when the router can't confidently resolve intent (e.g., "is my team good?" with no team specified) — asks a targeted follow-up instead of guessing.
 - `synthesizer` — the expensive model call (Claude by default, chosen by task type) that turns tool outputs + retrieved context into the final grounded response, with citations back to source documents where RAG was used.
@@ -34,13 +34,13 @@ Each tool is a plain Python callable with a Pydantic input/output model, so the 
 
 | Tool | Input | Output | Notes |
 |---|---|---|---|
+| `get_pokemon_profile` | Pokémon name/id, optional held item | base stats, full movepool, abilities, type matchups/weaknesses, natures reference, tournament usage % (once Phase 5 lands), and post-Mega stats/ability if a Mega Stone is held | **Deterministic lookup, no LLM.** This is the Pokédex tool — backs the standalone Pokédex UI directly (Phase 1) *and* is callable by the agent, so "tell me about Landorus-Therian" gets the same underlying data as browsing the Pokédex page, just reasoned over in prose. Mega-awareness is folded in here rather than being a separate tool, since it's the same species lookup with one extra branch — directly fixes an official, dev-acknowledged complaint that Pokémon Champions doesn't surface this anywhere in-game (see [`product-research.md`](./product-research.md)). |
 | `calculate_damage` | attacker, defender, move, field conditions | min/max damage, KO chance, roll breakdown | **Deterministic, no LLM.** Ported/verified against known-correct Showdown calc values. This is the tool most worth having exhaustive `pytest` coverage on. |
 | `analyze_team` | team (6 Pokémon + sets) | type-coverage matrix, speed tiers, weaknesses, role-compression flags | Deterministic + rule-based; no LLM needed to compute, though the agent explains the output in natural language. |
 | `lookup_meta_stats` | format, Pokémon or archetype | usage %, common sets/spreads, common teammates | Backed by ingested Pikalytics-style usage data in Postgres. |
 | `retrieve_context` | natural-language query, source filter | top-k chunks + citations | The RAG tool — see section 3. |
 | `parse_replay` | replay log/URL | structured turn-by-turn game state | **Pokémon Showdown replays specifically** (Phase 5) — Showdown exposes clean text logs today. Runs as a background job (Arq) for anything non-trivial in length; the agent queries the *result*, not the raw log. The equivalent for official Pokémon Champions matches requires video/multimodal input instead of a log, since Champions has no replay export — that's the deferred `analyze_battle_video` Premium tool (Phase 7), not this one. |
 | `scout_opponent` | known team fragments / player history | inferred likely team + counter-suggestions | Combines `lookup_meta_stats` + `retrieve_context`; a genuinely agentic multi-tool composition, good demo material. |
-| `get_mega_evolution_profile` | Pokémon + held Mega Stone/item | post-Mega stats, ability, and EV breakpoints | Deterministic lookup/computation, no LLM. Directly fixes an official, dev-acknowledged complaint that Pokémon Champions doesn't surface this anywhere in-game (see [`product-research.md`](./product-research.md)). |
 | `log_battle_result` | win/loss, timestamp, optional team id | updated session record | Powers the Mental-Game Coach (Phase 3). Deterministic; triggers `check_tilt_risk` as a side effect, not an LLM call. |
 | `check_tilt_risk` | recent session history | streak length, "two-loss rule" nudge flag | Deterministic rule (the community's own documented "two-loss rule" — see [`product-research.md`](./product-research.md)), evaluated after every `log_battle_result` call. When it fires, triggers a Web Push notification (browser Push API/service worker — see [`tech-stack.md`](./tech-stack.md#mobile--distribution)) — this is one of the few places the system initiates contact with the user rather than responding to a request. |
 
@@ -65,7 +65,7 @@ raw sources → LlamaIndex loaders/parsers → chunking → embedding → pgvect
 
 ## 4. MCP server
 
-A standalone server (official MCP Python SDK) exposing the tools from section 2 — likely a useful subset (`calculate_damage`, `analyze_team`, `lookup_meta_stats`) rather than all of them, since some (like `parse_replay`) are async/job-shaped and less natural as a synchronous MCP tool call at first.
+A standalone server (official MCP Python SDK) exposing the tools from section 2 — likely a useful subset (`get_pokemon_profile`, `calculate_damage`, `analyze_team`, `lookup_meta_stats`) rather than all of them, since some (like `parse_replay`) are async/job-shaped and less natural as a synchronous MCP tool call at first. `get_pokemon_profile` in particular is a good MCP citizen: a fast, synchronous, deterministic lookup with no side effects, so any MCP client (Claude Desktop, Cursor) can ask "what's Landorus-Therian's profile" and get a real answer with zero extra plumbing.
 
 **Build checklist** (matches what current hiring research flags as the credibility bar for this artifact):
 - [ ] Typed schemas via Pydantic for every tool's input/output

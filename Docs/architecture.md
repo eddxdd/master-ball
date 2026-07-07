@@ -5,6 +5,7 @@
 ```mermaid
 flowchart TB
     subgraph Client["Frontend (React + TS + Vite, PWA)"]
+        Dex[Pokédex Browser UI]
         UI[Team Builder / Analyzer UI]
         Chat[Coach Chat — streaming]
         Session[Session Check-in UI]
@@ -24,9 +25,9 @@ flowchart TB
     end
 
     subgraph ToolsImpl["Tools"]
+        PokedexTool[Pokémon Profile Lookup\n(Pokédex + Mega-aware, deterministic, no LLM)]
         Calc[Damage Calc Engine\n(deterministic, no LLM)]
         TeamAnalyzer[Team Analyzer]
-        MegaProfile[Mega Evolution Profile\n(deterministic, no LLM)]
         MetaLookup[Meta / Usage Stats Lookup]
         ReplayParser[Showdown Replay Parser]
         RAGTool[RAG Retriever]
@@ -66,6 +67,7 @@ flowchart TB
         PostHog[PostHog]
     end
 
+    Dex --> REST
     UI --> REST
     Chat <--> WS
     Session --> REST
@@ -74,15 +76,16 @@ flowchart TB
     REST --> ToolsImpl
 
     Router --> Tools
+    Tools --> PokedexTool
     Tools --> Calc
     Tools --> TeamAnalyzer
-    Tools --> MegaProfile
     Tools --> MetaLookup
     Tools --> ReplayParser
     Tools --> RAGTool
     Tools --> Synth
     Synth --> Models
 
+    MCP --> PokedexTool
     MCP --> Calc
     MCP --> TeamAnalyzer
     MCP --> MetaLookup
@@ -90,7 +93,7 @@ flowchart TB
 
     RAGTool --> PG
     TeamAnalyzer --> PG
-    MegaProfile --> PG
+    PokedexTool --> PG
     MetaLookup --> PG
     Auth --> PG
     WS --> Valkey
@@ -116,6 +119,8 @@ flowchart TB
 ### Frontend
 React SPA, built as an installable PWA (web app manifest + service worker) — this is the only committed distribution mechanism; a native Google Play wrapper (Capacitor) is documented as an optional, unscheduled stretch goal, not a planned deliverable (see [`tech-stack.md`](./tech-stack.md#mobile--distribution)). Talks to FastAPI over REST for CRUD-shaped operations (teams, tournament data, user settings, session/battle-result logging) and over WebSocket for anything that streams (chat responses). TanStack Query owns all server-state caching; Zustand owns transient UI/editor state (e.g., the team currently being built, before it's saved). The push-notification handler is the browser's native Push API/service worker (Web Push) — works on Android and, as of 2026, iOS Safari too.
 
+The **Pokédex Browser UI** is deliberately its own surface, not a panel inside the Team Builder — it's the standalone "look up any Pokémon" reference page that closes the gap identified in [`product-research.md`](./product-research.md) (even ChampTeams only ever surfaces this data while actively building a team). Both it and the Team Builder read from the same `get_pokemon_profile`/Pokédex data, so there's no duplicated species/move/ability data between the two surfaces.
+
 ### FastAPI edge
 Thin layer: auth, request validation (Pydantic/SQLModel), routing to either direct data-layer operations (simple CRUD) or the agent layer (anything that needs reasoning). Deliberately does **not** put agent logic in the route handlers themselves — routes call into the agent layer as a black box that takes a request and returns/streams a typed response.
 
@@ -134,7 +139,7 @@ Plain Python modules/classes, each with a Pydantic input/output schema. Every to
 - From inside the LangGraph agent, as a tool call
 - From the standalone MCP server, as an MCP tool
 
-The **damage calculator, team analyzer, Mega Evolution profile, and session logger/tilt-risk check are all deterministic tools that never touch an LLM** — they're plain Python computed against known-correct formulas and simple rules (e.g., the "two-loss rule" from [`product-research.md`](./product-research.md)). The agent's job is to call them and explain the result in context, not to compute or approximate any of it. This matters doubly for the tilt-risk check specifically: it needs to fire reliably and immediately after a logged loss, which a rules engine does deterministically and an LLM call would make slower, more expensive, and less predictable for no benefit.
+The **Pokémon profile lookup (Pokédex + Mega-aware), damage calculator, team analyzer, and session logger/tilt-risk check are all deterministic tools that never touch an LLM** — they're plain Python computed against known-correct formulas, structured reference data, and simple rules (e.g., the "two-loss rule" from [`product-research.md`](./product-research.md)). The agent's job is to call them and explain the result in context, not to compute or approximate any of it. This matters doubly for the tilt-risk check specifically: it needs to fire reliably and immediately after a logged loss, which a rules engine does deterministically and an LLM call would make slower, more expensive, and less predictable for no benefit. It also matters for the Pokédex lookup: browsing the Pokédex UI should never wait on an LLM round-trip — it's a data lookup, and it stays one whether it's rendered directly in the Pokédex UI or narrated by the agent in chat.
 
 ### MCP server
 A separate lightweight FastAPI (or the official MCP Python SDK's own server) process that wraps the same tool implementations behind the MCP protocol — stdio and Streamable HTTP transports. This lets any MCP-aware client (Claude Desktop, Cursor, a future third-party integration) use DexTrAIner's Pokémon tools directly, independent of the main chat product. See [`ai-agents-and-rag.md`](./ai-agents-and-rag.md) for the tool contracts.
