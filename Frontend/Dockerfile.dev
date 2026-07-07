@@ -1,0 +1,19 @@
+# Dev-only image: runs Vite's dev server with hot reload against a volume-mounted
+# source tree (see docker-compose.yml). Not used for production builds.
+FROM node:24-slim
+
+WORKDIR /app
+
+# `npm install`, not `npm ci`: this project is developed on Windows, and Windows-
+# generated package-lock.json files are known to omit Linux-only optional native
+# deps (e.g. @emnapi/* used by lightningcss/tailwindcss's WASM fallback), which
+# makes `npm ci` fail on Linux even though the lockfile is otherwise valid. See
+# Docs/frontend/README.md.
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
