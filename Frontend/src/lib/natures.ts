@@ -1,0 +1,30 @@
+/** The 25 natures — static game data, safe to duplicate client-side rather
+ * than round-tripping to the backend just to populate a dropdown. Matches
+ * Backend/scripts/seed_pokedex.py's seeded natures table exactly. */
+export const NATURES: { id: string; name: string; increased?: string; decreased?: string }[] = [
+  { id: "hardy", name: "Hardy" },
+  { id: "lonely", name: "Lonely", increased: "atk", decreased: "def" },
+  { id: "brave", name: "Brave", increased: "atk", decreased: "spe" },
+  { id: "adamant", name: "Adamant", increased: "atk", decreased: "spa" },
+  { id: "naughty", name: "Naughty", increased: "atk", decreased: "spd" },
+  { id: "bold", name: "Bold", increased: "def", decreased: "atk" },
+  { id: "docile", name: "Docile" },
+  { id: "relaxed", name: "Relaxed", increased: "def", decreased: "spe" },
+  { id: "impish", name: "Impish", increased: "def", decreased: "spa" },
+  { id: "lax", name: "Lax", increased: "def", decreased: "spd" },
+  { id: "timid", name: "Timid", increased: "spe", decreased: "atk" },
+  { id: "hasty", name: "Hasty", increased: "spe", decreased: "def" },
+  { id: "serious", name: "Serious" },
+  { id: "jolly", name: "Jolly", increased: "spe", decreased: "spa" },
+  { id: "naive", name: "Naive", increased: "spe", decreased: "spd" },
+  { id: "modest", name: "Modest", increased: "spa", decreased: "atk" },
+  { id: "mild", name: "Mild", increased: "spa", decreased: "def" },
+  { id: "quiet", name: "Quiet", increased: "spa", decreased: "spe" },
+  { id: "bashful", name: "Bashful" },
+  { id: "rash", name: "Rash", increased: "spa", decreased: "spd" },
+  { id: "calm", name: "Calm", increased: "spd", decreased: "atk" },
+  { id: "gentle", name: "Gentle", increased: "spd", decreased: "def" },
+  { id: "sassy", name: "Sassy", increased: "spd", decreased: "spe" },
+  { id: "careful", name: "Careful", increased: "spd", decreased: "spa" },
+  { id: "quirky", name: "Quirky" },
+];

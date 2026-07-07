@@ -1,28 +1,12 @@
 import { useEffect } from "react";
+import { Route, Routes } from "react-router";
 import { APP_NAME } from "@/config/branding";
-import { useHealth } from "@/hooks/useHealth";
-
-function HealthIndicator() {
-  const { data, isPending, isError, error } = useHealth();
-
-  if (isPending) {
-    return <span className="text-muted-foreground">Checking backend connection…</span>;
-  }
-
-  if (isError) {
-    return (
-      <span className="text-destructive">
-        Backend unreachable ({error instanceof Error ? error.message : "unknown error"})
-      </span>
-    );
-  }
-
-  return (
-    <span className="text-emerald-600 dark:text-emerald-400">
-      Backend connected — {data.status} ({data.app_name})
-    </span>
-  );
-}
+import { AppLayout } from "@/layout/AppLayout";
+import { CalculatorPage } from "@/pages/calculator/CalculatorPage";
+import { HomePage } from "@/pages/HomePage";
+import { PokedexBrowser } from "@/pages/pokedex/PokedexBrowser";
+import { PokemonDetail } from "@/pages/pokedex/PokemonDetail";
+import { TeamBuilderPage } from "@/pages/team-builder/TeamBuilderPage";
 
 function App() {
   useEffect(() => {
@@ -30,15 +14,15 @@ function App() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background p-8 text-foreground">
-      <h1 className="text-3xl font-semibold">{APP_NAME}</h1>
-      <p className="text-muted-foreground">
-        Phase 0 foundations — this is a wiring check, not the real UI yet.
-      </p>
-      <div className="rounded-lg border border-border bg-card px-4 py-3 text-sm">
-        <HealthIndicator />
-      </div>
-    </main>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="pokedex" element={<PokedexBrowser />} />
+        <Route path="pokedex/:speciesId" element={<PokemonDetail />} />
+        <Route path="calculator" element={<CalculatorPage />} />
+        <Route path="team-builder" element={<TeamBuilderPage />} />
+      </Route>
+    </Routes>
   );
 }
 
