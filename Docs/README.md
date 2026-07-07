@@ -36,8 +36,9 @@ Two goals, in order:
 | Doc | What's in it |
 |---|---|
 | [`setup.md`](./setup.md) | How to run the whole stack locally (Docker Compose), environment variables, common commands, troubleshooting |
-| [`backend/README.md`](./backend/README.md) | `Backend/`'s folder structure, conventions (Settings, DB session, migrations), and Docker image notes |
-| [`frontend/README.md`](./frontend/README.md) | `Frontend/`'s folder structure, conventions (branding, state management, shadcn/ui), and Docker image notes |
+| [`backend/README.md`](./backend/README.md) | `Backend/`'s folder structure, conventions (Settings, DB session, migrations, tools/schemas/routers pattern), data seeding, and Docker image notes |
+| [`backend/damage-calc.md`](./backend/damage-calc.md) | The damage calculator's exact formula scope — what's implemented, what's deliberately deferred, and how it's verified |
+| [`frontend/README.md`](./frontend/README.md) | `Frontend/`'s folder structure, conventions (routing, branding, state management, shadcn/ui), and Docker image notes |
 
 ## Keeping docs current
 

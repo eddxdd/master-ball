@@ -21,17 +21,21 @@ Phased so that each phase ships something demoable and maps to a specific set of
 
 **Skills demonstrated:** modern full-stack scaffolding, Docker, CI basics, cloud deploy from day one.
 
-## Phase 1 — The Dex: Pokédex, Team Builder, and Calculator, no AI yet
+## Phase 1 — The Dex: Pokédex, Team Builder, and Calculator, no AI yet — ✅ complete
 **Goal:** the "Dex" half of the product — Pokédex, team import, and deterministic analysis — works, fully tested, before any LLM is involved. This is the foundation everything else (including the AI layer) is built on, not a placeholder to get past quickly.
 
-- Pokédex data model: species/move/ability/type-chart/nature reference tables, seeded once and shared by every feature below (the calculator, the team builder, and later the agent's tools all read from this same data, never duplicate it)
-- `get_pokemon_profile` tool + standalone Pokédex UI — a genuine, browsable "look up any Pokémon" page (base stats, full movepool, abilities, type matchups/weaknesses, natures reference), independent of team-building — this is the confirmed gap even ChampTeams has (see [`product-research.md`](./product-research.md)): dex-grade data that only ever shows up inside a team-builder flow, never as its own first-class reference
-- **Mega Evolution awareness folded into the Pokédex profile** — pre-computed, displayed Mega stat/ability changes, since Pokémon Champions itself doesn't show this anywhere before you actually mega evolve in a real match; the sharpest, most concretely-validated capability inside the Pokédex, not a separate feature bolted onto the team builder
-- Team import (Showdown export format parser)
-- `calculate_damage` tool — ported/verified damage formulas, exhaustively unit-tested against known-correct values, with `pytest-benchmark` asserting sub-100ms response from day one (see [`tech-stack.md`](./tech-stack.md#performance--cost-discipline-explicit-architecture-principle-not-just-a-nice-to-have)) — this tool is a core product pillar competing against established calculator apps, not a placeholder
-- `analyze_team` tool — type coverage, speed tiers, weakness matrix
-- Frontend: Pokédex browser, team builder/import UI, analysis results view — held to the same "feels instant" bar as the best native calculator apps, not just "functionally correct"
-- Auth (basic email/password or OAuth)
+**What shipped:**
+- Pokédex data model (`species`/`moves`/`abilities`/`natures`/`type_matchups`), seeded from `poke-env`'s Showdown-sourced Gen 9 data via a re-runnable `scripts/seed_pokedex.py` — see [`backend/README.md`](./backend/README.md#data-seeding) and [`tech-stack.md`](./tech-stack.md#backend) for why `poke-env`
+- `get_pokemon_profile` tool + standalone Pokédex UI (browse/search/filter + detail page) — base stats, full gen-9-legal movepool, abilities, computed type matchups, natures reference, and Mega Evolution formes shown inline with their own full profile (stats/movepool/abilities recomputed, not just a stat delta)
+- `calculate_damage` tool — a from-scratch Gen 9 formula implementation (not a wrapper around an existing calc library), covering stat calc/stages, STAB (incl. Adaptability/Terastallization), the full type chart, weather, screens, crits, burn/Guts, and a curated set of common items/abilities — every test hand-derives its expected value in a comment; see [`backend/damage-calc.md`](./backend/damage-calc.md) for the full scope statement and what's explicitly deferred. `pytest-benchmark` holds it at ~15ms mean, well inside the sub-100ms target.
+- Showdown team-import parser (via `poke-env`'s `Teambuilder`, not hand-rolled regex) and `analyze_team` tool — type coverage, speed tiers, a full weakness matrix, and simple heuristic role-compression flags (shared-weakness detection, missing-strong-attacker checks)
+- Frontend: Pokédex browser + detail, Calculator, and Team Builder (paste-import + manual slot editor) pages, wired with React Router (new dependency this phase). Team Builder state lives in the browser (Zustand + `localStorage`), not a server-side table — see the scope note below.
+
+**Deliberately not done, and why:**
+- **Auth / server-side team persistence** — descoped after discussion: nothing in Phase 1 actually needs to know *who* the user is (`analyze_team` takes a team payload directly, not a `team_id`), so building accounts now would be infrastructure ahead of a real requirement. Real accounts land in Phase 3, when session/battle-result logging is inherently tied to a specific person.
+- Everything listed in [`backend/damage-calc.md`](./backend/damage-calc.md)'s "explicitly deferred" section (the long tail of ability/item interactions, full VGC doubles targeting, variable-base-power moves beyond a curated set, Stellar Tera type).
+- Full ability/move description text — mechanical data is complete; flavor text is a curated common subset only (`poke-env`'s data doesn't include it at all).
+- Tournament usage % — needs Phase 5's data pipeline.
 
 **Skills demonstrated:** you can ship a correct, well-tested, *fast*, non-AI feature set that stands on its own against established competitors — this matters both as a product foundation and because it proves the LLM layer is used where it adds value, not as a crutch to cover for a weak core product.
 
