@@ -1,0 +1,64 @@
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python (Backend) ---
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+celerybeat-schedule
+*.sqlite3
+
+# --- Alembic (leave versions tracked, ignore local db artifacts) ---
+*.db
+
+# --- Node / Frontend (React + Vite) ---
+node_modules/
+dist/
+dist-ssr/
+build/
+.vite/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Docker ---
+docker-compose.override.yml
+
+# --- Capacitor / native (kept out unless the mobile stretch goal is picked up) ---
+android/
+ios/
+
+# --- Logs ---
+*.log
+logs/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Editors / IDE ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# --- Misc build artifacts ---
+*.tsbuildinfo
+.turbo/
