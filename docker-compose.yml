@@ -9,7 +9,13 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dextrainer}
       POSTGRES_DB: ${POSTGRES_DB:-dextrainer}
     ports:
-      - "5432:5432"
+      # Host-side port intentionally not 5432: a native Postgres install on the
+      # host is a common source of a silent port conflict (connections get
+      # accepted by the wrong Postgres with different credentials, which looks
+      # like a password error, not a connection error). Container-to-container
+      # traffic (backend -> postgres) is unaffected, since that uses the
+      # Docker-internal port 5432 regardless of this mapping. See setup.md.
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:

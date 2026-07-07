@@ -6,7 +6,9 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from app import models  # noqa: F401 — populates Base.metadata by importing every model
 from app.core.config import get_settings
+from app.db.session import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -21,9 +23,7 @@ if config.config_file_name is not None:
 settings = get_settings()
 config.set_main_option("sqlalchemy.url", settings.database_url)
 
-# No models yet (Phase 1 introduces the Pokedex/team tables) — once they exist,
-# import their Base.metadata here to enable `alembic revision --autogenerate`.
-target_metadata = None
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
