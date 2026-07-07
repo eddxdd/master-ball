@@ -7,6 +7,7 @@ dependencies = [
     "alembic>=1.18.5",
     "asyncpg>=0.31.0",
     "fastapi[standard]>=0.139.0",
+    "poke-env>=0.15.0",
     "pydantic-settings>=2.14.2",
     "sqlalchemy[asyncio]>=2.0.51",
 ]
@@ -25,6 +26,16 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+# B008: FastAPI's `Depends(...)` as an argument default is the framework's own
+# documented dependency-injection pattern, not the mutable-default-argument
+# footgun this rule exists to catch.
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# Alembic's own --autogenerate template predates modern typing/import-sort
+# conventions; not worth hand-fixing on every migration, and not worth
+# customizing script.py.mako just to appease the linter.
+"app/alembic/versions/*.py" = ["UP035", "UP007", "I001"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
