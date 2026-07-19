@@ -186,8 +186,11 @@ export function AppLayout() {
               </NavLink>
             ))}
           </nav>
-          {/* Mobile: full-width second row so autocomplete isn't squeezed. */}
-          <SearchBar className="order-last w-full basis-full md:order-none md:ml-auto md:w-72 md:basis-auto" />
+          {/* Mobile: full-width second row so autocomplete isn't squeezed.
+              Wrapper owns flex order/basis — not the input (that collapses the popup). */}
+          <div className="order-last w-full basis-full md:order-none md:ml-auto md:w-72 md:basis-auto">
+            <SearchBar className="w-full" />
+          </div>
           <div className="ml-auto flex shrink-0 items-center gap-1 md:ml-0">
             <ThemeToggle />
             <AccountMenu />
