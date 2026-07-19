@@ -126,7 +126,7 @@ export function SearchBar({ className }: { className?: string }) {
         showClear={query.length > 0}
         placeholder="Search Pokemon, moves, items..."
         aria-label="Search Pokemon, moves, abilities, items, and types"
-        className={cn("w-40 sm:w-56 md:w-72", className)}
+        className={cn("w-full md:w-72", className)}
         onKeyDown={(event) => {
           if (event.key !== "Enter") return;
           const q = query.trim();
@@ -140,27 +140,30 @@ export function SearchBar({ className }: { className?: string }) {
           }, 0);
         }}
       />
-      <ComboboxContent>
+      <ComboboxContent
+        align="start"
+        className="min-w-[min(100vw-2rem,var(--anchor-width))] w-(--anchor-width) max-w-[min(100vw-2rem,36rem)]"
+      >
         <ComboboxEmpty>
           {trimmedQuery ? "No matches found." : "Start typing to search."}
         </ComboboxEmpty>
-        <ComboboxList>
+        <ComboboxList className="max-h-[min(60vh,22rem)]">
           {groups.map((group) => (
             <ComboboxGroup key={group.value} items={group.items}>
               <ComboboxLabel>{group.value}</ComboboxLabel>
               <ComboboxCollection>
                 {(item: EnrichedResult) => (
-                  <ComboboxItem key={`${item.path}/${item.id}`} value={item}>
+                  <ComboboxItem key={`${item.path}/${item.id}`} value={item} className="gap-2.5">
                     {item.sprite_url && (
                       <SpriteImg
                         spriteUrl={item.sprite_url}
                         name={item.name}
-                        className="size-6 shrink-0 object-contain"
-                        placeholderClassName="size-6 shrink-0 text-[10px]"
+                        className="size-7 shrink-0 object-contain"
+                        placeholderClassName="size-7 shrink-0 text-[10px]"
                       />
                     )}
-                    <span className="flex min-w-0 flex-1 flex-col">
-                      <span className="truncate">{item.name}</span>
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="truncate font-medium">{item.name}</span>
                       {item.subtitle && (
                         <span className="truncate text-muted-foreground text-xs">
                           {item.subtitle}

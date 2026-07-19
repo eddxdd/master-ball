@@ -161,7 +161,7 @@ export function AppLayout() {
           headerHidden ? "-translate-y-full" : "translate-y-0",
         )}
       >
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:gap-6">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 sm:gap-x-6 md:flex-nowrap">
           <NavLink to="/" className="flex shrink-0 items-center gap-2 text-lg font-semibold">
             <AppLogo size="sm" />
             <span className="bg-[image:var(--gradient-brand)] bg-clip-text text-transparent">
@@ -186,21 +186,24 @@ export function AppLayout() {
               </NavLink>
             ))}
           </nav>
-          <SearchBar className="ml-auto w-28 sm:w-56 md:w-72" />
-          <ThemeToggle />
-          <AccountMenu />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="site-nav-mobile"
-            onClick={() => setMobileMenuOpen((open) => !open)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </Button>
+          {/* Mobile: full-width second row so autocomplete isn't squeezed. */}
+          <SearchBar className="order-last w-full basis-full md:order-none md:ml-auto md:w-72 md:basis-auto" />
+          <div className="ml-auto flex shrink-0 items-center gap-1 md:ml-0">
+            <ThemeToggle />
+            <AccountMenu />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="site-nav-mobile"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </Button>
+          </div>
         </div>
 
         {mobileMenuOpen && (
