@@ -1,4 +1,4 @@
-"""Interview / local-demo Gen 9 OU leaderboard filler.
+"""Local-demo Gen 9 OU leaderboard filler.
 
 Used by `lookup_meta_leaderboard` when `usage_stats` has no rows for
 `gen9ou` yet (Smogon sync hasn't been run). Numbers are plausible ladder

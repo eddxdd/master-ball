@@ -138,7 +138,7 @@ async def _enrich_meta_stats_from_parts(
     checks_and_counters: list[dict],
     is_demo: bool = False,
 ) -> MetaStatsResult:
-    """Shared enrichment path for synced rows and interview demo fallbacks."""
+    """Shared enrichment path for synced rows and local demo fallbacks."""
     ability_ids = {to_id_str(a["name"]) for a in abilities}
     abilities_by_id = await _rows_by_id(db, Ability, ability_ids)
 
@@ -241,7 +241,7 @@ async def _enrich_meta_stats_from_parts(
 async def _demo_meta_stats_for_species(
     db: AsyncSession, species_id: str, format: str = DEFAULT_FORMAT
 ) -> MetaStatsResult | None:
-    """Interview filler when this species has no synced usage_stats row."""
+    """Local demo filler when this species has no synced usage_stats row."""
     mon = (
         await db.execute(select(Species).where(Species.id == species_id))
     ).scalar_one_or_none()
@@ -479,7 +479,7 @@ async def lookup_meta_leaderboard(
     """Format-wide usage snapshot for the homepage dashboard — top-N by rank,
     plus a usage-weighted type distribution across every synced row.
 
-    When `gen9ou` has never been synced, returns the interview demo pack from
+    When `gen9ou` has never been synced, returns the local demo pack from
     `app.data.demo_meta` so the homepage is never an empty dashed box.
     """
     limit = max(1, min(limit, 50))

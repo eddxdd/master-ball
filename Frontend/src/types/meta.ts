@@ -57,7 +57,7 @@ export type MetaStatsResult = {
   top_tera_types: UsageShare[];
   top_teammates: PokemonUsageShare[];
   top_checks_and_counters: CheckOrCounter[];
-  /** True when the API served interview demo filler (no Smogon sync row). */
+  /** True when the API served local demo filler (no Smogon sync row). */
   is_demo?: boolean;
 };
 
@@ -92,6 +92,6 @@ export type MetaLeaderboard = {
   top_usage_percent: number | null;
   entries: MetaLeaderboardEntry[];
   type_distribution: TypeUsageShare[];
-  /** True when the API served the interview filler pack (no Smogon sync yet). */
+  /** True when the API served the local demo filler pack (no Smogon sync yet). */
   is_demo?: boolean;
 };

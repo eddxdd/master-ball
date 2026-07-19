@@ -26,7 +26,7 @@ entry → router → {tool_calls in parallel} → synthesizer → END
 | Multimodal input (screenshotted team sheet/board state), bulk/cheap ingestion of large PDF corpora | Gemini |
 | Fallback if primary provider errors/rate-limits | Whichever of the above isn't already in the chain for that call |
 
-**Explicit non-goal:** don't grow this into a 15-node graph to look impressive. Add a node only when a real product requirement forces a new branch. Being able to justify *why the graph is shaped the way it is* is worth more in an interview than graph complexity.
+**Explicit non-goal:** don't grow this into a 15-node graph to look impressive. Add a node only when a real product requirement forces a new branch. Being able to justify *why the graph is shaped the way it is* matters more than graph complexity.
 
 ## 2. Tools (shared across agent, REST, and MCP)
 
@@ -67,17 +67,17 @@ raw sources → LlamaIndex loaders/parsers → chunking → embedding → pgvect
 
 A standalone server (official MCP Python SDK) exposing the tools from section 2 — likely a useful subset (`get_pokemon_profile`, `calculate_damage`, `analyze_team`, `lookup_meta_stats`) rather than all of them, since some (like `parse_replay`) are async/job-shaped and less natural as a synchronous MCP tool call at first. `get_pokemon_profile` in particular is a good MCP citizen: a fast, synchronous, deterministic lookup with no side effects, so any MCP client (Claude Desktop, Cursor) can ask "what's Landorus-Therian's profile" and get a real answer with zero extra plumbing.
 
-**Build checklist** (matches what current hiring research flags as the credibility bar for this artifact):
+**Build checklist** (matches what current industry practice flags as the credibility bar for a production MCP server):
 - [ ] Typed schemas via Pydantic for every tool's input/output
 - [ ] Clean, LLM-legible tool descriptions (the tool description *is* the API contract an LLM reads — treat it like documentation, not a code comment)
 - [ ] Both `stdio` and Streamable HTTP transports supported
 - [ ] Basic auth (API key) on the HTTP transport
 - [ ] Tested against the official MCP Inspector tool
-- [ ] Short README documenting architecture, failure modes, and how to run/test it locally — this README is itself portfolio material, separate from the main project docs
+- [ ] Short README documenting architecture, failure modes, and how to run/test it locally, separate from the main project docs
 
-**Stretch:** multi-server composition — configure a client that talks to the Master Ball MCP server *and* another public MCP server (e.g., a filesystem or fetch server) simultaneously, and document how capability conflicts are handled. This is explicitly called out in 2026 research as a strong, rare signal.
+**Stretch:** multi-server composition — configure a client that talks to the Master Ball MCP server *and* another public MCP server (e.g., a filesystem or fetch server) simultaneously, and document how capability conflicts are handled. This is a genuinely rare, higher-difficulty pattern relative to a single-server setup.
 
-**Not pursued, and why (worth being able to say in an interview):** Google's Agent2Agent (A2A) protocol — MCP's now-official complement for *agent-to-agent* delegation, as opposed to MCP's *agent-to-tool* scope, both now under the same Linux Foundation governance (see [`tech-stack.md`](./tech-stack.md#ai--agents)) — isn't used here because Master Ball's graph is one agent composing many tools, not multiple peer agents delegating tasks to each other. That's a deliberate scope call, not a gap: A2A would earn a place if the graph ever split into genuinely independent specialist agents (e.g., a Replay-Analysis agent handing a finished report to a separate Team-Doctor agent).
+**Not pursued, and why:** Google's Agent2Agent (A2A) protocol — MCP's now-official complement for *agent-to-agent* delegation, as opposed to MCP's *agent-to-tool* scope, both now under the same Linux Foundation governance (see [`tech-stack.md`](./tech-stack.md#ai--agents)) — isn't used here because Master Ball's graph is one agent composing many tools, not multiple peer agents delegating tasks to each other. That's a deliberate scope call, not a gap: A2A would earn a place if the graph ever split into genuinely independent specialist agents (e.g., a Replay-Analysis agent handing a finished report to a separate Team-Doctor agent).
 
 ## 5. Evaluation & observability loop
 
@@ -111,4 +111,4 @@ production traffic → LangSmith / Langfuse traces → flag failures/low-quality
 
 **promptfoo use cases:** side-by-side comparison when changing a prompt or swapping models (Claude vs. OpenAI vs. Gemini on the same synthesis prompt), plus basic red-teaming (prompt injection via a malicious "team name" or replay-log field — a real attack surface here since user-supplied text flows into prompts).
 
-**LangSmith vs. Langfuse, concretely:** run LangSmith as the default (lowest friction given the LangChain/LangGraph-native stack). Stand up Langfuse at least once, self-hosted, specifically to be able to compare trace quality, pricing model, and self-hosting operational cost firsthand — this is a common interview question ("why would you pick one over the other") that's much stronger answered from direct experience than from a blog post.
+**LangSmith vs. Langfuse, concretely:** run LangSmith as the default (lowest friction given the LangChain/LangGraph-native stack). Stand up Langfuse at least once, self-hosted, specifically to be able to compare trace quality, pricing model, and self-hosting operational cost firsthand — "why would you pick one over the other" is much stronger answered from direct experience than from a blog post.

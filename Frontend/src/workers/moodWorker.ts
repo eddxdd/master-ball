@@ -15,7 +15,7 @@
  * (Frontend/src/pages/coach/MentalCoachPage.tsx's post-loss note) — running it
  * off the main thread means the UI never has a reason to jank while a
  * classification is in flight, which is also the honest "why a worker here"
- * answer for this being an interview-ready design decision, not a tacked-on
+ * answer for this being a deliberate product design decision, not a tacked-on
  * demo (see tech-stack.md's own framing of this feature).
  */
 import { type PipelineType, pipeline } from "@huggingface/transformers";

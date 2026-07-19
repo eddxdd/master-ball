@@ -14,7 +14,7 @@ app/tools/damage_calc.py and app/tools/team_analysis.py: this is a
 structured, numeric, low-latency prediction over ~20 engineered features, a
 task an LLM would be slower, costlier, and no more accurate at. XGBoost over
 tabular features is the industry-standard tool for exactly this shape of
-problem, which is the point of this module as a portfolio artifact.
+problem.
 """
 
 from functools import lru_cache

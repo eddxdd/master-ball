@@ -117,7 +117,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* Professor showcase embed — hiring demo surface; day-to-day chat is Rotom. */}
+        {/* Professor showcase embed on the homepage; day-to-day chat lives behind the Rotom launcher. */}
         <section
           id="home-professor"
           className="w-full overflow-hidden rounded-2xl border border-border bg-card"

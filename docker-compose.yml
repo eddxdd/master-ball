@@ -39,8 +39,8 @@ services:
 
   neo4j:
     # Phase 6's knowledge graph (GraphRAG) — Community edition is enough for a
-    # single-instance dev/portfolio graph, no clustering/enterprise features
-    # this app needs. See scripts/load_graph.py and Docs/backend/README.md's
+    # single-instance deployment, no clustering/enterprise features this app
+    # needs. See scripts/load_graph.py and Docs/backend/README.md's
     # "Knowledge graph (Phase 6)" section.
     image: neo4j:5-community
     restart: unless-stopped

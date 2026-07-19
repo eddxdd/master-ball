@@ -2,7 +2,7 @@
 
 A standalone [Model Context Protocol](https://modelcontextprotocol.io) server exposing three of Master Ball's deterministic Pokémon tools to any MCP client (Claude Desktop, Cursor, the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector)). Built with the official Python SDK's `FastMCP`. See [`Docs/ai-agents-and-rag.md`](../../../Docs/ai-agents-and-rag.md#4-mcp-server) for the product rationale, and [`Docs/roadmap.md`](../../../Docs/roadmap.md#phase-4--eval-loop--mcp-server) for where this fits in the overall build.
 
-This README is itself portfolio material — it's meant to stand on its own, separately from the rest of the project's docs.
+This README is meant to stand on its own, separately from the rest of the project's docs.
 
 ## What's exposed, and why only this subset
 
@@ -38,7 +38,7 @@ MCP client (Claude Desktop / Cursor / Inspector)
 
 ## Auth
 
-**stdio has no auth** — its client launches the server as a local subprocess it already controls, so there's no network boundary to protect. **Streamable HTTP is gated by a single bearer API key** (`app/mcp/auth.py`'s `ApiKeyMiddleware`, wired up in `scripts/run_mcp_server.py`): every request must send `Authorization: Bearer <MCP_API_KEY>` or gets a `401`. This is a deliberately simple mechanism, not the `mcp` SDK's full OAuth (`TokenVerifier`/`AuthSettings`) machinery — a single-key bearer check is the right amount of auth for a single-tenant portfolio server; OAuth would be the right call if this ever needed to support multiple distinct clients/users with different permissions.
+**stdio has no auth** — its client launches the server as a local subprocess it already controls, so there's no network boundary to protect. **Streamable HTTP is gated by a single bearer API key** (`app/mcp/auth.py`'s `ApiKeyMiddleware`, wired up in `scripts/run_mcp_server.py`): every request must send `Authorization: Bearer <MCP_API_KEY>` or gets a `401`. This is a deliberately simple mechanism, not the `mcp` SDK's full OAuth (`TokenVerifier`/`AuthSettings`) machinery — a single-key bearer check is the right amount of auth for a single-tenant deployment; OAuth would be the right call if this ever needed to support multiple distinct clients/users with different permissions.
 
 If `MCP_API_KEY` isn't set, the HTTP transport starts anyway but logs a loud warning and serves unauthenticated — the same "missing config is a visible state, never a silent gap" rule this codebase applies to the VAPID/LLM provider keys elsewhere (see [`Docs/backend/README.md`](../../../Docs/backend/README.md)).
 

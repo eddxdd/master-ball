@@ -413,7 +413,7 @@ function StatPill({
 }
 
 /** Analytics / ladder-usage panel on a Pokemon detail page. Backed by synced
- * Smogon chaos stats when available, otherwise the backend's interview demo
+ * Smogon chaos stats when available, otherwise the backend's local demo
  * pack so the section is never blank. */
 export function UsageStatsCard({ speciesId }: { speciesId: string }) {
   const { data: stats, isPending, isError } = useMetaStats(speciesId);

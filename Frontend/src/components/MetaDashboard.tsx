@@ -375,7 +375,7 @@ type MetaDashboardProps = {
 };
 
 /** Gen 9 OU analytics — Smogon-synced usage when available, otherwise the
- * backend's interview demo pack so this section is never an empty box. */
+ * backend's local demo pack so this section is never an empty box. */
 export function MetaDashboard({
   id = "home-meta-dashboard",
   limit = 12,
@@ -430,7 +430,7 @@ export function MetaDashboard({
               )}
             >
               {isDemo
-                ? "Usage ranks, move splits, and type pressure across the format — demo ladder data for local/interview demos until Smogon stats are synced."
+                ? "Usage ranks, move splits, and type pressure across the format — demo ladder data for local demos until Smogon stats are synced."
                 : "Real Smogon chaos stats — usage ranks, move splits, and type pressure across the format. Synced ladder data, not mock charts."}
             </p>
           </div>

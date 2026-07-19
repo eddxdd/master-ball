@@ -26,7 +26,7 @@ ssh -i <your-key.pem> ec2-user@<EC2_HOST>
 cd /home/ec2-user/apps/master-ball
 ```
 
-`EC2_HOST` lives in CodeBuild env for `master-ball-deploy` (also historically ~`18.225.81.206` — confirm in AWS console). SSH private key is in Secrets Manager as `master-ball/ec2-deploy-key`.
+`EC2_HOST` lives in CodeBuild env for `master-ball-deploy` — confirm current value in the AWS console. SSH private key is in Secrets Manager as `master-ball/ec2-deploy-key`.
 
 ## Postgres tunnel (pgAdmin / psql from laptop)
 

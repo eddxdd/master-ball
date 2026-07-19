@@ -4,7 +4,7 @@ Server path: `/home/ec2-user/apps/master-ball`
 Region: `us-east-2` · Account: `338753559735`  
 ECR: `master-ball-api`, `master-ball-frontend`  
 Compose: `docker compose -f docker-compose.prod.yml …`  
-Public: host port **4000** → `proxy` → frontend SPA + FastAPI (see `deploy/nginx-proxy.conf`)
+Public: Cloudflare → host nginx (`/etc/nginx/conf.d/masterball.conf`, mirrored in `deploy/host-nginx-masterball.conf`) → port **4000** → compose `proxy` → SPA + FastAPI (`deploy/nginx-proxy.conf`). Host nginx **must** forward `Upgrade` / `Connection` or Professor WebSockets (`wss://…/chat/ws`) fail.
 
 ## Server `.env` (names only — values stay on the box)
 
@@ -83,7 +83,7 @@ When something on the server changes (new IP, Cloudflare toggle, bootstrap done,
 
 ### 2026-07-19 — initial competitive cutover
 
-- SSH host alias: `portfolio-ec2` → `18.225.81.206` (key under `Documents/Code/aws-keys/main-server-key.pem`)
+- SSH host/IP: see AWS console (EC2 instance) or CodeBuild's `EC2_HOST` env var for `master-ball-deploy` — not recorded here. SSH key: Secrets Manager `master-ball/ec2-deploy-key` (not stored on any local machine path).
 - Wordle stack stopped + volumes wiped; new compose up on `:4000`
 - Images built **on EC2** (CodePipeline ECR frontend repo create was AccessDenied; API image pushed only if role allows — local tags used for frontend)
 - Bootstrap done: alembic + seed_pokedex + ingest_knowledge_base + load_graph

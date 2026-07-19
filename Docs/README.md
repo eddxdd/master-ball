@@ -4,20 +4,20 @@ Master Ball is a competitive Pokémon companion held to a "best in class" bar: a
 
 See [Naming & branding](#naming--branding) for how display name vs internal slug are kept separate.
 
-> **Product scope note:** the original one-liner above (and the six "pillars" this doc used to list) came from an initial ChatGPT-generated concept and an early, under-researched pass. It's since been replaced by [`product-research.md`](./product-research.md) — real research into what competitive Pokémon players are actually frustrated by (Reddit, Smogon forums, official Pokémon forums, existing app reviews), what's already been built by others, and where the real, validated, multi-person gap is. Read that doc for the reasoning behind the "Core product pillars" section below.
+> **Product scope note:** the original one-liner above (and the six "pillars" this doc used to list) came from an early concept draft. It's since been replaced by [`product-research.md`](./product-research.md) — research into what competitive Pokémon players are actually frustrated by (Reddit, Smogon forums, official Pokémon forums, existing app reviews), what's already been built by others, and where the real gap is. Read that doc for the reasoning behind the "Core product pillars" section below.
 
 ## Why this project exists
 
-Two goals, in order:
+Master Ball exists to be a first-class competitive Pokémon toolkit **and** a production-grade AI coach on top of that toolkit:
 
-1. **Learning vehicle for AI engineering.** The primary objective is to build hands-on depth with the tools and patterns that Canadian/US companies are actually hiring for in 2026: agent orchestration (LangGraph/LangChain), retrieval-augmented generation, the Model Context Protocol (MCP), structured tool-calling, evaluation/observability pipelines, and cloud-native deployment. Every architectural choice below is optimized for **learning the popular thing well and being able to speak to trade-offs in an interview**, not for using what's already comfortable.
-2. **A genuinely useful, portfolio-worthy product.** A working, deployed, well-documented AI coach for a niche but passionate community (competitive Pokémon/VGC) is a much stronger portfolio piece than a generic "chat with your PDF" demo, because it forces real product decisions: multi-step reasoning, tool use, freshness of data (meta shifts constantly), and correctness (bad damage-calc advice is an obviously wrong answer, unlike a fuzzy chatbot response).
+1. **Competitive tools that stand alone** — Pokédex, Team Builder, and Damage Calculator held to a best-in-class bar against existing apps in the category.
+2. **An AI Professor that earns its place** — agent orchestration (LangGraph/LangChain), RAG, MCP, structured tool-calling, evaluation/observability, and cloud-native deployment wired into real product surfaces, not a thin chat wrapper around a calculator.
 
 ## Reference points used to shape this plan
 
-- Author's background/portfolio: [eduardolemos.com](https://eduardolemos.com/) — 10 years full-stack (JS/React/Node/PHP), comfortable picking up new stacks as needed, currently light on Python/AI-specific tooling. This project is deliberately shifting the primary backend language to Python.
-- A Google-posted [Staff Applied AI Agent Developer](https://www.google.com/about/careers/applications/jobs/results/114910825608553158-staff-applied-ai-agent-developer) role was the concrete example used to kick off research into what "AI Agent Developer" roles look like — useful for understanding the *shape* of the role (GenAI agents, structured tool-building, production readiness), but it's one company's posting, not the market. It does **not** drive the cloud or model-provider choices below — those are set from aggregated, multi-source, multi-cloud/multi-vendor 2026 hiring and enterprise-adoption data instead (see [`tech-stack.md`](./tech-stack.md#cloud-and-model-provider-decision-revisited) for the correction and the numbers behind it).
-- Broad 2026 hiring-data research (frameworks, clouds, vector DBs, eval tooling, MCP, enterprise LLM adoption surveys) — cited inline throughout [`tech-stack.md`](./tech-stack.md).
+- Player research into competitive Pokémon frustrations and the existing tool landscape — see [`product-research.md`](./product-research.md).
+- Industry-adoption research on AI-agent stacks (frameworks, clouds, vector DBs, eval tooling, MCP, enterprise LLM surveys) — cited inline throughout [`tech-stack.md`](./tech-stack.md).
+- Python as the primary backend language because nearly every AI/agent framework, eval tool, and ML library targets it first.
 
 ## Doc index
 
@@ -29,7 +29,7 @@ Two goals, in order:
 | [`tech-stack.md`](./tech-stack.md) | The full stack, what changed from the initial draft and why, with sources |
 | [`architecture.md`](./architecture.md) | System design: components, data flow, agent graph, RAG pipeline |
 | [`ai-agents-and-rag.md`](./ai-agents-and-rag.md) | Deep dive on the AI layer: tools, MCP servers, retrieval pipeline, eval/observability strategy |
-| [`roadmap.md`](./roadmap.md) | Phased build plan, each phase mapped to the skills it's meant to demonstrate |
+| [`roadmap.md`](./roadmap.md) | Phased build plan, each phase mapped to what it ships and why |
 
 **Operational & structural** — how to run the project and how the code that actually exists is organized, kept up to date alongside the code itself (see "Keeping docs current" below):
 
@@ -93,4 +93,4 @@ Also a standing principle: this is a public content site (thousands of Pokémon/
 Both **Pokémon Champions/VGC** players and **Pokémon Showdown OU/singles** players, served by the same core agent and tool engine. The two communities need mostly the same underlying reasoning — they differ mainly in data source (Showdown exposes replay logs directly; official Champions currently does not).
 
 ### Platform
-A single React/TypeScript website, shipped as an installable PWA — that's the only committed platform. A native Google Play app (via Capacitor) is deliberately kept as an optional, unscheduled stretch goal rather than a planned deliverable: it doesn't teach or demonstrate an AI skill, it adds real recurring app-store maintenance overhead, and neither the AI-hiring angle nor the "AI on phones" angle turned out to require it (on-device/edge AI, the one genuinely hot 2026 mobile-AI trend, is reachable straight from the browser via WebGPU — see [`tech-stack.md`](./tech-stack.md#mobile--distribution) for the full reasoning, including two research passes that reversed the original call).
+A single React/TypeScript website, shipped as an installable PWA — that's the only committed platform. A native Google Play app (via Capacitor) is deliberately kept as an optional, unscheduled stretch goal rather than a planned deliverable: it adds real, recurring app-store maintenance overhead unrelated to the AI work, and the "AI on phones" angle turned out not to require it (on-device/edge AI, the one genuinely hot 2026 mobile-AI trend, is reachable straight from the browser via WebGPU — see [`tech-stack.md`](./tech-stack.md#mobile--distribution) for the full reasoning, including two research passes that reversed the original call).

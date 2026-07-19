@@ -110,7 +110,7 @@ class MetaStatsResult(BaseModel):
     top_teammates: list[PokemonUsageShare]
     top_checks_and_counters: list[CheckOrCounter]
     is_demo: bool = False
-    """True when this payload is the interview filler pack (no Smogon sync row)."""
+    """True when this payload is the local demo filler pack (no Smogon sync row)."""
 
 
 class MetaLeaderboardEntry(BaseModel):
@@ -149,7 +149,7 @@ class MetaLeaderboard(BaseModel):
     entries: list[MetaLeaderboardEntry]
     type_distribution: list[TypeUsageShare]
     is_demo: bool = False
-    """True when this payload is the interview/local filler from
+    """True when this payload is the local demo filler from
     `app.data.demo_meta` because no Smogon sync rows exist yet for the format."""
 
 
