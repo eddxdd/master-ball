@@ -24,17 +24,11 @@ export default defineConfig({
         "images/masterball-logo.png",
       ],
       injectManifest: {
-        // Phase 7's on-device mood model (src/workers/moodWorker.ts, via
-        // @huggingface/transformers) bundles a large onnxruntime-web WASM
-        // binary (~23MB) as a build asset of its own worker chunk. It's
-        // fetched lazily, on demand, only once a user actually writes a
-        // post-loss note — precaching it on every install would defeat the
-        // whole "small, opt-in, one-time download" point of that feature, and
-        // Workbox refuses to precache anything over its default 2MB cap
-        // anyway. Restricting the precache glob to the file types the *core*
-        // app shell actually needs upfront (JS/CSS/HTML/fonts/icons) is
-        // simpler and more honest here than raising the size cap.
-        globPatterns: ["**/*.{js,css,html,svg,woff2,png,ico}"],
+        // Precache the app shell only. Large profile banners / hero photos
+        // and the on-device mood WASM are fetched on demand — Workbox's
+        // default 2MB cap would fail the production build if we glob all PNGs.
+        globPatterns: ["**/*.{js,css,html,svg,woff2,ico}", "favicon-*.png", "images/masterball*.png"],
+        globIgnores: ["**/images/profiles/**", "**/images/image1.jpg"],
       },
       manifest: {
         // Kept generic on purpose — see src/config/branding.ts for the single
