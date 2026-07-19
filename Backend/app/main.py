@@ -5,22 +5,38 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
+from app.core.logging import RequestLoggingMiddleware, configure_logging
+from app.core.observability import configure_observability
 from app.db.session import engine
-from app.routers import calculator, pokedex, team
+from app.graph.session import close_driver as close_graph_driver
+from app.routers import (
+    abilities,
+    auth,
+    calculator,
+    chat,
+    items,
+    meta,
+    ml,
+    moves,
+    pokedex,
+    replay,
+    scout,
+    search,
+    sessions,
+    team,
+    types,
+)
 
 settings = get_settings()
+configure_logging(settings.environment)
+configure_observability()
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     yield
-    # Disposes the async engine's connection pool on shutdown. Matters beyond
-    # tidiness: the pool's connections are bound to whichever event loop was
-    # running when they were first opened, and without this, a second
-    # `TestClient(app)` context (which spins up its own fresh loop) inherits
-    # a pool full of connections tied to the *previous* (now-closed) loop —
-    # surfaces as "RuntimeError: Event loop is closed" on the second test.
     await engine.dispose()
+    await close_graph_driver()
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
@@ -32,10 +48,23 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(RequestLoggingMiddleware, environment=settings.environment)
 
+app.include_router(auth.router)
 app.include_router(pokedex.router)
 app.include_router(calculator.router)
 app.include_router(team.router)
+app.include_router(items.router)
+app.include_router(moves.router)
+app.include_router(abilities.router)
+app.include_router(types.router)
+app.include_router(search.router)
+app.include_router(chat.router)
+app.include_router(sessions.router)
+app.include_router(meta.router)
+app.include_router(scout.router)
+app.include_router(replay.router)
+app.include_router(ml.router)
 
 
 @app.get("/health")

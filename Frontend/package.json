@@ -1,5 +1,5 @@
 {
-  "name": "dextrainer-frontend",
+  "name": "master-ball-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,19 +12,26 @@
     "format": "biome format --write .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@fontsource-variable/geist": "^5.2.9",
+    "@huggingface/transformers": "^4.2.0",
+    "@sentry/react": "^10.66.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.2",
     "@tanstack/react-query": "^5.101.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.23.0",
+    "posthog-js": "^1.404.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-markdown": "^10.1.0",
     "react-router": "^8.1.0",
+    "remark-gfm": "^4.0.1",
     "shadcn": "^4.13.0",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.2",
@@ -34,6 +41,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.2",
+    "@playwright/test": "^1.61.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@types/node": "^24.13.2",
@@ -44,6 +52,8 @@
     "jsdom": "29.1.1",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "workbox-precaching": "^7.4.1",
+    "workbox-routing": "^7.4.1"
   }
 }

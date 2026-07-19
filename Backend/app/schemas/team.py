@@ -62,8 +62,27 @@ class RoleFlag(BaseModel):
     description: str
 
 
+class MemberRoleEntry(BaseModel):
+    """Per-Pokemon role card for the Team Builder's "About the team" panel —
+    a short heuristic label + blurb grounded in base stats / EVs / item, not
+    an LLM guess (same deterministic spirit as role_flags)."""
+
+    species_id: str
+    name: str
+    nickname: str | None
+    sprite_url: str
+    type1: str
+    type2: str | None
+    role: str
+    summary: str
+    item: str | None
+    ability: str | None
+    speed: int
+
+
 class TeamAnalysis(BaseModel):
     type_coverage: list[TypeCoverageEntry]
     speed_tiers: list[SpeedTierEntry]
     weakness_matrix: list[WeaknessMatrixEntry]
     role_flags: list[RoleFlag]
+    member_roles: list[MemberRoleEntry] = Field(default_factory=list)

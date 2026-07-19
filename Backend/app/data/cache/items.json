@@ -1,0 +1,2546 @@
+{
+  "abilityshield": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Ability Shield",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/ability-shield.png"
+  },
+  "abomasite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Abomasnow to Mega Evolve into Mega Abomasnow.",
+    "fling_power": 80,
+    "name": "Abomasite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/abomasite.png"
+  },
+  "absolite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Absol to Mega Evolve into Mega Absol.",
+    "fling_power": 80,
+    "name": "Absolite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/absolite.png"
+  },
+  "absolitez": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Absolite Z",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/absolite-z.png"
+  },
+  "absorbbulb": {
+    "category": "held-items",
+    "description": "Held: Raises the holder\u2019s Special Attack by one stage when it takes Water-type damage.",
+    "fling_power": 30,
+    "name": "Absorb Bulb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/absorb-bulb.png"
+  },
+  "adamantorb": {
+    "category": "species-specific",
+    "description": "Boosts the damage from Dialga\u2019s Dragon-type and Steel-type moves by 20%.",
+    "fling_power": 60,
+    "name": "Adamant Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/adamant-orb.png"
+  },
+  "adrenalineorb": {
+    "category": "held-items",
+    "description": "Makes wild Pok\u00e9mon more likely to summon allies. Held: increases the holder\u2019s Speed by one stage when affected by Intimidate.",
+    "fling_power": 30,
+    "name": "Adrenaline Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/adrenaline-orb.png"
+  },
+  "aerodactylite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Aerodactyl to Mega Evolve into Mega Aerodactyl.",
+    "fling_power": 80,
+    "name": "Aerodactylite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aerodactylite.png"
+  },
+  "aggronite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Aggron to Mega Evolve into Mega Aggron.",
+    "fling_power": 80,
+    "name": "Aggronite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aggronite.png"
+  },
+  "aguavberry": {
+    "category": "picky-healing",
+    "description": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pok\u00e9mon that dislike bitter flavor.",
+    "fling_power": 10,
+    "name": "Aguav Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aguav-berry.png"
+  },
+  "airballoon": {
+    "category": "held-items",
+    "description": "Held: Grants immunity to Ground-type moves, Spikes, and Toxic Spikes. Consumed when the holder takes damage from a move.",
+    "fling_power": 10,
+    "name": "Air Balloon",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/air-balloon.png"
+  },
+  "alakazite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Alakazam to Mega Evolve into Mega Alakazam.",
+    "fling_power": 80,
+    "name": "Alakazite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/alakazite.png"
+  },
+  "altarianite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Altaria to Mega Evolve into Mega Altaria.",
+    "fling_power": 80,
+    "name": "Altarianite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/altarianite.png"
+  },
+  "ampharosite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Ampharos to Mega Evolve into Mega Ampharos.",
+    "fling_power": 80,
+    "name": "Ampharosite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ampharosite.png"
+  },
+  "apicotberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost Special Defense.",
+    "fling_power": 10,
+    "name": "Apicot Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/apicot-berry.png"
+  },
+  "aspearberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when frozen to cure frozen.",
+    "fling_power": 10,
+    "name": "Aspear Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aspear-berry.png"
+  },
+  "assaultvest": {
+    "category": "held-items",
+    "description": "Raises the holder\u2019s Special Defense to 1.5\u00d7. Prevents the holder from selecting a status move.",
+    "fling_power": 80,
+    "name": "Assault Vest",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/assault-vest.png"
+  },
+  "audinite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Audino to Mega Evolve into Mega Audino.",
+    "fling_power": 80,
+    "name": "Audinite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/audinite.png"
+  },
+  "babiriberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Steel-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Babiri Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/babiri-berry.png"
+  },
+  "banettite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Banette to Mega Evolve into Mega Banette.",
+    "fling_power": 80,
+    "name": "Banettite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/banettite.png"
+  },
+  "barbaracite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Barbaracite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/barbaracite.png"
+  },
+  "baxcalibrite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Baxcalibrite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/baxcalibrite.png"
+  },
+  "beedrillite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Beedrill to Mega Evolve into Mega Beedrill.",
+    "fling_power": 80,
+    "name": "Beedrillite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beedrillite.png"
+  },
+  "bigroot": {
+    "category": "held-items",
+    "description": "Held: Increases HP recovered from draining moves, Ingrain, and Aqua Ring by 3/10 (30%).",
+    "fling_power": 10,
+    "name": "Big Root",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/big-root.png"
+  },
+  "bindingband": {
+    "category": "held-items",
+    "description": "Held: Doubles the per-turn damage of multi-turn trapping moves.",
+    "fling_power": 30,
+    "name": "Binding Band",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/binding-band.png"
+  },
+  "blackbelt": {
+    "category": "type-enhancement",
+    "description": "Held: Fighting-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Black Belt",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/black-belt.png"
+  },
+  "blackglasses": {
+    "category": "type-enhancement",
+    "description": "Held: Dark-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Black Glasses",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/black-glasses.png"
+  },
+  "blacksludge": {
+    "category": "held-items",
+    "description": "Held: Poison-type holder recovers 1/16 (6.25%) max HP each turn. Non-Poison-Types take 1/8 (12.5%) max HP damage.",
+    "fling_power": 30,
+    "name": "Black Sludge",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/black-sludge.png"
+  },
+  "blankplate": {
+    "category": "plates",
+    "description": null,
+    "fling_power": null,
+    "name": "Blank Plate",
+    "official_sprite": false,
+    "sprite_url": null
+  },
+  "blastoisinite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Blastoise to Mega Evolve into Mega Blastoise.",
+    "fling_power": 80,
+    "name": "Blastoisinite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blastoisinite.png"
+  },
+  "blazikenite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Blaziken to Mega Evolve into Mega Blaziken.",
+    "fling_power": 80,
+    "name": "Blazikenite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blazikenite.png"
+  },
+  "blunderpolicy": {
+    "category": "held-items",
+    "description": "Raises Speed sharply when a Pok\u00e9mon misses with a move because of accuracy.",
+    "fling_power": 80,
+    "name": "Blunder Policy",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/blunder-policy.png"
+  },
+  "boosterenergy": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Booster Energy",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/booster-energy.png"
+  },
+  "brightpowder": {
+    "category": "held-items",
+    "description": "Held: Increases the holder\u2019s evasion by 1/9 (11 1/9%).",
+    "fling_power": 10,
+    "name": "Bright Powder",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bright-powder.png"
+  },
+  "buggem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Bug-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Bug Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bug-gem.png"
+  },
+  "bugmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Bug form. Changes Multi-Attack\u2019s type to Bug.",
+    "fling_power": 50,
+    "name": "Bug Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bug-memory.png"
+  },
+  "burndrive": {
+    "category": "species-specific",
+    "description": "Grants Genesect a red, Fire-type Techno Blast.",
+    "fling_power": 70,
+    "name": "Burn Drive",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/burn-drive.png"
+  },
+  "cameruptite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Camerupt to Mega Evolve into Mega Camerupt.",
+    "fling_power": 80,
+    "name": "Cameruptite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cameruptite.png"
+  },
+  "cellbattery": {
+    "category": "held-items",
+    "description": "Held: Raises the holder\u2019s Attack by one stage when it takes Electric-type damage.",
+    "fling_power": 30,
+    "name": "Cell Battery",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cell-battery.png"
+  },
+  "chandelurite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Chandelurite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/chandelurite.png"
+  },
+  "charcoal": {
+    "category": "type-enhancement",
+    "description": "Held: Fire-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Charcoal",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charcoal.png"
+  },
+  "charizarditex": {
+    "category": "mega-stones",
+    "description": "Held: Allows Charizard to Mega Evolve into Mega Charizard X.",
+    "fling_power": 80,
+    "name": "Charizardite X",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charizardite-x.png"
+  },
+  "charizarditey": {
+    "category": "mega-stones",
+    "description": "Held: Allows Charizard to Mega Evolve into Mega Charizard Y.",
+    "fling_power": 80,
+    "name": "Charizardite Y",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charizardite-y.png"
+  },
+  "chartiberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Rock-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Charti Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charti-berry.png"
+  },
+  "cheriberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when paralyzed to cure paralysis.",
+    "fling_power": 10,
+    "name": "Cheri Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cheri-berry.png"
+  },
+  "chesnaughtite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Chesnaughtite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/chesnaughtite.png"
+  },
+  "chestoberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when asleep to cure sleep.",
+    "fling_power": 10,
+    "name": "Chesto Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/chesto-berry.png"
+  },
+  "chilanberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a Normal-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Chilan Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/chilan-berry.png"
+  },
+  "chilldrive": {
+    "category": "species-specific",
+    "description": "Grants Genesect a white, Ice-type Techno Blast.",
+    "fling_power": 70,
+    "name": "Chill Drive",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/chill-drive.png"
+  },
+  "chimechite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Chimechite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/chimechite.png"
+  },
+  "choiceband": {
+    "category": "choice",
+    "description": "Held: Increases Attack by 50%, but restricts the holder to only one move.",
+    "fling_power": 10,
+    "name": "Choice Band",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-band.png"
+  },
+  "choicescarf": {
+    "category": "choice",
+    "description": "Held: Increases Speed by 50%, but restricts the holder to only one move.",
+    "fling_power": 10,
+    "name": "Choice Scarf",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-scarf.png"
+  },
+  "choicespecs": {
+    "category": "choice",
+    "description": "Held: Increases Special Attack by 50%, but restricts the holder to only one move.",
+    "fling_power": 10,
+    "name": "Choice Specs",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/choice-specs.png"
+  },
+  "chopleberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Fighting-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Chople Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/chople-berry.png"
+  },
+  "clearamulet": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Clear Amulet",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/clear-amulet.png"
+  },
+  "clefablite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Clefablite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/clefablite.png"
+  },
+  "cobaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Flying-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Coba Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/coba-berry.png"
+  },
+  "colburberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Dark-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Colbur Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/colbur-berry.png"
+  },
+  "cornerstonemask": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Cornerstone Mask",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/cornerstone-mask.png"
+  },
+  "covertcloak": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Covert Cloak",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/covert-cloak.png"
+  },
+  "crabominite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Crabominite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/crabominite.png"
+  },
+  "custapberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP when using a move to go first.",
+    "fling_power": 10,
+    "name": "Custap Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/custap-berry.png"
+  },
+  "damprock": {
+    "category": "held-items",
+    "description": "Held: Rain Dance by the holder lasts 8 rounds instead of 5.",
+    "fling_power": 60,
+    "name": "Damp Rock",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/damp-rock.png"
+  },
+  "darkgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Dark-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Dark Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dark-gem.png"
+  },
+  "darkmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Dark form. Changes Multi-Attack\u2019s type to Dark.",
+    "fling_power": 50,
+    "name": "Dark Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dark-memory.png"
+  },
+  "darkranite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Darkranite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/darkranite.png"
+  },
+  "deepseascale": {
+    "category": "species-specific",
+    "description": "Doubles Clamperl\u2019s Special Defense. Traded on a Clamperl: Holder evolves into Gorebyss.",
+    "fling_power": 30,
+    "name": "Deep Sea Scale",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/deep-sea-scale.png"
+  },
+  "deepseatooth": {
+    "category": "species-specific",
+    "description": "Doubles Clamperl\u2019s Special Attack. Traded on a Clamperl: Holder evolves into Huntail.",
+    "fling_power": 90,
+    "name": "Deep Sea Tooth",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/deep-sea-tooth.png"
+  },
+  "delphoxite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Delphoxite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/delphoxite.png"
+  },
+  "destinyknot": {
+    "category": "held-items",
+    "description": "Held: Infatuates opposing Pok\u00e9mon when holder is inflicted with infatuation.",
+    "fling_power": 10,
+    "name": "Destiny Knot",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/destiny-knot.png"
+  },
+  "diancite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Diancie to Mega Evolve into Mega Diancie.",
+    "fling_power": 80,
+    "name": "Diancite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/diancite.png"
+  },
+  "dousedrive": {
+    "category": "species-specific",
+    "description": "Grants Genesect a blue, Water-type Techno Blast.",
+    "fling_power": 70,
+    "name": "Douse Drive",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/douse-drive.png"
+  },
+  "dracoplate": {
+    "category": "plates",
+    "description": "Held: Dragon-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Dragon.",
+    "fling_power": 90,
+    "name": "Draco Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/draco-plate.png"
+  },
+  "dragalgite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Dragalgite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/dragalgite.png"
+  },
+  "dragonfang": {
+    "category": "type-enhancement",
+    "description": "Held: Dragon-Type moves from holder do 20% more damage.",
+    "fling_power": 70,
+    "name": "Dragon Fang",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dragon-fang.png"
+  },
+  "dragongem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Dragon-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Dragon Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dragon-gem.png"
+  },
+  "dragoninite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Dragoninite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/dragoninite.png"
+  },
+  "dragonmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Dragon form. Changes Multi-Attack\u2019s type to Dragon.",
+    "fling_power": 50,
+    "name": "Dragon Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dragon-memory.png"
+  },
+  "drampanite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Drampanite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/drampanite.png"
+  },
+  "dreadplate": {
+    "category": "plates",
+    "description": "Held: Dark-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Dark.",
+    "fling_power": 90,
+    "name": "Dread Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dread-plate.png"
+  },
+  "earthplate": {
+    "category": "plates",
+    "description": "Held: Ground-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Ground.",
+    "fling_power": 90,
+    "name": "Earth Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/earth-plate.png"
+  },
+  "eelektrossite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Eelektrossite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/eelektrossite.png"
+  },
+  "ejectbutton": {
+    "category": "held-items",
+    "description": "Held: When the holder takes damage from a move, it switches out for a party Pok\u00e9mon of the Trainer\u2019s choice.",
+    "fling_power": 30,
+    "name": "Eject Button",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/eject-button.png"
+  },
+  "ejectpack": {
+    "category": "held-items",
+    "description": "An item to be held by a Pok\u00e9mon. When the holder\u2019s stats are lowered, it will be switched out of battle.",
+    "fling_power": 50,
+    "name": "Eject Pack",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/eject-pack.png"
+  },
+  "electricgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Electric-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Electric Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/electric-gem.png"
+  },
+  "electricmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Electric form. Changes Multi-Attack\u2019s type to Electric.",
+    "fling_power": 50,
+    "name": "Electric Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/electric-memory.png"
+  },
+  "electricseed": {
+    "category": "held-items",
+    "description": "Held: Consumed on Electric Terrain and raises the holder\u2019s Defense by one stage.",
+    "fling_power": 10,
+    "name": "Electric Seed",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/electric-seed.png"
+  },
+  "emboarite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Emboarite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/emboarite.png"
+  },
+  "enigmaberry": {
+    "category": "other",
+    "description": "Held: Consumed when struck by a super-effective attack to restore 1/4 max HP.",
+    "fling_power": 10,
+    "name": "Enigma Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/enigma-berry.png"
+  },
+  "eviolite": {
+    "category": "held-items",
+    "description": "Held: Holder has 1.5\u00d7 Defense and Special Defense, as long as it\u2019s not fully evolved.",
+    "fling_power": 40,
+    "name": "Eviolite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/eviolite.png"
+  },
+  "excadrite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Excadrite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/excadrite.png"
+  },
+  "expertbelt": {
+    "category": "held-items",
+    "description": "Held: Holder\u2019s Super Effective moves do 20% extra damage.",
+    "fling_power": 10,
+    "name": "Expert Belt",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/expert-belt.png"
+  },
+  "fairyfeather": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Fairy Feather",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/fairy-feather.png"
+  },
+  "fairygem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Fairy move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Fairy Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fairy-gem.png"
+  },
+  "fairymemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Fairy form. Changes Multi-Attack\u2019s type to Fairy.",
+    "fling_power": 50,
+    "name": "Fairy Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fairy-memory.png"
+  },
+  "falinksite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Falinksite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/falinksite.png"
+  },
+  "feraligite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Feraligite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/feraligite.png"
+  },
+  "fightinggem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Fighting-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Fighting Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fighting-gem.png"
+  },
+  "fightingmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Fighting form. Changes Multi-Attack\u2019s type to Fighting.",
+    "fling_power": 50,
+    "name": "Fighting Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fighting-memory.png"
+  },
+  "figyberry": {
+    "category": "picky-healing",
+    "description": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pok\u00e9mon that dislike spicy flavor.",
+    "fling_power": 10,
+    "name": "Figy Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/figy-berry.png"
+  },
+  "firegem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Fire-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Fire Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fire-gem.png"
+  },
+  "firememory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Fire form. Changes Multi-Attack\u2019s type to Fire.",
+    "fling_power": 50,
+    "name": "Fire Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fire-memory.png"
+  },
+  "fistplate": {
+    "category": "plates",
+    "description": "Held: Fighting-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Fighting.",
+    "fling_power": 90,
+    "name": "Fist Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+  },
+  "flameorb": {
+    "category": "bad-held-items",
+    "description": "Held: Inflicts Burn on the holder at the end of the turn. Activates after Burn damage would occur.",
+    "fling_power": 30,
+    "name": "Flame Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/flame-orb.png"
+  },
+  "flameplate": {
+    "category": "plates",
+    "description": "Held: Fire-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Fire.",
+    "fling_power": 90,
+    "name": "Flame Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/flame-plate.png"
+  },
+  "floatstone": {
+    "category": "held-items",
+    "description": "Held: Holder has 0.5\u00d7 weight.",
+    "fling_power": 30,
+    "name": "Float Stone",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/float-stone.png"
+  },
+  "floettite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Floettite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/floettite.png"
+  },
+  "flyinggem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Flying-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Flying Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/flying-gem.png"
+  },
+  "flyingmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Flying form. Changes Multi-Attack\u2019s type to Flying.",
+    "fling_power": 50,
+    "name": "Flying Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/flying-memory.png"
+  },
+  "focusband": {
+    "category": "held-items",
+    "description": "Held: Holder has 10% chance to survive attacks or self-inflicted damage at 1 HP.",
+    "fling_power": 10,
+    "name": "Focus Band",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-band.png"
+  },
+  "focussash": {
+    "category": "held-items",
+    "description": "Held: Holder survives any single-hit attack at 1 HP if at max HP, then the item is consumed.",
+    "fling_power": 10,
+    "name": "Focus Sash",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/focus-sash.png"
+  },
+  "froslassite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Froslassite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/froslassite.png"
+  },
+  "fullincense": {
+    "category": "bad-held-items",
+    "description": "Held: Holder moves last in its priority bracket. Breeding: Snorlax begets a Munchlax Egg.",
+    "fling_power": 10,
+    "name": "Full Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-incense.png"
+  },
+  "galladite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Gallade to Mega Evolve into Mega Gallade.",
+    "fling_power": 80,
+    "name": "Galladite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/galladite.png"
+  },
+  "ganlonberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost Defense.",
+    "fling_power": 10,
+    "name": "Ganlon Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ganlon-berry.png"
+  },
+  "garchompite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Garchomp to Mega Evolve into Mega Garchomp.",
+    "fling_power": 80,
+    "name": "Garchompite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/garchompite.png"
+  },
+  "garchompitez": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Garchompite Z",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/garchompite-z.png"
+  },
+  "gardevoirite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Gardevoir to Mega Evolve into Mega Gardevoir.",
+    "fling_power": 80,
+    "name": "Gardevoirite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gardevoirite.png"
+  },
+  "gengarite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Gengar to Mega Evolve into Mega Gengar.",
+    "fling_power": 80,
+    "name": "Gengarite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gengarite.png"
+  },
+  "ghostgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Ghost-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Ghost Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ghost-gem.png"
+  },
+  "ghostmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Ghost form. Changes Multi-Attack\u2019s type to Ghost.",
+    "fling_power": 50,
+    "name": "Ghost Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ghost-memory.png"
+  },
+  "glalitite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Glalie to Mega Evolve into Mega Glalie.",
+    "fling_power": 80,
+    "name": "Glalitite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/glalitite.png"
+  },
+  "glimmoranite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Glimmoranite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/glimmoranite.png"
+  },
+  "golisopite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Golisopite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/golisopite.png"
+  },
+  "golurkite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Golurkite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/golurkite.png"
+  },
+  "grassgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Grass-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Grass Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grass-gem.png"
+  },
+  "grassmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Grass form. Changes Multi-Attack\u2019s type to Grass.",
+    "fling_power": 50,
+    "name": "Grass Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grass-memory.png"
+  },
+  "grassyseed": {
+    "category": "held-items",
+    "description": "Held: Consumed on Grassy Terrain and raises the holder\u2019s Defense by one stage.",
+    "fling_power": 10,
+    "name": "Grassy Seed",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grassy-seed.png"
+  },
+  "greninjite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Greninjite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/greninjite.png"
+  },
+  "gripclaw": {
+    "category": "held-items",
+    "description": "Held: Holder\u2019s multi-turn trapping moves last 5 turns.",
+    "fling_power": 90,
+    "name": "Grip Claw",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grip-claw.png"
+  },
+  "griseousorb": {
+    "category": "species-specific",
+    "description": "Boosts the damage from Giratina\u2019s Dragon-type and Ghost-type moves by 20%, and transforms it into Origin Forme.",
+    "fling_power": 60,
+    "name": "Griseous Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/griseous-orb.png"
+  },
+  "groundgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Ground-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Ground Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ground-gem.png"
+  },
+  "groundmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Ground form. Changes Multi-Attack\u2019s type to Ground.",
+    "fling_power": 50,
+    "name": "Ground Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ground-memory.png"
+  },
+  "gyaradosite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Gyarados to Mega Evolve into Mega Gyarados.",
+    "fling_power": 80,
+    "name": "Gyaradosite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gyaradosite.png"
+  },
+  "habanberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Dragon-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Haban Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/haban-berry.png"
+  },
+  "hardstone": {
+    "category": "type-enhancement",
+    "description": "Held: Rock-Type moves from holder do 20% more damage.",
+    "fling_power": 100,
+    "name": "Hard Stone",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/hard-stone.png"
+  },
+  "hawluchanite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Hawluchanite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/hawluchanite.png"
+  },
+  "hearthflamemask": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Hearthflame Mask",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/hearthflame-mask.png"
+  },
+  "heatranite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Heatranite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/heatranite.png"
+  },
+  "heatrock": {
+    "category": "held-items",
+    "description": "Held: Sunny Day by the holder lasts 8 rounds instead of 5.",
+    "fling_power": 60,
+    "name": "Heat Rock",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heat-rock.png"
+  },
+  "heavydutyboots": {
+    "category": "held-items",
+    "description": "These boots prevent the effects of traps set on the battlefield.",
+    "fling_power": 80,
+    "name": "Heavy-Duty Boots",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/heavy-duty-boots.png"
+  },
+  "heracronite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Heracross to Mega Evolve into Mega Heracross.",
+    "fling_power": 80,
+    "name": "Heracronite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heracronite.png"
+  },
+  "houndoominite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Houndoom to Mega Evolve into Mega Houndoom.",
+    "fling_power": 80,
+    "name": "Houndoominite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/houndoominite.png"
+  },
+  "iapapaberry": {
+    "category": "picky-healing",
+    "description": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pok\u00e9mon that dislike sour flavor.",
+    "fling_power": 10,
+    "name": "Iapapa Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iapapa-berry.png"
+  },
+  "icegem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Ice-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Ice Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ice-gem.png"
+  },
+  "icememory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Ice form. Changes Multi-Attack\u2019s type to Ice.",
+    "fling_power": 50,
+    "name": "Ice Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ice-memory.png"
+  },
+  "icicleplate": {
+    "category": "plates",
+    "description": "Held: Ice-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Ice.",
+    "fling_power": 90,
+    "name": "Icicle Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/icicle-plate.png"
+  },
+  "icyrock": {
+    "category": "held-items",
+    "description": "Held: Hail by the holder lasts 8 rounds instead of 5.",
+    "fling_power": 40,
+    "name": "Icy Rock",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/icy-rock.png"
+  },
+  "insectplate": {
+    "category": "plates",
+    "description": "Held: Bug-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Bug.",
+    "fling_power": 90,
+    "name": "Insect Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/insect-plate.png"
+  },
+  "ironball": {
+    "category": "bad-held-items",
+    "description": "Held: Holder\u2019s Speed is halved. Negates all Ground-type immunities, and makes Flying-types take neutral damage from Ground-type moves. Arena Trap. Spikes, and Toxic Spikes affect the holder.",
+    "fling_power": 130,
+    "name": "Iron Ball",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-ball.png"
+  },
+  "ironplate": {
+    "category": "plates",
+    "description": "Held: Steel-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Steel.",
+    "fling_power": 90,
+    "name": "Iron Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+  },
+  "jabocaberry": {
+    "category": "other",
+    "description": "Held: Consumed to deal 1/8 attacker\u2019s max HP when holder is struck by a physical attack.",
+    "fling_power": 10,
+    "name": "Jaboca Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/jaboca-berry.png"
+  },
+  "kangaskhanite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Kangaskhan to Mega Evolve into Mega Kangaskhan.",
+    "fling_power": 80,
+    "name": "Kangaskhanite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kangaskhanite.png"
+  },
+  "kasibberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Ghost-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Kasib Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kasib-berry.png"
+  },
+  "kebiaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Poison-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Kebia Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kebia-berry.png"
+  },
+  "keeberry": {
+    "category": "other",
+    "description": "Held: When the holder is hit by a physical move, increases its Defense by one stage.",
+    "fling_power": 10,
+    "name": "Kee Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kee-berry.png"
+  },
+  "kingsrock": {
+    "category": "held-items",
+    "description": "Held: Damaging moves gain a 10% chance to make their target flinch. Traded on a Poliwhirl: Holder evolves into Politoed. Traded on a Slowpoke: Holder evolves into Slowking.",
+    "fling_power": 30,
+    "name": "King\u2019s Rock",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kings-rock.png"
+  },
+  "laggingtail": {
+    "category": "bad-held-items",
+    "description": "Held: Holder moves last in its priority bracket.",
+    "fling_power": 10,
+    "name": "Lagging Tail",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lagging-tail.png"
+  },
+  "lansatberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost critical hit ratio by two stages.",
+    "fling_power": 10,
+    "name": "Lansat Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lansat-berry.png"
+  },
+  "latiasite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Latias to Mega Evolve into Mega Latias.",
+    "fling_power": 80,
+    "name": "Latiasite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/latiasite.png"
+  },
+  "latiosite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Latios to Mega Evolve into Mega Latios.",
+    "fling_power": 80,
+    "name": "Latiosite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/latiosite.png"
+  },
+  "laxincense": {
+    "category": "held-items",
+    "description": "Held: Holder\u2019s evasion is increased by 5%. Breeding: Wobbuffet begets a Wynaut Egg.",
+    "fling_power": 10,
+    "name": "Lax Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lax-incense.png"
+  },
+  "leftovers": {
+    "category": "held-items",
+    "description": "Held: Restores 1/16 (6.25%) holder\u2019s max HP at the end of each turn.",
+    "fling_power": 10,
+    "name": "Leftovers",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leftovers.png"
+  },
+  "legendplate": {
+    "category": "plates",
+    "description": null,
+    "fling_power": null,
+    "name": "Legend Plate",
+    "official_sprite": false,
+    "sprite_url": null
+  },
+  "leppaberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when a move runs out of PP to restore its PP by 10.",
+    "fling_power": 10,
+    "name": "Leppa Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/leppa-berry.png"
+  },
+  "liechiberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost Attack.",
+    "fling_power": 10,
+    "name": "Liechi Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/liechi-berry.png"
+  },
+  "lifeorb": {
+    "category": "held-items",
+    "description": "Held: Holder\u2019s moves inflict 30% extra damage, but cost 10% max HP.",
+    "fling_power": 30,
+    "name": "Life Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/life-orb.png"
+  },
+  "lightball": {
+    "category": "species-specific",
+    "description": "Doubles Pikachu\u2019s Attack and Special Attack. Breed on Pikachu or Raichu: Pichu Egg will have Volt Tackle.",
+    "fling_power": 30,
+    "name": "Light Ball",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/light-ball.png"
+  },
+  "lightclay": {
+    "category": "held-items",
+    "description": "Held: Light Screen and Reflect used by the holder last 8 rounds instead of 5.",
+    "fling_power": 30,
+    "name": "Light Clay",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/light-clay.png"
+  },
+  "loadeddice": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Loaded Dice",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/loaded-dice.png"
+  },
+  "lopunnite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Lopunny to Mega Evolve into Mega Lopunny.",
+    "fling_power": 80,
+    "name": "Lopunnite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lopunnite.png"
+  },
+  "lucarionite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Lucario to Mega Evolve into Mega Lucario.",
+    "fling_power": 80,
+    "name": "Lucarionite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucarionite.png"
+  },
+  "lucarionitez": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Lucarionite Z",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/lucarionite-z.png"
+  },
+  "luckypunch": {
+    "category": "species-specific",
+    "description": "Raises Chansey\u2019s critical hit ratio by two stages.",
+    "fling_power": 40,
+    "name": "Lucky Punch",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-punch.png"
+  },
+  "lumberry": {
+    "category": "medicine",
+    "description": "Held: Consumed to cure any status condition or confusion.",
+    "fling_power": 10,
+    "name": "Lum Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lum-berry.png"
+  },
+  "luminousmoss": {
+    "category": "held-items",
+    "description": "Held: If the holder is hit by a damaging Water move, raises its Special Defense by one stage.",
+    "fling_power": 30,
+    "name": "Luminous Moss",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luminous-moss.png"
+  },
+  "lustrousorb": {
+    "category": "species-specific",
+    "description": "Boosts the damage from Palkia\u2019s Dragon-type and Water-type moves by 20%.",
+    "fling_power": 60,
+    "name": "Lustrous Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lustrous-orb.png"
+  },
+  "magearnite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Magearnite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/magearnite.png"
+  },
+  "magnet": {
+    "category": "type-enhancement",
+    "description": "Held: Electric-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Magnet",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/magnet.png"
+  },
+  "magoberry": {
+    "category": "picky-healing",
+    "description": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pok\u00e9mon that dislike sweet flavor.",
+    "fling_power": 10,
+    "name": "Mago Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mago-berry.png"
+  },
+  "malamarite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Malamarite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/malamarite.png"
+  },
+  "manectite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Manectric to Mega Evolve into Mega Manectric.",
+    "fling_power": 80,
+    "name": "Manectite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/manectite.png"
+  },
+  "marangaberry": {
+    "category": "other",
+    "description": "Held: When the holder is hit by a special move, increases its Special Defense by one stage.",
+    "fling_power": 10,
+    "name": "Maranga Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/maranga-berry.png"
+  },
+  "mawilite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Mawile to Mega Evolve into Mega Mawile.",
+    "fling_power": 80,
+    "name": "Mawilite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mawilite.png"
+  },
+  "meadowplate": {
+    "category": "plates",
+    "description": "Held: Grass-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Grass.",
+    "fling_power": 90,
+    "name": "Meadow Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+  },
+  "medichamite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Medicham to Mega Evolve into Mega Medicham.",
+    "fling_power": 80,
+    "name": "Medichamite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/medichamite.png"
+  },
+  "meganiumite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Meganiumite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/meganiumite.png"
+  },
+  "mentalherb": {
+    "category": "held-items",
+    "description": "Held: Consumed to cure infatuation. Gen V: Also removes Taunt, Encore, Torment, Disable, and Cursed Body.",
+    "fling_power": 10,
+    "name": "Mental Herb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mental-herb.png"
+  },
+  "meowsticite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Meowsticite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/meowsticite.png"
+  },
+  "metagrossite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Metagross to Mega Evolve into Mega Metagross.",
+    "fling_power": 80,
+    "name": "Metagrossite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metagrossite.png"
+  },
+  "metalcoat": {
+    "category": "type-enhancement",
+    "description": "Held: Steel-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Metal Coat",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metal-coat.png"
+  },
+  "metalpowder": {
+    "category": "species-specific",
+    "description": "Raises Ditto\u2019s Defense and Special Defense by 50%. The boost is lost after transforming.",
+    "fling_power": 10,
+    "name": "Metal Powder",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metal-powder.png"
+  },
+  "metronome": {
+    "category": "held-items",
+    "description": "Held: Consectutive uses of the same attack have a cumulative damage boost of 10%. Maximum 100% boost.",
+    "fling_power": 30,
+    "name": "Metronome",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metronome.png"
+  },
+  "mewtwonitex": {
+    "category": "mega-stones",
+    "description": "Held: Allows Mewtwo to Mega Evolve into Mega Mewtwo X.",
+    "fling_power": 80,
+    "name": "Mewtwonite X",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mewtwonite-x.png"
+  },
+  "mewtwonitey": {
+    "category": "mega-stones",
+    "description": "Held: Allows Mewtwo to Mega Evolve into Mega Mewtwo Y.",
+    "fling_power": 80,
+    "name": "Mewtwonite Y",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mewtwonite-y.png"
+  },
+  "micleberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost accuracy of next move by 20%. (Gen IV: Perfect accuracy)",
+    "fling_power": 10,
+    "name": "Micle Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/micle-berry.png"
+  },
+  "mindplate": {
+    "category": "plates",
+    "description": "Held: Psychic-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Psychic.",
+    "fling_power": 90,
+    "name": "Mind Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mind-plate.png"
+  },
+  "miracleseed": {
+    "category": "type-enhancement",
+    "description": "Held: Grass-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Miracle Seed",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/miracle-seed.png"
+  },
+  "mirrorherb": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Mirror Herb",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/mirror-herb.png"
+  },
+  "mistyseed": {
+    "category": "held-items",
+    "description": "Held: Consumed on Misty Terrain and raises the holder\u2019s Special Defense by one stage.",
+    "fling_power": 10,
+    "name": "Misty Seed",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/misty-seed.png"
+  },
+  "muscleband": {
+    "category": "held-items",
+    "description": "Held: Boosts the damage of physical moves used by the holder by 10%.",
+    "fling_power": 10,
+    "name": "Muscle Band",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/muscle-band.png"
+  },
+  "mysticwater": {
+    "category": "type-enhancement",
+    "description": "Held: Water-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Mystic Water",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mystic-water.png"
+  },
+  "nevermeltice": {
+    "category": "type-enhancement",
+    "description": "Held: Ice-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Never-Melt Ice",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/never-melt-ice.png"
+  },
+  "normalgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Normal-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Normal Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/normal-gem.png"
+  },
+  "occaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Fire-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Occa Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/occa-berry.png"
+  },
+  "oddincense": {
+    "category": "type-enhancement",
+    "description": "Held: Psychic-Type moves from holder do 20% more damage. Breeding: Mr. Mime begets a Mime Jr. Egg.",
+    "fling_power": 10,
+    "name": "Odd Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/odd-incense.png"
+  },
+  "oranberry": {
+    "category": "medicine",
+    "description": "Held: Consumed at 1/2 max HP to recover 10 HP.",
+    "fling_power": 10,
+    "name": "Oran Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/oran-berry.png"
+  },
+  "passhoberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Water-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Passho Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/passho-berry.png"
+  },
+  "passorb": {
+    "category": "held-items",
+    "description": "Activates Pass Powers.",
+    "fling_power": 30,
+    "name": "Pass Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pass-orb.png"
+  },
+  "payapaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Psychic-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Payapa Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/payapa-berry.png"
+  },
+  "pechaberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when poisoned to cure poison.",
+    "fling_power": 10,
+    "name": "Pecha Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pecha-berry.png"
+  },
+  "persimberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when confused to cure confusion.",
+    "fling_power": 10,
+    "name": "Persim Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/persim-berry.png"
+  },
+  "petayaberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost Special Attack.",
+    "fling_power": 10,
+    "name": "Petaya Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/petaya-berry.png"
+  },
+  "pidgeotite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Pidgeot to Mega Evolve into Mega Pidgeot.",
+    "fling_power": 80,
+    "name": "Pidgeotite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pidgeotite.png"
+  },
+  "pinknectar": {
+    "category": "species-specific",
+    "description": "Changes Oricorio to Pa\u2019u Style.",
+    "fling_power": 10,
+    "name": "Pink Nectar",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pink-nectar.png"
+  },
+  "pinsirite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Pinsir to Mega Evolve into Mega Pinsir.",
+    "fling_power": 80,
+    "name": "Pinsirite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pinsirite.png"
+  },
+  "pixieplate": {
+    "category": "plates",
+    "description": "Held: Fairy-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Fairy.",
+    "fling_power": 90,
+    "name": "Pixie Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pixie-plate.png"
+  },
+  "poisonbarb": {
+    "category": "type-enhancement",
+    "description": "Held: Poison-Type moves from holder do 20% more damage.",
+    "fling_power": 70,
+    "name": "Poison Barb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poison-barb.png"
+  },
+  "poisongem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Poison-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Poison Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poison-gem.png"
+  },
+  "poisonmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Poison form. Changes Multi-Attack\u2019s type to Poison.",
+    "fling_power": 50,
+    "name": "Poison Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poison-memory.png"
+  },
+  "powerherb": {
+    "category": "held-items",
+    "description": "Held: Both turns of a two-turn charge move happen at once. Consumed upon use.",
+    "fling_power": 10,
+    "name": "Power Herb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/power-herb.png"
+  },
+  "protectivepads": {
+    "category": "held-items",
+    "description": "Held: Prevents side effects of contact moves used on the holder.",
+    "fling_power": 30,
+    "name": "Protective Pads",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/protective-pads.png"
+  },
+  "psychicgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Psychic-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Psychic Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/psychic-gem.png"
+  },
+  "psychicmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Psychic form. Changes Multi-Attack\u2019s type to Psychic.",
+    "fling_power": 50,
+    "name": "Psychic Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/psychic-memory.png"
+  },
+  "psychicseed": {
+    "category": "held-items",
+    "description": "Held: Consumed on Psychic Terrain and raises the holder\u2019s Special Defense by one stage.",
+    "fling_power": 10,
+    "name": "Psychic Seed",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/psychic-seed.png"
+  },
+  "punchingglove": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Punching Glove",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/punching-glove.png"
+  },
+  "purplenectar": {
+    "category": "species-specific",
+    "description": "Changes Oricorio to Sensu Style.",
+    "fling_power": 10,
+    "name": "Purple Nectar",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/purple-nectar.png"
+  },
+  "pyroarite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Pyroarite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/pyroarite.png"
+  },
+  "quickclaw": {
+    "category": "held-items",
+    "description": "Held: Holder has a 3/16 (18.75%) chance to move first.",
+    "fling_power": 80,
+    "name": "Quick Claw",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-claw.png"
+  },
+  "quickpowder": {
+    "category": "species-specific",
+    "description": "Doubles Ditto\u2019s Speed when held. The boost is lost after transforming.",
+    "fling_power": 10,
+    "name": "Quick Powder",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-powder.png"
+  },
+  "raichunitex": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Raichunite X",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/raichunite-x.png"
+  },
+  "raichunitey": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Raichunite Y",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/raichunite-y.png"
+  },
+  "rawstberry": {
+    "category": "medicine",
+    "description": "Held: Consumed when burned to cure a burn.",
+    "fling_power": 10,
+    "name": "Rawst Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rawst-berry.png"
+  },
+  "razorclaw": {
+    "category": "held-items",
+    "description": "Held: Raises the holder\u2019s critical hit ratio by one stage. Held by a Sneasel while levelling up at night: Holder evolves into Weavile.",
+    "fling_power": 80,
+    "name": "Razor Claw",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/razor-claw.png"
+  },
+  "razorfang": {
+    "category": "held-items",
+    "description": "Held: Damaging moves gain a 10% chance to make their target flinch. Held by a Gligar while levelling up: Holder evolves into Gliscor.",
+    "fling_power": 30,
+    "name": "Razor Fang",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/razor-fang.png"
+  },
+  "redcard": {
+    "category": "held-items",
+    "description": "Held: When the holder takes damage from a move, the opponent switches out for another random party Pok\u00e9mon. Consumed after use.",
+    "fling_power": 10,
+    "name": "Red Card",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/red-card.png"
+  },
+  "rednectar": {
+    "category": "species-specific",
+    "description": "Changes Oricorio to Baile Style.",
+    "fling_power": 10,
+    "name": "Red Nectar",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/red-nectar.png"
+  },
+  "rindoberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Grass-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Rindo Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rindo-berry.png"
+  },
+  "ringtarget": {
+    "category": "held-items",
+    "description": "Held: Negates the holder\u2019s type immunities. Ability immunities are not removed.",
+    "fling_power": 10,
+    "name": "Ring Target",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ring-target.png"
+  },
+  "rockgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Rock-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Rock Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rock-gem.png"
+  },
+  "rockincense": {
+    "category": "type-enhancement",
+    "description": "Held: Rock-Type moves from holder do 20% more damage. Breeding: Sudowoodo begets a Bonsly Egg.",
+    "fling_power": 10,
+    "name": "Rock Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rock-incense.png"
+  },
+  "rockmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Rock form. Changes Multi-Attack\u2019s type to Rock.",
+    "fling_power": 50,
+    "name": "Rock Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rock-memory.png"
+  },
+  "rockyhelmet": {
+    "category": "held-items",
+    "description": "Held: When the holder is hit by a contact move, the attacking Pok\u00e9mon takes 1/6 its max HP in damage.",
+    "fling_power": 60,
+    "name": "Rocky Helmet",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rocky-helmet.png"
+  },
+  "roomservice": {
+    "category": "held-items",
+    "description": "An item to be held by a Pok\u00e9mon. Lowers Speed when Trick Room takes effect.",
+    "fling_power": 100,
+    "name": "Room Service",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/room-service.png"
+  },
+  "roseincense": {
+    "category": "type-enhancement",
+    "description": "Held: Grass-Type moves from holder do 20% more damage. Breeding: Roselia or Roserade beget a Budew Egg.",
+    "fling_power": 10,
+    "name": "Rose Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rose-incense.png"
+  },
+  "roseliberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Fairy-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Roseli Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/roseli-berry.png"
+  },
+  "rowapberry": {
+    "category": "other",
+    "description": "Held: Consumed to deal 1/8 attacker\u2019s max HP when holder is struck by a special attack.",
+    "fling_power": 10,
+    "name": "Rowap Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rowap-berry.png"
+  },
+  "rustedshield": {
+    "category": "species-specific",
+    "description": "It is said that a hero used this shield to halt a terrible disaster in ancient times. But it\u2019s grown rusty and worn.",
+    "fling_power": null,
+    "name": "Rusted Shield",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/rusted-shield.png"
+  },
+  "rustedsword": {
+    "category": "species-specific",
+    "description": "It is said that a hero used this sword to halt a terrible disaster in ancient times. But it\u2019s grown rusty and worn.",
+    "fling_power": null,
+    "name": "Rusted Sword",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/rusted-sword.png"
+  },
+  "sablenite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Sableye to Mega Evolve into Mega Sableye.",
+    "fling_power": 80,
+    "name": "Sablenite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sablenite.png"
+  },
+  "safetygoggles": {
+    "category": "held-items",
+    "description": "Held: Prevents damage from powder moves and the damage from Hail and Sandstorm.",
+    "fling_power": 80,
+    "name": "Safety Goggles",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safety-goggles.png"
+  },
+  "salacberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost Speed.",
+    "fling_power": 10,
+    "name": "Salac Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/salac-berry.png"
+  },
+  "salamencite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Salamence to Mega Evolve into Mega Salamence.",
+    "fling_power": 80,
+    "name": "Salamencite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/salamencite.png"
+  },
+  "sceptilite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Sceptile to Mega Evolve into Mega Sceptile.",
+    "fling_power": 80,
+    "name": "Sceptilite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sceptilite.png"
+  },
+  "scizorite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Scizor to Mega Evolve into Mega Scizor.",
+    "fling_power": 80,
+    "name": "Scizorite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/scizorite.png"
+  },
+  "scolipite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Scolipite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/scolipite.png"
+  },
+  "scopelens": {
+    "category": "held-items",
+    "description": "Held: Raises the holder\u2019s critical hit ratio by one stage.",
+    "fling_power": 30,
+    "name": "Scope Lens",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/scope-lens.png"
+  },
+  "scovillainite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Scovillainite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/scovillainite.png"
+  },
+  "scraftinite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Scraftinite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/scraftinite.png"
+  },
+  "seaincense": {
+    "category": "type-enhancement",
+    "description": "Held: Water-Type moves from holder do 20% more damage. Breeding: Marill or Azumarill beget an Azurill Egg.",
+    "fling_power": 10,
+    "name": "Sea Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sea-incense.png"
+  },
+  "sharpbeak": {
+    "category": "type-enhancement",
+    "description": "Held: Flying-Type moves from holder do 20% more damage.",
+    "fling_power": 50,
+    "name": "Sharp Beak",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sharp-beak.png"
+  },
+  "sharpedonite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Sharpedo to Mega Evolve into Mega Sharpedo.",
+    "fling_power": 80,
+    "name": "Sharpedonite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sharpedonite.png"
+  },
+  "shedshell": {
+    "category": "held-items",
+    "description": "Held: Holder can bypass all trapping effects and switch out. Multi-turn moves still cannot be switched out of.",
+    "fling_power": 10,
+    "name": "Shed Shell",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shed-shell.png"
+  },
+  "shellbell": {
+    "category": "held-items",
+    "description": "Held: Holder receives 1/8 of the damage it deals when attacking.",
+    "fling_power": 30,
+    "name": "Shell Bell",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shell-bell.png"
+  },
+  "shockdrive": {
+    "category": "species-specific",
+    "description": "Grants Genesect a yellow, Electric-type Techno Blast.",
+    "fling_power": 70,
+    "name": "Shock Drive",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shock-drive.png"
+  },
+  "shucaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Ground-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Shuca Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shuca-berry.png"
+  },
+  "silkscarf": {
+    "category": "type-enhancement",
+    "description": "Held: Normal-Type moves from holder do 20% more damage.",
+    "fling_power": 10,
+    "name": "Silk Scarf",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/silk-scarf.png"
+  },
+  "silverpowder": {
+    "category": "type-enhancement",
+    "description": "Held: Bug-Type moves from holder do 20% more damage.",
+    "fling_power": 10,
+    "name": "Silver Powder",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/silver-powder.png"
+  },
+  "sitrusberry": {
+    "category": "medicine",
+    "description": "Held: Consumed at 1/2 max HP to recover 1/4 max HP.",
+    "fling_power": 10,
+    "name": "Sitrus Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sitrus-berry.png"
+  },
+  "skarmorite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Skarmorite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/skarmorite.png"
+  },
+  "skyplate": {
+    "category": "plates",
+    "description": "Held: Flying-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Flying.",
+    "fling_power": 90,
+    "name": "Sky Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sky-plate.png"
+  },
+  "slowbronite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Slowbro to Mega Evolve into Mega Slowbro.",
+    "fling_power": 80,
+    "name": "Slowbronite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/slowbronite.png"
+  },
+  "smokeball": {
+    "category": "held-items",
+    "description": "Held: Allows the Holder to escape from any wild battle.",
+    "fling_power": 30,
+    "name": "Smoke Ball",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/smoke-ball.png"
+  },
+  "smoothrock": {
+    "category": "held-items",
+    "description": "Held: Sandstorm by the holder lasts 8 rounds instead of 5.",
+    "fling_power": 10,
+    "name": "Smooth Rock",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/smooth-rock.png"
+  },
+  "snowball": {
+    "category": "held-items",
+    "description": "Held: If the holder is hit by a damaging Ice move, raises its Attack by one stage.",
+    "fling_power": 30,
+    "name": "Snowball",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/snowball.png"
+  },
+  "softsand": {
+    "category": "type-enhancement",
+    "description": "Held: Ground-Type moves from holder do 20% more damage.",
+    "fling_power": 10,
+    "name": "Soft Sand",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soft-sand.png"
+  },
+  "souldew": {
+    "category": "species-specific",
+    "description": "Raises Latias and Latios\u2019s Special Attack and Special Defense by 50%.",
+    "fling_power": 30,
+    "name": "Soul Dew",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soul-dew.png"
+  },
+  "spelltag": {
+    "category": "type-enhancement",
+    "description": "Held: Ghost-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Spell Tag",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/spell-tag.png"
+  },
+  "splashplate": {
+    "category": "plates",
+    "description": "Held: Water-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Water.",
+    "fling_power": 90,
+    "name": "Splash Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/splash-plate.png"
+  },
+  "spookyplate": {
+    "category": "plates",
+    "description": "Held: Ghost-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Ghost.",
+    "fling_power": 90,
+    "name": "Spooky Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/spooky-plate.png"
+  },
+  "staraptite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Staraptite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/staraptite.png"
+  },
+  "starfberry": {
+    "category": "in-a-pinch",
+    "description": "Held: Consumed at 1/4 max HP to boost a random stat by two stages.",
+    "fling_power": 10,
+    "name": "Starf Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/starf-berry.png"
+  },
+  "starminite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Starminite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/starminite.png"
+  },
+  "steelgem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Steel-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Steel Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/steel-gem.png"
+  },
+  "steelixite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Steelix to Mega Evolve into Mega Steelix.",
+    "fling_power": 80,
+    "name": "Steelixite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/steelixite.png"
+  },
+  "steelmemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Steel form. Changes Multi-Attack\u2019s type to Steel.",
+    "fling_power": 50,
+    "name": "Steel Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/steel-memory.png"
+  },
+  "stick": {
+    "category": "species-specific",
+    "description": "Raises Farfetch\u2019d\u2019s critical hit ratio by two stages.",
+    "fling_power": 60,
+    "name": "Leek",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/stick.png"
+  },
+  "stickybarb": {
+    "category": "bad-held-items",
+    "description": "Held: Holder takes 1/8 (12.5%) its max HP at the end of each turn. When the holder is hit by a contact move, the attacking Pok\u00e9mon takes 1/8 its max HP in damage and receive the item if not holding one.",
+    "fling_power": 80,
+    "name": "Sticky Barb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sticky-barb.png"
+  },
+  "stoneplate": {
+    "category": "plates",
+    "description": "Held: Rock-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Rock.",
+    "fling_power": 90,
+    "name": "Stone Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/stone-plate.png"
+  },
+  "swampertite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Swampert to Mega Evolve into Mega Swampert.",
+    "fling_power": 80,
+    "name": "Swampertite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/swampertite.png"
+  },
+  "tangaberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Bug-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Tanga Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tanga-berry.png"
+  },
+  "tatsugirinite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Tatsugirinite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/tatsugirinite.png"
+  },
+  "terrainextender": {
+    "category": "held-items",
+    "description": "Held: Extends the holder\u2019s Terrain effects to 8 turns.",
+    "fling_power": 60,
+    "name": "Terrain Extender",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/terrain-extender.png"
+  },
+  "thickclub": {
+    "category": "species-specific",
+    "description": "Doubles Cubone or Marowak\u2019s Attack.",
+    "fling_power": 90,
+    "name": "Thick Club",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/thick-club.png"
+  },
+  "throatspray": {
+    "category": "held-items",
+    "description": "Raises Sp. Atk when a Pok\u00e9mon uses a sound-based move.",
+    "fling_power": 30,
+    "name": "Throat Spray",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/throat-spray.png"
+  },
+  "toxicorb": {
+    "category": "bad-held-items",
+    "description": "Held: Inflicts Toxic on the holder at the end of the turn. Activates after Poison damage would occur.",
+    "fling_power": 30,
+    "name": "Toxic Orb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-orb.png"
+  },
+  "toxicplate": {
+    "category": "plates",
+    "description": "Held: Poison-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Poison.",
+    "fling_power": 90,
+    "name": "Toxic Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+  },
+  "twistedspoon": {
+    "category": "type-enhancement",
+    "description": "Held: Psychic-Type moves from holder do 20% more damage.",
+    "fling_power": 30,
+    "name": "Twisted Spoon",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/twisted-spoon.png"
+  },
+  "tyranitarite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Tyranitar to Mega Evolve into Mega Tyranitar.",
+    "fling_power": 80,
+    "name": "Tyranitarite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tyranitarite.png"
+  },
+  "utilityumbrella": {
+    "category": "held-items",
+    "description": "An item to be held by a Pok\u00e9mon. This sturdy umbrella protects the holder from the effects of rain and harsh sunlight.",
+    "fling_power": 60,
+    "name": "Utility Umbrella",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen8/utility-umbrella.png"
+  },
+  "venusaurite": {
+    "category": "mega-stones",
+    "description": "Held: Allows Venusaur to Mega Evolve into Mega Venusaur.",
+    "fling_power": 80,
+    "name": "Venusaurite",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/venusaurite.png"
+  },
+  "victreebelite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Victreebelite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/victreebelite.png"
+  },
+  "wacanberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Electric-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Wacan Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wacan-berry.png"
+  },
+  "watergem": {
+    "category": "jewels",
+    "description": "Held: When the holder uses a damaging Water-type move, the move has 1.5\u00d7 power and this item is consumed.",
+    "fling_power": null,
+    "name": "Water Gem",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/water-gem.png"
+  },
+  "watermemory": {
+    "category": "memories",
+    "description": "Held: Changes Silvally to its Water form. Changes Multi-Attack\u2019s type to Water.",
+    "fling_power": 50,
+    "name": "Water Memory",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/water-memory.png"
+  },
+  "waveincense": {
+    "category": "type-enhancement",
+    "description": "Held: Water-Type moves from holder do 20% more damage. Breeding: Mantine begets a Mantyke Egg.",
+    "fling_power": 10,
+    "name": "Wave Incense",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wave-incense.png"
+  },
+  "weaknesspolicy": {
+    "category": "held-items",
+    "description": "Held: When the holder is hit by a super effective move, its Attack and Special Attack raise by two stages.",
+    "fling_power": 80,
+    "name": "Weakness Policy",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/weakness-policy.png"
+  },
+  "wellspringmask": {
+    "category": "held-items",
+    "description": null,
+    "fling_power": null,
+    "name": "Wellspring Mask",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/wellspring-mask.png"
+  },
+  "whiteherb": {
+    "category": "held-items",
+    "description": "Held: Resets all lowered stats to normal at end of turn. Consumed after use.",
+    "fling_power": 10,
+    "name": "White Herb",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/white-herb.png"
+  },
+  "widelens": {
+    "category": "held-items",
+    "description": "Held: Provides a 1/10 (10%) boost in accuracy to the holder.",
+    "fling_power": 10,
+    "name": "Wide Lens",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wide-lens.png"
+  },
+  "wikiberry": {
+    "category": "picky-healing",
+    "description": "Held: Consumed at 1/2 max HP to restore 1/8 max HP. Confuses Pok\u00e9mon that dislike dry flavor.",
+    "fling_power": 10,
+    "name": "Wiki Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wiki-berry.png"
+  },
+  "wiseglasses": {
+    "category": "held-items",
+    "description": "Held: Boosts the damage of special moves used by the holder by 1/10 (10%).",
+    "fling_power": 10,
+    "name": "Wise Glasses",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wise-glasses.png"
+  },
+  "yacheberry": {
+    "category": "type-protection",
+    "description": "Held: Consumed when struck by a super-effective Ice-type attack to halve the damage.",
+    "fling_power": 10,
+    "name": "Yache Berry",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/yache-berry.png"
+  },
+  "yellownectar": {
+    "category": "species-specific",
+    "description": "Changes Oricorio to Pom-Pom Style.",
+    "fling_power": 10,
+    "name": "Yellow Nectar",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/yellow-nectar.png"
+  },
+  "zapplate": {
+    "category": "plates",
+    "description": "Held: Electric-Type moves from holder do 20% more damage. Changes Arceus\u2019s and Judgment\u2019s type to Electric.",
+    "fling_power": 90,
+    "name": "Zap Plate",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/zap-plate.png"
+  },
+  "zeraorite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Zeraorite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/zeraorite.png"
+  },
+  "zoomlens": {
+    "category": "held-items",
+    "description": "Held: Provides a 1/5 (20%) boost in accuracy if the holder moves after the target.",
+    "fling_power": 10,
+    "name": "Zoom Lens",
+    "official_sprite": true,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/zoom-lens.png"
+  },
+  "zygardite": {
+    "category": "mega-stones",
+    "description": null,
+    "fling_power": 80,
+    "name": "Zygardite",
+    "official_sprite": false,
+    "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/gen9/zygardite.png"
+  }
+}

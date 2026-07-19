@@ -1,0 +1,36 @@
+{
+  "trained_at": "2026-07-08T16:30:11.155221+00:00",
+  "n_samples": 20000,
+  "team_size": 6,
+  "seed": 42,
+  "feature_names": [
+    "team_a_avg_hp",
+    "team_a_avg_atk",
+    "team_a_avg_def",
+    "team_a_avg_spa",
+    "team_a_avg_spd",
+    "team_a_avg_spe",
+    "team_a_type_diversity",
+    "team_a_avg_weak_count",
+    "team_a_avg_resist_count",
+    "team_a_team_size",
+    "team_b_avg_hp",
+    "team_b_avg_atk",
+    "team_b_avg_def",
+    "team_b_avg_spa",
+    "team_b_avg_spd",
+    "team_b_avg_spe",
+    "team_b_type_diversity",
+    "team_b_avg_weak_count",
+    "team_b_avg_resist_count",
+    "team_b_team_size"
+  ],
+  "metrics": {
+    "accuracy": 0.652,
+    "auc": 0.7114584466152913,
+    "log_loss": 0.6222724318504333,
+    "train_samples": 16000,
+    "test_samples": 4000
+  },
+  "note": "Trained on a documented SYNTHETIC battle-outcome simulator (app/ml/simulate.py), not real logged match results \u2014 no such dataset exists for this project. See Docs/backend/README.md's 'Win probability model (Phase 7)' section."
+}

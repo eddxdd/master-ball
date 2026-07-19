@@ -1,3 +1,5 @@
+import { MoveCategoryBadge } from "@/components/MoveCategoryBadge";
+import { MoveInfoLink } from "@/components/MoveInfoLink";
 import { TypeBadge } from "@/components/TypeBadge";
 import type { MoveSummary } from "@/types/pokemon";
 
@@ -21,12 +23,16 @@ export function MovepoolTable({ moves }: { moves: MoveSummary[] }) {
         </thead>
         <tbody>
           {moves.map((move) => (
-            <tr key={move.id} className="border-b border-border last:border-0">
-              <td className="p-2 font-medium">{move.name}</td>
+            <tr key={move.id} className="border-b border-border last:border-0 odd:bg-muted/30">
+              <td className="p-2 font-medium">
+                <MoveInfoLink move={move} />
+              </td>
               <td className="p-2">
                 <TypeBadge type={move.type} />
               </td>
-              <td className="p-2 text-muted-foreground">{move.category}</td>
+              <td className="p-2">
+                <MoveCategoryBadge category={move.category} />
+              </td>
               <td className="p-2 text-right font-mono">{move.base_power ?? "—"}</td>
               <td className="p-2 text-right font-mono">{move.accuracy ?? "—"}</td>
               <td className="p-2 text-right font-mono">{move.pp}</td>

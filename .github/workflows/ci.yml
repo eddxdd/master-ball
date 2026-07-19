@@ -12,6 +12,48 @@ jobs:
     defaults:
       run:
         working-directory: Backend
+    # A real Postgres (with pgvector, since app/models/knowledge.py's
+    # DocumentChunk needs the `vector` extension) — every DB-touching
+    # backend test needs a live database, so without this service the whole
+    # suite would fail at collection/fixture time, not just RAG-specific
+    # tests. See Docs/roadmap.md's Phase 4 section, which flagged this as a
+    # pre-existing gap before this was added.
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: masterball
+          POSTGRES_PASSWORD: masterball
+          POSTGRES_DB: masterball
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U masterball"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      # Phase 6's knowledge graph (app/graph/session.py, scripts/load_graph.py) —
+      # every graph-touching test (test_graph_query.py, test_load_graph.py,
+      # test_mcp_server.py's suggest_teammates test) needs a live Neo4j the
+      # same way DB tests need the postgres service above.
+      neo4j:
+        image: neo4j:5-community
+        env:
+          NEO4J_AUTH: neo4j/masterball-graph
+          NEO4J_dbms_usage__report_enabled: "false"
+        ports:
+          - 7687:7687
+        options: >-
+          --health-cmd "wget -q --spider http://localhost:7474 || exit 1"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+          --health-start-period 20s
+    env:
+      DATABASE_URL: postgresql+asyncpg://masterball:masterball@localhost:5432/masterball
+      NEO4J_URI: bolt://localhost:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: masterball-graph
     steps:
       - uses: actions/checkout@v4
 
@@ -30,8 +72,124 @@ jobs:
       - name: Ruff format check
         run: uv run ruff format --check .
 
+      - name: Run migrations
+        run: uv run alembic upgrade head
+
+      - name: Seed Pokedex reference data
+        run: uv run python -m scripts.seed_pokedex
+
+      - name: Ingest the RAG knowledge base
+        # Downloads fastembed's small local ONNX model on first run (no API
+        # key/cost) — needed for test_retrieval.py/test_scout.py's real
+        # (not mocked) retrieve_context coverage.
+        run: uv run python -m scripts.ingest_knowledge_base
+
+      - name: Load the Neo4j knowledge graph
+        # No live Smogon fetch happens in CI (scripts/sync_usage_stats.py is
+        # never run here — see tests/test_sync_usage_stats.py's docstring),
+        # so this populates real Pokemon/Type/Move/Ability/Item nodes and
+        # type-chart edges from the just-seeded Postgres data, but no
+        # PAIRS_WITH/COUNTERED_BY usage edges — exactly the "some graph data,
+        # no usage data yet" shape tests are written to handle gracefully.
+        run: uv run python -m scripts.load_graph
+
+      - name: Train the win-probability toy model (smoke test)
+        # Phase 7's XGBoost win-probability model (app/tools/win_probability.py).
+        # tests/test_win_probability.py/test_ml.py/test_mcp_server.py each train
+        # their own throwaway model against a temp path, so this step isn't
+        # required for the test suite to pass — it's a smoke test that the real
+        # training script still runs end-to-end against a real seeded DB in CI,
+        # not just locally. Small --samples purely to keep CI fast; the actual
+        # committed app/data/ml/win_probability_model.json (trained with the
+        # default 20,000 samples) is what's served, not this run's output.
+        run: uv run python -m scripts.train_win_probability_model --samples 2000
+
       - name: Pytest
+        # Includes deterministic RAGAS retrieval eval (tests/test_ragas_eval.py) —
+        # a retrieval/knowledge-base regression fails CI. See Backend/eval/README.md.
         run: uv run pytest
+
+  # Live promptfoo against a real /chat needs provider keys (repo secrets
+  # ANTHROPIC_API_KEY + OPENAI_API_KEY). Opt in per PR with the
+  # `run-agent-eval` label so spend stays intentional. Deterministic RAGAS
+  # retrieval eval already gates every PR via the backend pytest job.
+  agent-eval:
+    name: Agent eval (promptfoo)
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'run-agent-eval')
+    needs: backend
+    defaults:
+      run:
+        working-directory: Backend
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: masterball
+          POSTGRES_PASSWORD: masterball
+          POSTGRES_DB: masterball
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U masterball"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      neo4j:
+        image: neo4j:5-community
+        env:
+          NEO4J_AUTH: neo4j/masterball-graph
+          NEO4J_dbms_usage__report_enabled: "false"
+        ports:
+          - 7687:7687
+        options: >-
+          --health-cmd "wget -q --spider http://localhost:7474 || exit 1"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+          --health-start-period 20s
+    env:
+      DATABASE_URL: postgresql+asyncpg://masterball:masterball@localhost:5432/masterball
+      NEO4J_URI: bolt://localhost:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: masterball-graph
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ENVIRONMENT: ci
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install backend deps + migrate + seed + ingest
+        run: |
+          uv sync --locked --all-extras --dev
+          uv run alembic upgrade head
+          uv run python -m scripts.seed_pokedex
+          uv run python -m scripts.ingest_knowledge_base
+
+      - name: Start API
+        run: |
+          uv run uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 2
+          done
+
+      - name: promptfoo eval
+        working-directory: .
+        run: npx --yes promptfoo@0.114.0 eval -c Backend/eval/promptfoo/promptfooconfig.yaml --fail-on-error
 
   frontend:
     name: Frontend (lint + typecheck + test)

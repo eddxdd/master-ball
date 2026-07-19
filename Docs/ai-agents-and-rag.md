@@ -75,11 +75,25 @@ A standalone server (official MCP Python SDK) exposing the tools from section 2 
 - [ ] Tested against the official MCP Inspector tool
 - [ ] Short README documenting architecture, failure modes, and how to run/test it locally — this README is itself portfolio material, separate from the main project docs
 
-**Stretch:** multi-server composition — configure a client that talks to the DexTrAIner MCP server *and* another public MCP server (e.g., a filesystem or fetch server) simultaneously, and document how capability conflicts are handled. This is explicitly called out in 2026 research as a strong, rare signal.
+**Stretch:** multi-server composition — configure a client that talks to the Master Ball MCP server *and* another public MCP server (e.g., a filesystem or fetch server) simultaneously, and document how capability conflicts are handled. This is explicitly called out in 2026 research as a strong, rare signal.
 
-**Not pursued, and why (worth being able to say in an interview):** Google's Agent2Agent (A2A) protocol — MCP's now-official complement for *agent-to-agent* delegation, as opposed to MCP's *agent-to-tool* scope, both now under the same Linux Foundation governance (see [`tech-stack.md`](./tech-stack.md#ai--agents)) — isn't used here because DexTrAIner's graph is one agent composing many tools, not multiple peer agents delegating tasks to each other. That's a deliberate scope call, not a gap: A2A would earn a place if the graph ever split into genuinely independent specialist agents (e.g., a Replay-Analysis agent handing a finished report to a separate Team-Doctor agent).
+**Not pursued, and why (worth being able to say in an interview):** Google's Agent2Agent (A2A) protocol — MCP's now-official complement for *agent-to-agent* delegation, as opposed to MCP's *agent-to-tool* scope, both now under the same Linux Foundation governance (see [`tech-stack.md`](./tech-stack.md#ai--agents)) — isn't used here because Master Ball's graph is one agent composing many tools, not multiple peer agents delegating tasks to each other. That's a deliberate scope call, not a gap: A2A would earn a place if the graph ever split into genuinely independent specialist agents (e.g., a Replay-Analysis agent handing a finished report to a separate Team-Doctor agent).
 
 ## 5. Evaluation & observability loop
+
+**Status (current):** the full quality/observability loop is in place:
+
+- **LangSmith** — wired at startup (`app/core/observability.py`); auto-enabled outside `ENVIRONMENT=local` when `LANGCHAIN_API_KEY` is set.
+- **Langfuse** — optional self-hosted stack via `docker-compose.langfuse.yml` (`--profile observability`) + per-turn LangChain callbacks (`app/agent/tracing.py`).
+- **Sentry** — backend (`SENTRY_DSN`) + frontend (`VITE_SENTRY_DSN`).
+- **Structured request logs** — `RequestLoggingMiddleware` (request id, path, status, latency).
+- **LLM reliability** — timeouts, retries, per-provider circuit breaker, Claude→OpenAI synthesis fallback (`app/agent/reliability.py`).
+- **Quality guards** — citation integrity + ungrounded damage/KO disclaimer before the user sees a final answer (`app/agent/quality.py`).
+- **User feedback** — thumbs up/down on Professor replies → `chat_feedback` table → `scripts/export_feedback_to_golden.py`.
+- **CI** — deterministic RAGAS retrieval eval gates every PR via pytest; promptfoo is opt-in per PR with the `run-agent-eval` label (needs provider secrets).
+- **AWS staging** — image build on `main` + manual ECR push workflow; see [`infra/aws/README.md`](../infra/aws/README.md).
+
+See [`Backend/eval/README.md`](../Backend/eval/README.md) for eval commands. Design rationale below still holds.
 
 ```
 production traffic → LangSmith / Langfuse traces → flag failures/low-quality turns
@@ -93,7 +107,7 @@ production traffic → LangSmith / Langfuse traces → flag failures/low-quality
 
 **Golden dataset format:** plain JSONL, checked into the repo (`eval/golden/*.jsonl`), tool-neutral — so it's not locked to whichever eval tool is in use this quarter. Each entry: input, expected behavior/answer shape, and (for RAG entries) the source chunks that should be retrieved.
 
-**RAGAS metrics to track first:** faithfulness (is the answer actually supported by retrieved context?), context precision/recall (is retrieval finding the right chunks?), answer relevance.
+**RAGAS metrics to track first:** faithfulness (is the answer actually supported by retrieved context?), context precision/recall (is retrieval finding the right chunks?), answer relevance. **As shipped:** retrieval is scored with RAGAS's non-LLM `NonLLMContextRecall`/`NonLLMContextPrecisionWithReference` (string-similarity based — free, deterministic, runs on every `pytest`); faithfulness and `ResponseRelevancy` (RAGAS's current name for answer relevance) are LLM-judged and reserved for the manual/opt-in chat eval, since judging *those* two specifically requires a real LLM call per sample — see `Backend/eval/README.md`'s two-tier split.
 
 **promptfoo use cases:** side-by-side comparison when changing a prompt or swapping models (Claude vs. OpenAI vs. Gemini on the same synthesis prompt), plus basic red-teaming (prompt injection via a malicious "team name" or replay-log field — a real attack surface here since user-supplied text flows into prompts).
 

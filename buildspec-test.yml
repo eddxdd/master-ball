@@ -1,0 +1,23 @@
+# CodeBuild test stage — keeps the pipeline gate light; full pytest lives in GitHub Actions CI.
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+      python: 3.13
+    commands:
+      - echo "Install complete"
+  build:
+    commands:
+      - echo "Frontend typecheck + production build..."
+      - cd Frontend && npm ci && npx tsc -b --noEmit && npm run build && cd ..
+      - echo "Backend lint (ruff)..."
+      - cd Backend && pip install -q ruff && ruff check app tests && cd ..
+      - test -f docker-compose.prod.yml
+      - test -f deploy/nginx-proxy.conf
+      - echo "Test stage OK"
+
+artifacts:
+  files:
+    - "**/*"

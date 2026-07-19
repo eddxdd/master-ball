@@ -1,0 +1,12 @@
+{"query": "What makes Landorus-Therian a good defensive pivot in OU?", "expected_source_ids": ["ou-landorustherian"]}
+{"query": "How does Corviknight's Pressure ability help it stall out opponents?", "expected_source_ids": ["ou-corviknight"]}
+{"query": "Why is Dragapult one of the fastest Pokemon in the OU metagame?", "expected_source_ids": ["ou-dragapult"]}
+{"query": "How does Garganacl's Purifying Salt ability interact with status conditions?", "expected_source_ids": ["ou-garganacl"]}
+{"query": "What does Gholdengo's Good as Gold ability block?", "expected_source_ids": ["ou-gholdengo"]}
+{"query": "What is Great Tusk's signature move and what does it cost to use?", "expected_source_ids": ["ou-greattusk"]}
+{"query": "Why is Iron Valiant hard to switch into safely?", "expected_source_ids": ["ou-ironvaliant"]}
+{"query": "How does Kingambit's Supreme Overlord ability scale with fainted teammates?", "expected_source_ids": ["ou-kingambit"]}
+{"query": "What does Ting-Lu's Vessel of Ruin ability do to the rest of the field?", "expected_source_ids": ["ou-tinglu"]}
+{"query": "How does Toxapex's Regenerator ability work with Baneful Bunker?", "expected_source_ids": ["ou-toxapex"]}
+{"query": "What's the difference between a balance team and a hyper offense team?", "expected_source_ids": ["general-team-archetypes"]}
+{"query": "How many times per game can you Terastallize, and what does it do to STAB?", "expected_source_ids": ["general-terastallization"]}

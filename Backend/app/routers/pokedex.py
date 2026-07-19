@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
@@ -12,9 +12,10 @@ router = APIRouter(prefix="/pokedex", tags=["pokedex"])
 async def browse_pokedex(
     search: str | None = None,
     type: str | None = None,
+    generation: int | None = Query(None, ge=1, le=9),
     db: AsyncSession = Depends(get_db),
 ) -> list[PokemonSummary]:
-    return await list_pokemon(db, search=search, type_filter=type)
+    return await list_pokemon(db, search=search, type_filter=type, generation=generation)
 
 
 @router.get("/{species_id}", response_model=PokemonProfile)

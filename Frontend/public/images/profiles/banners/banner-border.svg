@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <defs>
+    <!-- Parallelogram clip so center is transparent -->
+    <clipPath id="innerClip">
+      <polygon points="120,40 680,40 720,160 160,160" />
+    </clipPath>
+    <!-- Gradient for outer border: purple to pink -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9d6ee4" />
+      <stop offset="100%" style="stop-color:#ff6b9d" />
+    </linearGradient>
+    <!-- Shadow/depth outline -->
+    <linearGradient id="shadowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6b4fb8;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#c44d7a;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  <!-- Outer shadow/depth layer (offset top-left) -->
+  <polygon points="95,25 655,55 715,175 155,145" fill="none" stroke="url(#shadowGrad)" stroke-width="3" />
+  <!-- Thin black/dark top line -->
+  <line x1="115" y1="35" x2="685" y2="65" stroke="#1a1a24" stroke-width="1.5" />
+  <!-- Main border: purple-to-pink -->
+  <polygon points="120,40 680,40 720,160 160,160" fill="none" stroke="url(#borderGrad)" stroke-width="4" />
+  <!-- Inner highlight (lighter edge) -->
+  <polygon points="128,46 672,46 712,154 168,154" fill="none" stroke="rgba(157,110,228,0.4)" stroke-width="1" />
+  <!-- Decorative dots bottom-left -->
+  <g fill="#9d6ee4">
+    <circle cx="175" cy="165" r="4" />
+    <circle cx="195" cy="165" r="4" />
+    <circle cx="215" cy="165" r="4" />
+    <circle cx="235" cy="165" r="4" />
+    <circle cx="175" cy="182" r="4" />
+    <circle cx="195" cy="182" r="4" />
+    <circle cx="215" cy="182" r="4" />
+    <circle cx="235" cy="182" r="4" />
+  </g>
+  <!-- Decorative dots bottom-right -->
+  <g fill="#ff6b9d">
+    <circle cx="565" cy="165" r="4" />
+    <circle cx="585" cy="165" r="4" />
+    <circle cx="605" cy="165" r="4" />
+    <circle cx="625" cy="165" r="4" />
+    <circle cx="565" cy="182" r="4" />
+    <circle cx="585" cy="182" r="4" />
+    <circle cx="605" cy="182" r="4" />
+    <circle cx="625" cy="182" r="4" />
+  </g>
+</svg>

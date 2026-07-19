@@ -1,0 +1,71 @@
+name: Deploy staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-api-image:
+    name: Build API image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Backend
+          push: false
+          tags: master-ball-api:staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build frontend production image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./Frontend
+          push: false
+          tags: master-ball-web:staging
+          build-args: |
+            VITE_API_BASE_URL=https://api.example.com
+            VITE_ENVIRONMENT=staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Manual / main-branch deploy. Requires repo secrets AWS_ROLE_ARN + AWS_REGION
+  # and an ECR repo named master-ball-api. See infra/aws/README.md.
+  push-and-deploy:
+    name: Push to ECR
+    needs: build-api-image
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push API image
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t "$ECR_REGISTRY/master-ball-api:$IMAGE_TAG" ./Backend
+          docker push "$ECR_REGISTRY/master-ball-api:$IMAGE_TAG"
+          echo "Pushed $ECR_REGISTRY/master-ball-api:$IMAGE_TAG"
+          echo "Update App Runner / ECS to this tag — see infra/aws/README.md."

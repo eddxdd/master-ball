@@ -1,6 +1,8 @@
 # Local development setup
 
-Everything runs locally via Docker Compose for now — no cloud account is required to work on this project (AWS deployment is a later phase; see [`roadmap.md`](./roadmap.md)). This doc covers running the whole stack. For what's actually inside each service, see [`backend/README.md`](./backend/README.md) and [`frontend/README.md`](./frontend/README.md).
+Everything runs locally via Docker Compose. This doc covers the local stack. For what's inside each service, see [`backend/README.md`](./backend/README.md) and [`frontend/README.md`](./frontend/README.md).
+
+**Production (AWS EC2 / live site):** see [`cursor/local.md`](./cursor/local.md) and [`cursor/remote.md`](./cursor/remote.md). Compose file: [`docker-compose.prod.yml`](../docker-compose.prod.yml).
 
 ## Prerequisites
 
@@ -37,6 +39,29 @@ docker compose exec backend python -m scripts.seed_pokedex
 
 It's idempotent — safe to re-run any time. See [`backend/README.md`](./backend/README.md#data-seeding) for what it does and the data-quality gotchas that came up building it.
 
+### Ingesting the RAG knowledge base (one-time, per fresh database)
+
+The `/chat` agent's `retrieve_context` tool (Phase 2) reads from pgvector, which is empty until this runs once:
+
+```bash
+docker compose exec backend python -m scripts.ingest_knowledge_base
+```
+
+Idempotent (delete-then-insert per source document) — safe to re-run after editing a file in `Backend/app/data/knowledge_base/`. The first run downloads a small (~130MB) local embedding model from Hugging Face — see [`backend/README.md`](./backend/README.md#ai-agent-phase-2) — which is then cached in the `backend_embedding_cache` volume, not re-downloaded on subsequent runs/restarts.
+
+**Note:** `/chat` and `/chat/ws` also need `ANTHROPIC_API_KEY`/`OPENAI_API_KEY` set (repo-root `.env`) to actually answer — without them they return a clear `503`, on purpose, rather than a fake response. See [`backend/README.md`](./backend/README.md#ai-agent-phase-2).
+
+## Observability extras (optional)
+
+| Stack | How to enable |
+|---|---|
+| LangSmith | Set `LANGCHAIN_API_KEY` — auto-on outside `ENVIRONMENT=local` |
+| Langfuse (self-hosted) | `docker compose -f docker-compose.yml -f docker-compose.langfuse.yml --profile observability up -d`, then set `LANGFUSE_*` |
+| Sentry | `SENTRY_DSN` (API) + `VITE_SENTRY_DSN` (web) |
+| PostHog | `VITE_POSTHOG_KEY` |
+
+AWS staging deploy notes: [`infra/aws/README.md`](../infra/aws/README.md).
+
 ## Environment variables
 
 Three separate `.env.example` files exist, one per layer — copy each to `.env` in the same folder:
@@ -45,7 +70,7 @@ Three separate `.env.example` files exist, one per layer — copy each to `.env`
 |---|---|---|
 | [`.env.example`](../.env.example) (repo root) | `docker-compose.yml` | `APP_NAME`, Postgres credentials. This is the one you need for `docker compose up`. |
 | [`Backend/.env.example`](../Backend/.env.example) | The backend, when run *outside* Docker (`uv run uvicorn ...` directly) | Same variables, but as full connection strings pointed at `localhost` instead of Docker service names. |
-| [`Frontend/.env.example`](../Frontend/.env.example) | The frontend, when run *outside* Docker (`npm run dev` directly) | Only `VITE_`-prefixed vars are exposed to client code — this is a Vite convention, not a DexTrAIner-specific rule. |
+| [`Frontend/.env.example`](../Frontend/.env.example) | The frontend, when run *outside* Docker (`npm run dev` directly) | Only `VITE_`-prefixed vars are exposed to client code — this is a Vite convention, not a Master Ball-specific rule. |
 
 The naming convention behind `APP_NAME`/`VITE_APP_NAME` is documented in [`README.md`](./README.md#naming--branding) — there's exactly one place per layer that owns the display name.
 
@@ -93,7 +118,8 @@ Both sides are also checked in CI on every push/PR — see [`.github/workflows/c
 - **Postgres connection fails with a password/auth error, not a connection-refused error.** This almost always means something *other* than the Docker container answered on that port — most commonly a native Postgres install on the host machine (Windows installers commonly register it as a service, e.g. `postgresql-x64-18`, bound to the default 5432). That's exactly why the Postgres container's host-side port is mapped to **5433, not 5432** in `docker-compose.yml` — connections silently landing on a different Postgres instance with different credentials look like a password error, not a networking error, which makes it a confusing one to debug from the error message alone. If you ever see this with a *different* port, check `Get-Service | Where-Object { $_.DisplayName -like "*postgres*" }` (Windows) or `lsof -i :<port>` (macOS/Linux) for a competing listener before assuming the credentials are wrong.
 - **Backend can't reach Postgres/Valkey on first boot.** The backend container waits on Postgres/Valkey's healthchecks before starting (see `depends_on: condition: service_healthy` in `docker-compose.yml`), so this shouldn't happen — but if it does, `docker compose logs postgres` / `docker compose logs valkey` first.
 - **Frontend shows "Backend unreachable."** Check `docker compose logs backend` for a startup error, and confirm `VITE_API_BASE_URL` (frontend env) actually points at `http://localhost:8000` — from the *browser's* perspective, not the Docker network's, since the health check fetch runs client-side.
-- **Changed `Backend/pyproject.toml` or `Frontend/package.json` and the container doesn't pick it up.** Dependencies are installed at image build time, not on container start (see `backend_venv`/`frontend_node_modules` named volumes in `docker-compose.yml`, which deliberately persist the *container's* installed dependencies over your host's bind-mounted source). Re-run `docker compose up --build` after a dependency change.
+- **Changed `Backend/pyproject.toml` or `Frontend/package.json` and the container doesn't pick it up.** Dependencies are installed at image build time, not on container start (see `backend_venv`/`frontend_node_modules` named volumes in `docker-compose.yml`, which deliberately persist the *container's* installed dependencies over your host's bind-mounted source). Re-run `docker compose up --build` after a dependency change. **If the container still fails with `ModuleNotFoundError` for a package you just added**, even after `--build`: the named volume (`backend_venv`/`frontend_node_modules`) already existed from a *previous* build and Compose doesn't refresh an existing named volume's contents just because the image changed — only a fresh volume gets populated from the new image. Fix: `docker compose down backend` then `docker volume rm masterball_backend_venv` (or the frontend equivalent, `masterball_frontend_node_modules`) before `docker compose up -d backend` again, so the volume is recreated from the freshly built image instead of reusing the stale one.
 - **`npm ci` fails inside Docker/CI with a "Missing: @emnapi/..." error, even though `npm install` works fine locally.** This is a known cross-platform `package-lock.json` quirk: this project is developed on Windows, and Windows-generated lockfiles can omit Linux-only optional native dependencies (used by `lightningcss`/Tailwind's WASM fallback path) that a Linux container or CI runner needs. That's why both `Frontend/Dockerfile.dev` and `.github/workflows/ci.yml` deliberately use `npm install` instead of `npm ci` — see the comment in `Frontend/Dockerfile.dev` for the full explanation. If you hit this in a new context, that's the same root cause.
 - **Postgres data looks stale/corrupted after changing `docker-compose.yml`'s Postgres config.** Named volumes persist data independently of the container definition. `docker compose down -v` wipes volumes and gives you a clean slate (you'll lose local data, which is fine — nothing here is production data yet).
 - **Running `uvicorn --reload` directly (outside Docker) fails to bind with a permissions-flavored error (Windows: `WinError 10013`), even right after stopping the process that was supposedly using that port.** On Windows, `uvicorn --reload` runs a supervisor process that spawns a separate worker process actually holding the socket — killing the PID you started (the supervisor) doesn't kill the worker, which keeps the port bound as an orphan. Symptom: `Stop-Process` on the PID you have appears to succeed, but the next `uvicorn --reload` attempt on the same port still fails. Fix: find the actual PID holding the port (`netstat -ano | findstr :<port>` on Windows) and stop that one instead. This is specific to running `uvicorn --reload` directly on the host — the Dockerized backend doesn't have this issue, since `docker compose down` tears down the whole container.
+- **Edited frontend code, but the browser keeps showing the old version — Vite's dev server logs no HMR update at all for the file you just saved.** This is a known Windows/macOS-Docker issue: `docker-compose.yml` bind-mounts `./Frontend:/app`, and Vite's file watcher (backed by native filesystem-change events) doesn't reliably see changes written through a Docker Desktop bind mount into a Linux container the way it would on a native Linux host. `vite.config.ts`'s `server.watch.usePolling: true` works around this (Vite polls the filesystem for changes instead of waiting on events that never arrive) and should make this a non-issue going forward. If you still ever see it (e.g. after editing `vite.config.ts` itself, which needs a full restart to take effect either way), `docker compose restart frontend` forces the dev server to re-read every file from disk on boot.

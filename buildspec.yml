@@ -1,0 +1,51 @@
+# CodeBuild build stage: build + push API and frontend images to ECR (us-east-2).
+version: 0.2
+
+env:
+  variables:
+    ECR_REGISTRY: "338753559735.dkr.ecr.us-east-2.amazonaws.com"
+    AWS_REGION: "us-east-2"
+    API_REPOSITORY: "master-ball-api"
+    FRONTEND_REPOSITORY: "master-ball-frontend"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      - |
+        for REPO in $API_REPOSITORY $FRONTEND_REPOSITORY; do
+          aws ecr describe-repositories --repository-names "$REPO" --region "$AWS_REGION" \
+            || aws ecr create-repository --repository-name "$REPO" --region "$AWS_REGION"
+        done
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:-latest}
+      - echo "Image tag $IMAGE_TAG"
+  build:
+    commands:
+      - echo Building API image...
+      - docker build -t $ECR_REGISTRY/$API_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$API_REPOSITORY:latest ./Backend
+      - echo Building frontend image (same-origin API)...
+      - |
+        docker build \
+          --build-arg VITE_APP_NAME="Master Ball" \
+          --build-arg VITE_API_BASE_URL= \
+          --build-arg VITE_ENVIRONMENT=production \
+          -t $ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG \
+          -t $ECR_REGISTRY/$FRONTEND_REPOSITORY:latest \
+          ./Frontend
+  post_build:
+    commands:
+      - docker push $ECR_REGISTRY/$API_REPOSITORY:$IMAGE_TAG
+      - docker push $ECR_REGISTRY/$API_REPOSITORY:latest
+      - docker push $ECR_REGISTRY/$FRONTEND_REPOSITORY:$IMAGE_TAG
+      - docker push $ECR_REGISTRY/$FRONTEND_REPOSITORY:latest
+      - echo "Pushed API + frontend images"
+
+artifacts:
+  files:
+    - docker-compose.prod.yml
+    - deploy/**/*
+    - buildspec-deploy.yml
+
+cache:
+  paths: []

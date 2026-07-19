@@ -1,0 +1,15 @@
+import { useEffect, useState } from "react";
+
+/** Delays reflecting `value` until it's stopped changing for `delayMs` —
+ * used by SearchBar so every keystroke doesn't fire a request (see
+ * Docs/frontend/README.md's "Global search" section). */
+export function useDebouncedValue<T>(value: T, delayMs: number): T {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delayMs);
+    return () => clearTimeout(timer);
+  }, [value, delayMs]);
+
+  return debounced;
+}

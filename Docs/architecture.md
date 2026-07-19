@@ -5,9 +5,9 @@
 ```mermaid
 flowchart TB
     subgraph Client["Frontend (React + TS + Vite, PWA)"]
-        Dex[Pokédex Browser UI]
+        Pokedex[Pokédex Browser UI]
         UI[Team Builder / Analyzer UI]
-        Chat[Coach Chat — streaming]
+        Chat[Professor Chat — streaming]
         Session[Session Check-in UI]
         Push[Push Notification Handler\n(Web Push via service worker)]
     end
@@ -39,7 +39,7 @@ flowchart TB
     end
 
     subgraph MCPLayer["MCP Server (standalone)"]
-        MCP[DexTrAIner MCP Server]
+        MCP[Master Ball MCP Server]
     end
 
     subgraph Data["Data Layer"]
@@ -67,7 +67,7 @@ flowchart TB
         PostHog[PostHog]
     end
 
-    Dex --> REST
+    Pokedex --> REST
     UI --> REST
     Chat <--> WS
     Session --> REST
@@ -142,7 +142,7 @@ Plain Python modules/classes, each with a Pydantic input/output schema. Every to
 The **Pokémon profile lookup (Pokédex + Mega-aware), damage calculator, team analyzer, and session logger/tilt-risk check are all deterministic tools that never touch an LLM** — they're plain Python computed against known-correct formulas, structured reference data, and simple rules (e.g., the "two-loss rule" from [`product-research.md`](./product-research.md)). The agent's job is to call them and explain the result in context, not to compute or approximate any of it. This matters doubly for the tilt-risk check specifically: it needs to fire reliably and immediately after a logged loss, which a rules engine does deterministically and an LLM call would make slower, more expensive, and less predictable for no benefit. It also matters for the Pokédex lookup: browsing the Pokédex UI should never wait on an LLM round-trip — it's a data lookup, and it stays one whether it's rendered directly in the Pokédex UI or narrated by the agent in chat.
 
 ### MCP server
-A separate lightweight FastAPI (or the official MCP Python SDK's own server) process that wraps the same tool implementations behind the MCP protocol — stdio and Streamable HTTP transports. This lets any MCP-aware client (Claude Desktop, Cursor, a future third-party integration) use DexTrAIner's Pokémon tools directly, independent of the main chat product. See [`ai-agents-and-rag.md`](./ai-agents-and-rag.md) for the tool contracts.
+A separate lightweight FastAPI (or the official MCP Python SDK's own server) process that wraps the same tool implementations behind the MCP protocol — stdio and Streamable HTTP transports. This lets any MCP-aware client (Claude Desktop, Cursor, a future third-party integration) use Master Ball's Pokémon tools directly, independent of the main chat product. See [`ai-agents-and-rag.md`](./ai-agents-and-rag.md) for the tool contracts.
 
 ### Data layer
 Single PostgreSQL instance on RDS (with the pgvector extension) holds relational data (users, teams, tournaments, battle history) *and* vector embeddings side by side — one transactional boundary, no dual-write consistency problems between a relational store and a separate vector store. Valkey (via Amazon ElastiCache — see [`tech-stack.md`](./tech-stack.md#backend) for why Valkey, not Redis) handles caching, rate limiting, and pub/sub for WebSocket fan-out. Amazon S3 holds large blobs (raw replay files, uploaded tournament PDFs).

@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -24,6 +25,10 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning: var(--warning);
+  --color-success-foreground: var(--success-foreground);
+  --color-success: var(--success);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -48,73 +53,116 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Light theme — Master Ball palette tuned for a white backdrop. Kept as
+ * `:root` (rather than a `.light` class) so the existing shadcn `dark:`
+ * variant convention (`@custom-variant dark (&:is(.dark *))`) keeps working
+ * unmodified; the app is switched into dark-by-default via a `.dark` class
+ * applied by an inline script in index.html + the theme store, see
+ * Docs/frontend/README.md's "Theming & Design System" section. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.99 0.004 296);
+  --foreground: oklch(0.2 0.03 296);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.2 0.03 296);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.2 0.03 296);
+  --primary: oklch(0.5 0.22 296);
+  --primary-foreground: oklch(0.99 0.005 296);
+  --secondary: oklch(0.95 0.02 320);
+  --secondary-foreground: oklch(0.3 0.05 296);
+  --muted: oklch(0.96 0.01 296);
+  --muted-foreground: oklch(0.48 0.02 296);
+  --accent: oklch(0.93 0.05 340);
+  --accent-foreground: oklch(0.4 0.18 340);
+  --destructive: oklch(0.58 0.24 27);
+  --border: oklch(0.9 0.015 296);
+  /* A visibly-purple tint (not just a near-gray hue) so form fields read as
+   * "soft purple" rather than flat/boring — this is the one variable behind
+   * every Input/Select/Combobox's border (`border-input`, both themes) and
+   * dark mode's fill (`dark:bg-input/30`). */
+  --input: oklch(0.85 0.05 296);
+  --ring: oklch(0.65 0.15 230);
+  --success: oklch(0.55 0.15 150);
+  --success-foreground: oklch(0.98 0.01 150);
+  --warning: oklch(0.65 0.16 80);
+  --warning-foreground: oklch(0.98 0.01 80);
+  --gradient-brand: linear-gradient(135deg, oklch(0.5 0.22 296), oklch(0.55 0.22 340));
+  --gradient-accent: linear-gradient(135deg, oklch(0.5 0.22 296), oklch(0.6 0.15 230));
+  --gradient-page: linear-gradient(
+    160deg,
+    oklch(0.99 0.004 296) 0%,
+    oklch(0.97 0.014 320) 55%,
+    oklch(0.95 0.02 340) 100%
+  );
+  --chart-1: oklch(0.5 0.22 296);
+  --chart-2: oklch(0.55 0.22 340);
+  --chart-3: oklch(0.6 0.15 230);
+  --chart-4: oklch(0.55 0.15 150);
+  --chart-5: oklch(0.65 0.16 80);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.97 0.01 296);
+  --sidebar-foreground: oklch(0.2 0.03 296);
+  --sidebar-primary: oklch(0.5 0.22 296);
+  --sidebar-primary-foreground: oklch(0.99 0.005 296);
+  --sidebar-accent: oklch(0.93 0.05 340);
+  --sidebar-accent-foreground: oklch(0.4 0.18 340);
+  --sidebar-border: oklch(0.9 0.015 296);
+  --sidebar-ring: oklch(0.65 0.15 230);
+  --scrollbar-thumb: oklch(0.48 0.02 296 / 35%);
+  --scrollbar-thumb-hover: oklch(0.5 0.22 296 / 70%);
 }
 
+/* Dark theme — the default. Master Ball: violet-purple body (primary),
+ * magenta band (accent), pale sky-blue button (ring/highlight). */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.16 0.025 296);
+  --foreground: oklch(0.96 0.01 296);
+  --card: oklch(0.21 0.03 296);
+  --card-foreground: oklch(0.96 0.01 296);
+  --popover: oklch(0.21 0.03 296);
+  --popover-foreground: oklch(0.96 0.01 296);
+  --primary: oklch(0.58 0.22 296);
+  --primary-foreground: oklch(0.98 0.01 296);
+  --secondary: oklch(0.28 0.05 296);
+  --secondary-foreground: oklch(0.96 0.01 296);
+  --muted: oklch(0.26 0.02 296);
+  --muted-foreground: oklch(0.72 0.02 296);
+  --accent: oklch(0.62 0.23 340);
+  --accent-foreground: oklch(0.98 0.01 340);
+  --destructive: oklch(0.68 0.21 25);
+  --border: oklch(1 0 0 / 12%);
+  /* See :root's --input comment — a purple-hued fill/border (not a flat
+   * white-at-low-opacity neutral) so dark mode's form fields read as "soft
+   * purple" instead of plain dark boxes. */
+  --input: oklch(0.62 0.2 296 / 32%);
+  --ring: oklch(0.78 0.13 230);
+  --success: oklch(0.72 0.17 150);
+  --success-foreground: oklch(0.15 0.03 150);
+  --warning: oklch(0.79 0.15 80);
+  --warning-foreground: oklch(0.18 0.03 80);
+  --gradient-brand: linear-gradient(135deg, oklch(0.58 0.22 296), oklch(0.62 0.23 340));
+  --gradient-accent: linear-gradient(135deg, oklch(0.58 0.22 296), oklch(0.78 0.13 230));
+  --gradient-page: linear-gradient(
+    160deg,
+    oklch(0.16 0.025 296) 0%,
+    oklch(0.13 0.03 320) 55%,
+    oklch(0.11 0.035 340) 100%
+  );
+  --chart-1: oklch(0.58 0.22 296);
+  --chart-2: oklch(0.62 0.23 340);
+  --chart-3: oklch(0.78 0.13 230);
+  --chart-4: oklch(0.72 0.17 150);
+  --chart-5: oklch(0.79 0.15 80);
+  --sidebar: oklch(0.19 0.03 296);
+  --sidebar-foreground: oklch(0.96 0.01 296);
+  --sidebar-primary: oklch(0.58 0.22 296);
+  --sidebar-primary-foreground: oklch(0.98 0.01 296);
+  --sidebar-accent: oklch(0.62 0.23 340);
+  --sidebar-accent-foreground: oklch(0.98 0.01 340);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.78 0.13 230);
+  --scrollbar-thumb: oklch(0.72 0.02 296 / 25%);
+  --scrollbar-thumb-hover: oklch(0.58 0.22 296 / 75%);
 }
 
 @layer base {
@@ -122,9 +170,601 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    /* overflow-x-hidden guards against the homepage's full-bleed
+     * `AccountCTABanner` (`w-screen` + the negative-margin breakout
+     * trick), since `100vw` can be a hair wider than the visible viewport
+     * whenever a vertical scrollbar is present. */
+    @apply overflow-x-hidden bg-[image:var(--gradient-page)] bg-fixed text-foreground;
   }
   html {
     @apply font-sans;
+  }
+
+  /* Raw `<button>` / role=button (not only the shadcn Button) — hand cursor
+   * everywhere interactive controls are clicked. Disabled stays not-allowed. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* Modern, theme-aware scrollbars — applies everywhere (page scroll, the
+   * Movepool table, natures reference grid, Select dropdowns, ...) rather
+   * than a one-off class, since every scroll container in the app should
+   * look consistent. Firefox uses the `scrollbar-*` properties; every other
+   * engine uses the `::-webkit-scrollbar*` pseudo-elements — both are
+   * declared so this is a two-line change, not a browser-specific hack. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* Text-link hover underline — draws left→right via scaleX. Opt-in with
+ * `.link-underline` so card/button/badge wrappers aren't affected. Active
+ * nav items (`aria-current="page"`) keep the line drawn. */
+.link-underline {
+  position: relative;
+  text-decoration-line: none;
+  padding-bottom: 0.12em;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1.5px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.28s ease;
+  pointer-events: none;
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after,
+.link-underline[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* The Professor's streaming cursor — sits inline after the characters being
+ * typed (see CoachPage's streaming plain-text bubble). A plain
+ * `animate-pulse` fades smoothly rather than blinking, which reads as
+ * "loading" rather than "a live text cursor"; this snaps instead, matching
+ * how a real terminal/editor caret blinks. */
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.streaming-caret-inline {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background-color: currentColor;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+/* Floating Rotom launcher — soft phone bob + tilt. Occasional sharper
+ * rock reads like a notification buzz without being noisy. Paused via
+ * `.rotom-phone-idle-paused` on hover / open chat. */
+@keyframes rotom-phone-idle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
+  }
+  20% {
+    transform: translate3d(0, -6px, 0) rotate(2deg);
+  }
+  40% {
+    transform: translate3d(0, -2px, 0) rotate(-1.5deg);
+  }
+  55% {
+    transform: translate3d(1px, -8px, 0) rotate(3deg);
+  }
+  62% {
+    transform: translate3d(-2px, -5px, 0) rotate(-4deg);
+  }
+  68% {
+    transform: translate3d(2px, -7px, 0) rotate(3.5deg);
+  }
+  75% {
+    transform: translate3d(0, -4px, 0) rotate(-1deg);
+  }
+  90% {
+    transform: translate3d(0, -7px, 0) rotate(1.5deg);
+  }
+}
+
+.rotom-phone-idle {
+  transform-origin: 50% 85%;
+  animation: rotom-phone-idle 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.rotom-phone-idle-paused,
+.group\/rotom:hover .rotom-phone-idle,
+.group\/rotom:focus-visible .rotom-phone-idle {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotom-phone-idle {
+    animation: none;
+  }
+}
+
+/* Brand mark — soft bloom + stacked drop shadows (see `AppLogo`). */
+.app-logo {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.app-logo__glow {
+  position: absolute;
+  inset: -18%;
+  z-index: 0;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in oklch, var(--primary) 42%, transparent) 0%,
+    color-mix(in oklch, var(--primary) 12%, transparent) 45%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.app-logo--hero .app-logo__glow {
+  inset: -28%;
+  filter: blur(12px);
+  opacity: 1;
+  background: radial-gradient(
+    circle at 50% 40%,
+    rgb(248 208 48 / 0.28) 0%,
+    color-mix(in oklch, var(--primary) 38%, transparent) 38%,
+    transparent 68%
+  );
+}
+
+.app-logo__mark {
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35)) drop-shadow(0 4px 10px rgb(0 0 0 / 0.4))
+    drop-shadow(0 0 10px color-mix(in oklch, var(--primary) 35%, transparent));
+}
+
+.app-logo--hero .app-logo__mark {
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.55)) drop-shadow(0 8px 22px rgb(0 0 0 / 0.55))
+    drop-shadow(0 0 18px rgb(248 208 48 / 0.35))
+    drop-shadow(0 0 28px color-mix(in oklch, var(--primary) 40%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-logo__glow {
+    filter: blur(4px);
+    opacity: 0.65;
+  }
+}
+
+/* Site-wide loading wheel — dual counter-rotating rings on a soft brand glow.
+ * Used by `LoadingState` for page/section waits. */
+.loading-orbit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.loading-orbit-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--primary) 35%, transparent) 0%,
+    transparent 70%
+  );
+  animation: loading-glow 2.2s ease-in-out infinite;
+}
+
+.loading-orbit-ring {
+  position: absolute;
+  border-radius: 9999px;
+  /* Hollow ring via radial mask — keeps the conic gradient as a stroke. */
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 3px),
+    #000 calc(100% - 2.5px)
+  );
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+}
+
+.loading-orbit-ring-outer {
+  inset: 0;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    var(--primary) 35%,
+    var(--ring) 55%,
+    transparent 75%
+  );
+  animation: loading-spin 1.1s linear infinite;
+}
+
+.loading-orbit-ring-inner {
+  inset: 18%;
+  background: conic-gradient(
+    from 180deg,
+    transparent 0%,
+    color-mix(in oklch, var(--accent) 85%, var(--primary)) 40%,
+    transparent 70%
+  );
+  animation: loading-spin-reverse 0.85s linear infinite;
+}
+
+.loading-orbit-core {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: var(--primary);
+  box-shadow: 0 0 12px color-mix(in oklch, var(--primary) 70%, transparent);
+  animation: loading-core 1.4s ease-in-out infinite;
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes loading-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes loading-core {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-orbit-glow,
+  .loading-orbit-ring-outer,
+  .loading-orbit-ring-inner,
+  .loading-orbit-core {
+    animation: none;
+  }
+
+  .loading-orbit-ring-outer,
+  .loading-orbit-ring-inner {
+    opacity: 0.85;
+  }
+}
+
+/* ── Site motion system ──────────────────────────────────────────────
+ * page-enter  → route land (PageEnter around Outlet)
+ * reveal      → scroll into view (Reveal component), once
+ * motion-lift → subtle hover lift on interactive cards
+ * Keep these quiet: short distances, soft easing, honor reduced-motion. */
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Pokedex Team Builder showcase — rotate copy/sprite with a soft slide. */
+@keyframes team-promo-swap {
+  from {
+    opacity: 0;
+    transform: translate3d(14px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes team-promo-sprite {
+  from {
+    opacity: 0;
+    transform: translate3d(18px, 10px, 0) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes team-promo-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes team-promo-card-flash {
+  0% {
+    filter: brightness(1);
+  }
+  35% {
+    filter: brightness(1.1);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.team-promo-swap {
+  animation: team-promo-swap 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.team-promo-sprite {
+  animation: team-promo-sprite 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.team-promo-progress {
+  animation: team-promo-progress linear both;
+}
+
+.team-promo-card[data-swap] {
+  animation: team-promo-card-flash 0.55s ease-out;
+}
+
+/* `backwards` (not `both`/`forwards`): apply the from-state before start so
+ * we don't flash, then drop the animated transform when the animation ends.
+ * A leftover `transform` on this Outlet wrapper (even translate3d(0,0,0))
+ * makes `background-attachment: fixed` parallax (AccountCTABanner) fall
+ * back to scroll. */
+.page-enter {
+  animation: page-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Stagger: parent stays put; children carry the entrance. */
+.reveal.reveal-stagger {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.reveal-in.reveal-stagger > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.reveal.reveal-in.reveal-stagger > *:nth-child(1) {
+  transition-delay: 0ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(2) {
+  transition-delay: 40ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(3) {
+  transition-delay: 80ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(4) {
+  transition-delay: 120ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(5) {
+  transition-delay: 160ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(6) {
+  transition-delay: 200ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(7) {
+  transition-delay: 240ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(8) {
+  transition-delay: 280ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(9) {
+  transition-delay: 320ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(10) {
+  transition-delay: 360ms;
+}
+.reveal.reveal-in.reveal-stagger > *:nth-child(n + 11) {
+  transition-delay: 400ms;
+}
+
+.motion-lift {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background-color 0.22s ease;
+}
+
+/* Homepage meta dashboard — usage bars + curve draw-in. */
+.meta-usage-bar {
+  width: 0%;
+  transition: width 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.meta-curve-line {
+  stroke-dasharray: 480;
+  stroke-dashoffset: 480;
+  animation: meta-curve-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+.meta-curve-area {
+  opacity: 0;
+  animation: meta-curve-fade 0.8s ease 0.35s forwards;
+}
+
+@keyframes meta-curve-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes meta-curve-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Analytics page — floating sprites + bar grow-in. */
+@keyframes analytics-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.analytics-float {
+  animation: analytics-float 5.5s ease-in-out infinite;
+}
+
+.analytics-bar {
+  transition:
+    height 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .motion-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px -16px rgb(0 0 0 / 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+
+  .team-promo-swap,
+  .team-promo-sprite,
+  .team-promo-progress,
+  .team-promo-card[data-swap] {
+    animation: none;
+  }
+
+  .reveal,
+  .reveal.reveal-in,
+  .reveal-stagger > *,
+  .reveal.reveal-in.reveal-stagger > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .motion-lift,
+  .motion-lift:hover {
+    transition: none;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .meta-usage-bar {
+    transition: none;
+  }
+
+  .meta-curve-line,
+  .meta-curve-area {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  .analytics-float {
+    animation: none;
+  }
+
+  .analytics-bar {
+    transition: none;
   }
 }

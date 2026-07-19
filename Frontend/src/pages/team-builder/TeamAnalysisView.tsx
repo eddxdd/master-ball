@@ -1,18 +1,20 @@
+import { AlertTriangle, Grid3x3, Shield, Zap } from "lucide-react";
+import { GradientCardHeader } from "@/components/GradientCardHeader";
+import { Reveal } from "@/components/Reveal";
 import { TypeBadge } from "@/components/TypeBadge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ALL_TYPES } from "@/lib/pokemonTypes";
+import { cn } from "@/lib/utils";
 import type { TeamAnalysis } from "@/types/team";
 
 export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
   const coverageByType = Object.fromEntries(analysis.type_coverage.map((c) => [c.type, c]));
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <Reveal id="team-builder-analysis" stagger className="grid gap-4 md:grid-cols-2">
       <Card>
-        <CardHeader>
-          <CardTitle>Speed tiers</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <GradientCardHeader icon={Zap} title="Speed tiers" />
+        <CardContent className="pt-4">
           <ol className="flex flex-col gap-1 text-sm">
             {analysis.speed_tiers.map((entry, i) => (
               <li key={entry.species_id} className="flex justify-between gap-2">
@@ -28,16 +30,14 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Role-compression flags</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <GradientCardHeader icon={AlertTriangle} title="Role-compression flags" />
+        <CardContent className="pt-4">
           {analysis.role_flags.length === 0 ? (
             <p className="text-muted-foreground text-sm">No flags raised for this team.</p>
           ) : (
             <ul className="flex flex-col gap-2 text-sm">
               {analysis.role_flags.map((flag) => (
-                <li key={flag.flag} className="text-amber-700 dark:text-amber-400">
+                <li key={flag.flag} className="text-warning">
                   {flag.description}
                 </li>
               ))}
@@ -51,10 +51,8 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
       </Card>
 
       <Card className="md:col-span-2">
-        <CardHeader>
-          <CardTitle>Type coverage</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <GradientCardHeader icon={Shield} title="Type coverage" />
+        <CardContent className="pt-4">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -66,10 +64,16 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
                 </tr>
               </thead>
               <tbody>
-                {ALL_TYPES.map((type) => {
+                {ALL_TYPES.map((type, i) => {
                   const c = coverageByType[type];
                   return (
-                    <tr key={type} className="border-b border-border last:border-0">
+                    <tr
+                      key={type}
+                      className={cn(
+                        "border-b border-border last:border-0",
+                        i % 2 === 0 && "bg-muted/30",
+                      )}
+                    >
                       <td className="p-1">
                         <TypeBadge type={type} />
                       </td>
@@ -86,10 +90,8 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
       </Card>
 
       <Card className="md:col-span-2">
-        <CardHeader>
-          <CardTitle>Weakness matrix</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <GradientCardHeader icon={Grid3x3} title="Weakness matrix" />
+        <CardContent className="pt-4">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -103,9 +105,20 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
                 </tr>
               </thead>
               <tbody>
-                {analysis.weakness_matrix.map((entry) => (
-                  <tr key={entry.species_id} className="border-b border-border last:border-0">
-                    <td className="sticky left-0 bg-card p-1 font-medium whitespace-nowrap">
+                {analysis.weakness_matrix.map((entry, i) => (
+                  <tr
+                    key={entry.species_id}
+                    className={cn(
+                      "border-b border-border last:border-0",
+                      i % 2 === 0 && "bg-muted/30",
+                    )}
+                  >
+                    <td
+                      className={cn(
+                        "sticky left-0 p-1 font-medium whitespace-nowrap",
+                        i % 2 === 0 ? "bg-muted/30" : "bg-card",
+                      )}
+                    >
                       {entry.nickname ?? entry.name}
                     </td>
                     {ALL_TYPES.map((type) => {
@@ -126,6 +139,6 @@ export function TeamAnalysisView({ analysis }: { analysis: TeamAnalysis }) {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </Reveal>
   );
 }

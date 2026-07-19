@@ -15,6 +15,14 @@ export type Team = {
   members: PokemonSet[];
 };
 
+/** One named roster in the browser-local team library. */
+export type SavedTeam = {
+  id: string;
+  name: string;
+  members: PokemonSet[];
+  updatedAt: number;
+};
+
 export type TeamImportResponse = {
   team: Team;
   warnings: string[];
@@ -46,11 +54,26 @@ export type RoleFlag = {
   description: string;
 };
 
+export type MemberRoleEntry = {
+  species_id: string;
+  name: string;
+  nickname: string | null;
+  sprite_url: string;
+  type1: string;
+  type2: string | null;
+  role: string;
+  summary: string;
+  item: string | null;
+  ability: string | null;
+  speed: number;
+};
+
 export type TeamAnalysis = {
   type_coverage: TypeCoverageEntry[];
   speed_tiers: SpeedTierEntry[];
   weakness_matrix: WeaknessMatrixEntry[];
   role_flags: RoleFlag[];
+  member_roles: MemberRoleEntry[];
 };
 
 export function defaultPokemonSet(): PokemonSet {

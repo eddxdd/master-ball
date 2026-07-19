@@ -32,3 +32,16 @@ def compute_matchups(
         for defending_type in defending_types:
             combined[attacking_type] *= type_chart.get((attacking_type, defending_type), 1.0)
     return combined
+
+
+def compute_attacking_matchups(
+    attacking_type: str, type_chart: dict[tuple[str, str], float]
+) -> dict[str, float]:
+    """The mirror of compute_matchups: how effective a single `attacking_type`
+    is against each single defending type — used by get_type_detail's "moves
+    of this type" side of the chart (compute_matchups already covers the
+    "moves against this type" side, called with a single defending type)."""
+    return {
+        defending_type: type_chart.get((attacking_type, defending_type), 1.0)
+        for defending_type in ALL_TYPES
+    }

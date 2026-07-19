@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <defs>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9d6ee4" />
+      <stop offset="100%" style="stop-color:#ff6b9d" />
+    </linearGradient>
+    <linearGradient id="shadowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6b4fb8;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#c44d7a;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  <!-- Outer shadow/depth layer -->
+  <polygon points="98,28 658,52 718,172 158,148" fill="none" stroke="url(#shadowGrad)" stroke-width="2" />
+  <!-- Thin dark top line -->
+  <line x1="118" y1="38" x2="682" y2="62" stroke="#1a1a24" stroke-width="1" />
+  <!-- Main border: purple-to-pink, 2px -->
+  <polygon points="120,40 680,40 720,160 160,160" fill="none" stroke="url(#borderGrad)" stroke-width="2" />
+  <!-- Inner highlight -->
+  <polygon points="124,42 676,42 716,158 164,158" fill="none" stroke="rgba(157,110,228,0.35)" stroke-width="1" />
+</svg>

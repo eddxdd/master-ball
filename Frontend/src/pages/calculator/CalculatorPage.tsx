@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
+import { Sparkles, Swords } from "lucide-react";
 import { useState } from "react";
+import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -24,8 +26,10 @@ export function CalculatorPage() {
   const [field, setField] = useState<FieldConditions>(defaultFieldConditions);
 
   const { data: attackerProfile } = usePokemonProfile(attacker.species_id || undefined);
+  const { data: defenderProfile } = usePokemonProfile(defender.species_id || undefined);
   const damagingMoves =
     attackerProfile?.learnable_moves.filter((m) => m.category !== "Status") ?? [];
+  const selectedMove = damagingMoves.find((m) => m.id === moveId);
 
   const mutation = useMutation({
     mutationFn: () => postDamageCalc({ attacker, defender, move_id: moveId, field }),
@@ -34,21 +38,37 @@ export function CalculatorPage() {
   const canSubmit = attacker.species_id && defender.species_id && moveId;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <h1 className="text-2xl font-semibold">Damage Calculator</h1>
-        <p className="text-muted-foreground text-sm">
-          A real deterministic calc engine — never an LLM guessing numbers.
-        </p>
+    <div id="calculator-page" className="flex flex-col gap-4">
+      <Seo
+        title="Damage Calculator"
+        description="A real deterministic Gen 9 damage calculator for competitive Pokemon — accurate stat, STAB, Terastallization, weather, and item math, never an LLM guessing numbers."
+      />
+      <div
+        id="calculator-header"
+        className="flex items-center gap-3 rounded-xl border border-border bg-[image:var(--gradient-brand)] p-4 text-white shadow-sm"
+      >
+        <Swords className="size-8 shrink-0" />
+        <div>
+          <h1 className="text-2xl font-semibold">Damage Calculator</h1>
+          <p className="text-sm text-white/80">
+            A real deterministic calc engine — never an LLM guessing numbers.
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div id="calculator-config" className="grid gap-4 md:grid-cols-2">
         <PokemonConfigForm title="Attacker" state={attacker} onChange={setAttacker} showStatus />
         <PokemonConfigForm title="Defender" state={defender} onChange={setDefender} showCurrentHp />
       </div>
 
-      <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
-        <h2 className="font-semibold">Move &amp; field conditions</h2>
+      <div
+        id="calculator-conditions"
+        className="flex flex-col gap-3 rounded-lg border border-border p-4"
+      >
+        <h2 className="flex items-center gap-2 font-semibold">
+          <Sparkles className="size-4 text-primary" />
+          Move &amp; field conditions
+        </h2>
 
         <div className="flex flex-col gap-1">
           <span className="text-sm font-medium">Move</span>
@@ -137,6 +157,7 @@ export function CalculatorPage() {
         </div>
 
         <Button
+          variant="gradient"
           className="w-fit"
           disabled={!canSubmit || mutation.isPending}
           onClick={() => mutation.mutate()}
@@ -153,7 +174,14 @@ export function CalculatorPage() {
         </p>
       )}
 
-      {mutation.data && <DamageResult result={mutation.data} />}
+      {mutation.data && (
+        <DamageResult
+          result={mutation.data}
+          attacker={attackerProfile}
+          defender={defenderProfile}
+          move={selectedMove}
+        />
+      )}
     </div>
   );
 }

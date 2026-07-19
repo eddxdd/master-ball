@@ -1,13 +1,13 @@
-name: dextrainer
+name: master-ball
 
 services:
   postgres:
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-dextrainer}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dextrainer}
-      POSTGRES_DB: ${POSTGRES_DB:-dextrainer}
+      POSTGRES_USER: ${POSTGRES_USER:-masterball}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-masterball}
+      POSTGRES_DB: ${POSTGRES_DB:-masterball}
     ports:
       # Host-side port intentionally not 5432: a native Postgres install on the
       # host is a common source of a silent port conflict (connections get
@@ -19,7 +19,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dextrainer}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-masterball}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -37,6 +37,30 @@ services:
       timeout: 5s
       retries: 10
 
+  neo4j:
+    # Phase 6's knowledge graph (GraphRAG) — Community edition is enough for a
+    # single-instance dev/portfolio graph, no clustering/enterprise features
+    # this app needs. See scripts/load_graph.py and Docs/backend/README.md's
+    # "Knowledge graph (Phase 6)" section.
+    image: neo4j:5-community
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-masterball-graph}
+      # Keeps the container quiet about the (irrelevant for local dev)
+      # official Neo4j usage-stats ping.
+      NEO4J_dbms_usage__report_enabled: "false"
+    ports:
+      - "7474:7474" # Neo4j Browser (http) — handy for manually poking at the graph
+      - "7687:7687" # Bolt — what the app's own driver actually talks to
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
   backend:
     build:
       context: ./Backend
@@ -46,13 +70,63 @@ services:
     # Backend/Dockerfile. `uvicorn` resolves straight from PATH (/app/.venv/bin).
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
-      APP_NAME: ${APP_NAME:-DexTrAIner}
-      ENVIRONMENT: local
-      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-dextrainer}:${POSTGRES_PASSWORD:-dextrainer}@postgres:5432/${POSTGRES_DB:-dextrainer}
+      APP_NAME: ${APP_NAME:-Master Ball}
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      RELEASE: ${RELEASE:-}
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-masterball}:${POSTGRES_PASSWORD:-masterball}@postgres:5432/${POSTGRES_DB:-masterball}
       VALKEY_URL: redis://valkey:6379/0
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-masterball-graph}
       CORS_ORIGINS: '["http://localhost:5173"]'
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+      LLM_FALLBACK_ENABLED: ${LLM_FALLBACK_ENABLED:-true}
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY:-}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT:-masterball}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-http://langfuse-web:3000}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      SENTRY_TRACES_SAMPLE_RATE: ${SENTRY_TRACES_SAMPLE_RATE:-0.1}
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_CLAIMS_EMAIL: ${VAPID_CLAIMS_EMAIL:-coach@example.com}
+      MCP_API_KEY: ${MCP_API_KEY:-}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-masterball-dev-secret-change-me-please}
     ports:
       - "8000:8000"
+    volumes:
+      - ./Backend:/app
+      - backend_venv:/app/.venv
+      - backend_embedding_cache:/app/.cache
+    depends_on:
+      postgres:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # Same image/env as `backend` (see Docs/backend/README.md's "Background
+    # worker (Phase 5)" section) — just a different command/process, per
+    # Arq's own recommended deployment shape of "web + worker, same
+    # codebase." Runs scripts/sync_usage_stats.py on a daily cron schedule
+    # (see app/worker.py) rather than a request thread ever fetching from
+    # Smogon live.
+    command: arq app.worker.WorkerSettings
+    environment:
+      APP_NAME: ${APP_NAME:-Master Ball}
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-masterball}:${POSTGRES_PASSWORD:-masterball}@postgres:5432/${POSTGRES_DB:-masterball}
+      VALKEY_URL: redis://valkey:6379/0
     volumes:
       - ./Backend:/app
       - backend_venv:/app/.venv
@@ -68,8 +142,12 @@ services:
       dockerfile: Dockerfile.dev
     restart: unless-stopped
     environment:
-      VITE_APP_NAME: ${APP_NAME:-DexTrAIner}
+      VITE_APP_NAME: ${APP_NAME:-Master Ball}
       VITE_API_BASE_URL: http://localhost:8000
+      VITE_ENVIRONMENT: ${ENVIRONMENT:-local}
+      VITE_SENTRY_DSN: ${VITE_SENTRY_DSN:-}
+      VITE_POSTHOG_KEY: ${VITE_POSTHOG_KEY:-}
+      VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST:-}
     ports:
       - "5173:5173"
     volumes:
@@ -81,5 +159,7 @@ services:
 volumes:
   postgres_data:
   valkey_data:
+  neo4j_data:
   backend_venv:
+  backend_embedding_cache:
   frontend_node_modules:

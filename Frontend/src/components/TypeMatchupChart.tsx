@@ -20,14 +20,22 @@ export function TypeMatchupChart({ matchups }: { matchups: TypeEffectiveness[] }
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      {groups.map((group) => (
-        <div key={group.label} className="flex items-center gap-2">
-          <span className="w-28 shrink-0 text-sm text-muted-foreground">{group.label}</span>
-          <div className="flex flex-wrap gap-1">
-            {group.types.map((t) => (
-              <TypeBadge key={t} type={t} />
-            ))}
+    <div className="flex flex-col gap-4">
+      {groups.map((group, index) => (
+        <div key={group.label} className="flex flex-col gap-4">
+          {index > 0 && (
+            <div
+              aria-hidden
+              className="h-px w-full bg-linear-to-r from-transparent via-border to-transparent"
+            />
+          )}
+          <div className="flex items-center gap-2">
+            <span className="w-28 shrink-0 text-sm text-muted-foreground">{group.label}</span>
+            <div className="flex flex-wrap gap-1">
+              {group.types.map((t) => (
+                <TypeBadge key={t} type={t} />
+              ))}
+            </div>
           </div>
         </div>
       ))}

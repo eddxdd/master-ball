@@ -2,9 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" href="/favicon-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DexTrAIner</title>
+    <!--
+      Only the <title> is duplicated here — it's a singleton React manages
+      specially, so its per-page <Seo> value cleanly replaces this one with
+      no leftover duplicate. `<meta name="description">`/OG/Twitter tags are
+      NOT React singletons: a static one here would coexist *alongside* each
+      page's <Seo>-rendered one rather than being replaced, and the first tag
+      in document order wins for most parsers (Facebook's OG parser, etc.) —
+      i.e. every page would incorrectly advertise this generic copy instead
+      of its own. So those are Seo-only. See Docs/frontend/README.md's SEO
+      section before adding any more static meta tags here.
+    -->
+    <title>Master Ball — AI-Powered Competitive Pokemon Companion</title>
+    <meta name="theme-color" content="#0e0b17" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <script>
+      // Applies the .dark class before first paint so reloading never flashes
+      // the light theme — dark is the default (see themeStore.ts). Reads the
+      // same localStorage key the zustand persist store writes to.
+      (() => {
+        try {
+          const raw = localStorage.getItem("masterball-theme");
+          const theme = raw ? JSON.parse(raw).state.theme : "dark";
+          if (theme !== "light") {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (_error) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

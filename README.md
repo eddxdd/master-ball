@@ -1,8 +1,8 @@
-# DexTrAIner
+# Master Ball
 
 *Working title — see [`Docs/README.md`](./Docs/README.md#naming--branding).*
 
-An AI-powered competitive Pokémon companion: the **Dex** — a fast, accurate Pokédex, Team Builder, and Damage Calculator — plus the **TrAIner** — an AI layer that reasons in plain English about your team and matchups, and helps with the mental-game side of laddering.
+An AI-powered competitive Pokémon companion: a fast, accurate Pokédex, Team Builder, and Damage Calculator, plus an AI Professor that reasons in plain English about your team and matchups, and helps with the mental-game side of laddering.
 
 ## Running locally
 
