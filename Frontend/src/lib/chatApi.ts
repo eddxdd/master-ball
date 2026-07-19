@@ -37,12 +37,21 @@ type StreamChatOptions = {
   history?: ChatHistoryTurn[];
 };
 
+function resolveChatWsUrl(): string {
+  // Empty VITE_API_BASE_URL means same-origin (prod proxy). WebSocket needs an
+  // absolute ws/wss URL — a bare `/chat/ws` path is rejected by the browser.
+  const httpBase =
+    API_BASE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "http://localhost:8000");
+  return `${httpBase.replace(/^http/, "ws")}/chat/ws`;
+}
+
 export function streamChatMessage(
   message: string,
   callbacks: StreamChatCallbacks,
   options?: StreamChatOptions,
 ): () => void {
-  const wsUrl = `${API_BASE_URL.replace(/^http/, "ws")}/chat/ws`;
+  const wsUrl = resolveChatWsUrl();
   const socket = new WebSocket(wsUrl);
   let closedByClient = false;
   let settled = false;
