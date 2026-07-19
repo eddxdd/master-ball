@@ -80,3 +80,12 @@ Heap/pagecache are capped in compose (~1.5GB Neo4j budget). If the instance OOMs
 ## Write-backs for the laptop agent
 
 When something on the server changes (new IP, Cloudflare toggle, bootstrap done, Neo4j disabled), append a dated note here so [`local.md`](./local.md) workflows stay accurate.
+
+### 2026-07-19 — initial competitive cutover
+
+- SSH host alias: `portfolio-ec2` → `18.225.81.206` (key under `Documents/Code/aws-keys/main-server-key.pem`)
+- Wordle stack stopped + volumes wiped; new compose up on `:4000`
+- Images built **on EC2** (CodePipeline ECR frontend repo create was AccessDenied; API image pushed only if role allows — local tags used for frontend)
+- Bootstrap done: alembic + seed_pokedex + ingest_knowledge_base + load_graph
+- Teammate/counter graph edges empty until `sync_usage_stats` / worker cron
+- Create ECR repo `master-ball-frontend` in AWS console (or widen EC2 role) so future pipeline pushes work
